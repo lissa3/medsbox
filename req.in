@@ -1,0 +1,4 @@
+django
+django-allauth
+django-autoslug
+django-environ

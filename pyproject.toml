@@ -1,0 +1,18 @@
+[tool.bandit]
+skips = ["B101","B107","B105"]
+exclude_dirs = ["venv","*_test.py"]
+
+[tool.coverage.report]
+fail_under = 100
+omit = [
+    "*/migrations/*",
+]
+show_missing = true
+skip_covered = true
+
+[tool.isort]
+profile = "black"
+src_paths = ["sandbox"]
+
+[tool.black]
+line-length = 88

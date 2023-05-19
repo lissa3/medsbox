@@ -1,0 +1,23 @@
+# Editor
+.vscode
+
+# local env files
+.env
+prod.py
+*.sqlite3
+*.pyc
+*__pycache__
+dump
+media
+static
+*.env
+
+
+venv
+dev.py
+prod.py
+templatetags
+templates
+tags_note.txt
+*pytest_cache
+locale
