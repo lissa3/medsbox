@@ -1,8 +1,10 @@
 pip-tools
 pre-commit
+
 flake8
 isort
 black
 bandit
+
 django-extensions
 werkzeug

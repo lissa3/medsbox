@@ -12,7 +12,7 @@ env = environ.Env(ALLOWED_HOSTS=(list, []), DEBUG=(bool, False))
 BASE_DIR = Path(__file__).resolve().parent.parent.parent  # let op: +parent
 environ.Env.read_env(BASE_DIR / ".env")
 
-# DEBUG = True
+
 DEBUG = env("DEBUG")
 SECRET_KEY = env("SECRET_KEY")
 
@@ -34,7 +34,9 @@ THIRD_PARTY = [
 ]
 
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    "src.accounts.apps.AccountsConfig",
+]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY + LOCAL_APPS
 
 MIDDLEWARE = [
@@ -47,12 +49,12 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "config.urls"
+ROOT_URLCONF = "sandbox.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "src" / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -65,7 +67,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "config.wsgi.application"
+WSGI_APPLICATION = "sandbox.wsgi.application"
 
 
 DATABASES = {
@@ -102,10 +104,9 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
-
+# STATIC_ROOT = BASE_DIR / "src" / "static"
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR.joinpath("static")]
+STATICFILES_DIRS = [BASE_DIR.joinpath("src", "static")]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR.joinpath("media")

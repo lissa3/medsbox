@@ -12,7 +12,8 @@ skip_covered = true
 
 [tool.isort]
 profile = "black"
-src_paths = ["sandbox"]
+src_paths = ["src/sandbox"]
 
 [tool.black]
 line-length = 88
+src_paths = ["src/sandbox"]

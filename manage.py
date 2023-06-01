@@ -5,7 +5,7 @@ import sys
 
 
 def main():
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.conf.dev")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sandbox.conf.dev")
 
     """Run administrative tasks."""
 
