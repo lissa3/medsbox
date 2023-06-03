@@ -5,11 +5,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import path
+from django.urls import include, path
+from django.views.generic import TemplateView
 
 urlpatterns = [
-    # path(os.getenv('SECRET_ADMIN_URL') + '/admin/', admin.site.urls),
+    # path(eve('SECRET_ADMIN_URL') + '/admin/', admin.site.urls),
     path("admin/", admin.site.urls),
+    path("", TemplateView.as_view(template_name="home.html"), name="home"),
+    path(
+        "general-info/", TemplateView.as_view(template_name="intro.html"), name="intro"
+    ),
+    path("accounts/", include("allauth.urls")),
+    path("profile/", include("src.profiles.urls")),
 ]
 
 if settings.DEBUG:

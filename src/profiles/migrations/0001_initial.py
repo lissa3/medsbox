@@ -3,10 +3,11 @@
 import uuid
 
 import django.db.models.deletion
-import src.timestamp.utils.base
-import src.timestamp.utils.magic_valid_files
 from django.conf import settings
 from django.db import migrations, models
+
+import src.timestamp.utils.base
+import src.timestamp.utils.magic_valid_files
 
 
 class Migration(migrations.Migration):

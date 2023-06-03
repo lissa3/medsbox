@@ -1,4 +1,5 @@
 import factory
+
 from src.accounts.tests.factories.user_factory import UserFactory
 from src.profiles.models import Profile
 

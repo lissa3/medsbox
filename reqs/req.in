@@ -5,3 +5,5 @@ django-environ
 python-magic-bin
 pytz
 pillow
+django-widget-tweaks
+django-htmx

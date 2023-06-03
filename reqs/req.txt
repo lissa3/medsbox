@@ -20,11 +20,16 @@ django==4.2.1
     # via
     #   -r reqs/req.in
     #   django-allauth
+    #   django-htmx
 django-allauth==0.54.0
     # via -r reqs/req.in
 django-autoslug==1.9.9
     # via -r reqs/req.in
 django-environ==0.10.0
+    # via -r reqs/req.in
+django-htmx==1.14.0
+    # via -r reqs/req.in
+django-widget-tweaks==1.4.12
     # via -r reqs/req.in
 idna==3.4
     # via requests

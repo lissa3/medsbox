@@ -15,7 +15,8 @@ environ.Env.read_env(BASE_DIR / ".env")
 
 DEBUG = env("DEBUG")
 SECRET_KEY = env("SECRET_KEY")
-
+SITE_ID = 1
+AUTH_USER_MODEL = "accounts.User"
 
 ALLOWED_HOSTS: list[str] = env("ALLOWED_HOSTS")
 DJANGO_APPS = [
@@ -25,17 +26,23 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
+    "django.forms",
 ]
 
 THIRD_PARTY = [
     "allauth",
     "allauth.account",
-    "allauth.socialaccount",
+    # "allauth.socialaccount",
+    "widget_tweaks",
+    "django_htmx",
 ]
 
 
 LOCAL_APPS = [
     "src.accounts.apps.AccountsConfig",
+    "src.profiles.apps.ProfilesConfig",
+    "src.posts.apps.PostsConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY + LOCAL_APPS
 
@@ -47,6 +54,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = "sandbox.urls"
@@ -83,16 +91,13 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.\
-        MinimumLengthValidator",
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.\
-        CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.\
-        NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -112,3 +117,57 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR.joinpath("media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+#                extra's
+# clean widget
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
+# EMAIL
+# email settings
+EMAIL_HOST = "smtp.gmail.com"
+DEFAULT_FROM_EMAIL = "optima_helpdesk@zoo.com"
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = "587"
+EMAIL_USE_TLS = True
+
+
+# img upload limits
+
+MIN_UPLOAD_SIZE = 120  # in bytes
+MAX_UPLOAD_SIZE = 1024 * 1024 * 2  # 2 MB
+UPLOAD_FILE_TYPES = "image/jpeg,image/png,image/jpg"
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 2  # for MemFileUploadHandler info
+
+
+# allauth
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+
+ACCOUNT_FORMS = {
+    "signup": "src.accounts.forms.CustomSignupForm",
+}
+ACCOUNT_ADAPTER = "src.accounts.adapters.InactiveUserEmailAdapter"
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = True
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"  # can be both
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # "optional"
+ACCOUNT_USERNAME_MIN_LENGTH = 3
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/accounts/login"
+
+# ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 5
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "Help  desk - "
+ACCOUNT_USERNAME_BLACKLIST = ["admin", "administrator", "moderator"]
+ACCOUNT_SESSION_REMEMBER = True

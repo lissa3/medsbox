@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
+
 from src.timestamp.models import TimeStamp
 from src.timestamp.utils.base import upload_img
 from src.timestamp.utils.magic_valid_files import validate_img_mimetype
