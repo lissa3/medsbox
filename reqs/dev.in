@@ -1,10 +1,23 @@
 pip-tools
 pre-commit
 
+#formatters
 flake8
 isort
 black
 bandit
 
+# debuggers
 django-extensions
 werkzeug
+
+# tests
+pytest-django
+pytest-socket
+freezegun
+django-webtest
+WebTest
+Faker
+factory-boy
+# for ./.env
+pytest-django-dotenv

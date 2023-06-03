@@ -1,7 +1,10 @@
 ### Med Sandbox
 
 [X] split dependencies
-[X] statuic for dev (admin via static_root)
+[X] static for dev (admin via static_root)
+[X] precommit
+[X] dj-environ
+[X] tests setup
 
 ## setup
 
@@ -15,6 +18,7 @@ black .
 flake8 .
 pre-commit install (auto: only if changed)
 pre-commit run -a (forced:check all)
+pyest.ini needs
 
 ```
 
@@ -26,4 +30,6 @@ dependency  reqs/req.in (or dev.in)
 pip-compile reqs/req.in (or dev.in)
 pip-compile req.txt or dev.txt
 pip install -r reqs/req.txt reqs/dev.txt
+windows (here): upload files require python-magic-bin
+linux: pip install libmagic
 ```

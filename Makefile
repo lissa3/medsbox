@@ -20,7 +20,9 @@ req-compile:
 rs-ex:
 	python manage.py runserver_plus --nopin
 shell:
-	python manage.py shell_plus --ipython #use tab to see autocompl
+	python manage.py shell_plus
+shell-ip:
+	python manage.py shell_plus --ipython
 models:
 	python manage.py list_model_info
 help-admin:
