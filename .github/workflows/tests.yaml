@@ -26,7 +26,7 @@ jobs:
           cache-dependency-path: "reqs/*.txt"
 
       - name: Install Python packages
-        run: pip install -r reqs/reqlin.txt -r reqs/dev.txt
+        run: pip install -r reqs/reqlinux.txt -r reqs/dev.txt
 
       - name: Test it
         run: make coverage
