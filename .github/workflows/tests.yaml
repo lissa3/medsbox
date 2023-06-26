@@ -10,6 +10,9 @@ jobs:
     env:
       ALLOWED_HOSTS: "*"
       SECRET_KEY: "my big secret not seen"
+      EMAIL_HOST: "smtp.gmail.com"
+      EMAIL_HOST_USER: "somemail@mail.com"
+      EMAIL_HOST_PASSWORD: "very-secret"
 
     steps:
       - name: Get the code
@@ -23,7 +26,7 @@ jobs:
           cache-dependency-path: "reqs/*.txt"
 
       - name: Install Python packages
-        run: pip install -r reqs/req.txt -r reqs/dev.txt
+        run: pip install -r reqs/reqlin.txt -r reqs/dev.txt
 
       - name: Test it
         run: make coverage

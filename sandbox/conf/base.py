@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent  # let op: +parent
 environ.Env.read_env(BASE_DIR / ".env")
 
 
-DEBUG = env("DEBUG")
+DEBUG = True
 SECRET_KEY = env("SECRET_KEY")
 SITE_ID = 1
 AUTH_USER_MODEL = "accounts.User"
@@ -33,7 +33,7 @@ DJANGO_APPS = [
 THIRD_PARTY = [
     "allauth",
     "allauth.account",
-    # "allauth.socialaccount",
+    "allauth.socialaccount",
     "widget_tweaks",
     "django_htmx",
 ]
@@ -130,7 +130,7 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = "587"
 EMAIL_USE_TLS = True
-EMAIL_BACKEND = env("EMAIL_BACKEND")
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" # dev.py
 
 
