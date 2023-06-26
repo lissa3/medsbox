@@ -4,7 +4,7 @@ from django.forms import ClearableFileInput, ImageField, ModelForm, ValidationEr
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import gettext_lazy as _
 
-from src.timestamp.utils.resize import resize
+from src.core.utils.resize import resize
 
 from .models import Profile
 

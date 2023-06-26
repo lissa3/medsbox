@@ -43,6 +43,7 @@ LOCAL_APPS = [
     "src.accounts.apps.AccountsConfig",
     "src.profiles.apps.ProfilesConfig",
     "src.posts.apps.PostsConfig",
+    "src.core.apps.CoreConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY + LOCAL_APPS
 
@@ -129,6 +130,7 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = "587"
 EMAIL_USE_TLS = True
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" # dev.py
 
 
 # img upload limits
@@ -150,9 +152,6 @@ ACCOUNT_FORMS = {
     "signup": "src.accounts.forms.CustomSignupForm",
 }
 ACCOUNT_ADAPTER = "src.accounts.adapters.InactiveUserEmailAdapter"
-
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 
 ACCOUNT_USERNAME_REQUIRED = True

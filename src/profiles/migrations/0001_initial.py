@@ -6,8 +6,8 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
-import src.timestamp.utils.base
-import src.timestamp.utils.magic_valid_files
+import src.core.utils.base
+import src.core.utils.magic_valid_files
 
 
 class Migration(migrations.Migration):
@@ -41,9 +41,9 @@ class Migration(migrations.Migration):
                     models.ImageField(
                         blank=True,
                         null=True,
-                        upload_to=src.timestamp.utils.base.upload_img,
+                        upload_to=src.core.utils.base.upload_img,
                         validators=[
-                            src.timestamp.utils.magic_valid_files.validate_img_mimetype
+                            src.core.utils.magic_valid_files.validate_img_mimetype
                         ],
                         verbose_name="Avatar",
                     ),
