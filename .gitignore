@@ -12,9 +12,7 @@ media
 static
 *.env
 
-
 venv
-dev.py
 prod.py
 templatetags
 tags_note.txt
