@@ -48,8 +48,8 @@ class CustomSignupForm(SignupForm):
     agree_to_terms = forms.BooleanField(
         label=format_html(
             _(
-                "<p>'I agree to the <a class='general' \
-                href='/terms'>terms and conditions</a>'</p>"
+                "I agree to the <a class='general' \
+                href='/terms'>terms and conditions</a>"
             )
         )
     )
