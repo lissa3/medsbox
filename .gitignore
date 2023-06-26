@@ -19,3 +19,4 @@ tags_note.txt
 *pytest_cache
 locale
 docs
+.coverage
