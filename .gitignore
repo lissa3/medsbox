@@ -17,7 +17,6 @@ venv
 dev.py
 prod.py
 templatetags
-templates
 tags_note.txt
 *pytest_cache
 locale

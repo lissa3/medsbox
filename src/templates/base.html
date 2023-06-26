@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/ico/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/ico/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/ico/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'images/ico/site.webmanifest' %}" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+    <title>{% block head_title %}SandBox{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link  rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- <link nonce=" request.csp_nonce }}" rel="stylesheet" href="{% static 'css/styles.css' %}">    -->
+    <link rel="stylesheet" href="{% static 'css/sidebar_admin.css' %}">
+    <link rel="stylesheet" href="{% static 'css/categs.css' %}">
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+    <link rel="stylesheet" href="{% static 'css/editor.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+</head>
+<body>
+  {% include "components/menu.html" %}
+
+<!-- class wrap to fix footer  -->
+<div class="wraps">
+    <section class="container-xxl">
+      {% block msg %}
+        {% if messages %}
+        <div class="container" id="msg-box">
+          <div class="m-2">
+            placeholder for htmx-messages
+          </div>
+        </div>
+        {% endif %}
+      {% endblock msg %}
+    <!-- search form  -->
+      <div class="container mb-lg-4 mb-sm-1 pe-sm-0">
+        placeholder for search form
+      </div>
+    </section>
+    <main>
+    <!-- <main class="container">     -->
+      {% block content %}
+      {% endblock %}
+    </main>
+    {% block categs %}
+    {% endblock categs %}
+    <footer class="container px-4 px-sm-5 pt-5 mb-2">
+      <div class="row d-flex justify-content-around">
+        <div class="col-6 text-center">
+          <a href="#">
+            <button type="button" class="w-60 btn btn-outline rounded-pill custom-font px-3 ">
+              Contact Admin
+            </button>
+            </a>
+
+        </div>
+        <div class="col-6 text-center">
+          <a href="#">
+            <button type="button" class="w-60 btn btn-outline rounded-pill custom-font px-3 ">
+              About
+            </button>
+            </a>
+        </div>
+      </div>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="{% static 'js/htmx.min.js' %}" defer></script>
+
+</script>
+<script  src="{% static 'js/utils.js' %}"></script>
+
+  {% block js %}
+  {% endblock %}
+</body>
+</html>
