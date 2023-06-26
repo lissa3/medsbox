@@ -8,6 +8,19 @@ migration:
 	python manage.py runserver makemigrations
 migrate:
 	python manage.py runserver migrate
+
+# coverage vs fcov: both for coverage but coverage runs migrations
+coverage:
+	pytest --cov=sandbox --migrations -n 2 --dist loadfile
+
+# fcov == "fast coverage" by skipping migrations checking.
+# // processes ( need + package pytest-xdist)
+# Save that for CI.(here processes: N==4)
+fcov:
+	@echo "Running fast coverage check"
+	@pytest --cov=sandbox -n 2 --dist loadfile -q
+	# @pytest --cov=sandbox
+
 # handmatig pre-commit
 lint:
 	pre-commit run -a

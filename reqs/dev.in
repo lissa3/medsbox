@@ -21,3 +21,7 @@ Faker
 factory-boy
 # for ./.env
 pytest-django-dotenv
+# to make pytest faster (flag --cov)
+# needs pytest-xdist
+pytest-cov
+pytest-xdist==3.3.1

@@ -26,6 +26,8 @@ colorama==0.4.6
     #   build
     #   click
     #   pytest
+coverage[toml]==7.2.7
+    # via pytest-cov
 distlib==0.3.6
     # via virtualenv
 django==4.2.1
@@ -38,6 +40,8 @@ django-webtest==1.9.10
     # via -r reqs/dev.in
 exceptiongroup==1.1.1
     # via pytest
+execnet==1.9.0
+    # via pytest-xdist
 factory-boy==3.2.1
     # via -r reqs/dev.in
 faker==18.10.0
@@ -101,14 +105,20 @@ pyproject-hooks==1.0.0
     # via build
 pytest==7.3.1
     # via
+    #   pytest-cov
     #   pytest-django
     #   pytest-django-dotenv
     #   pytest-socket
+    #   pytest-xdist
+pytest-cov==4.1.0
+    # via -r reqs/dev.in
 pytest-django==4.5.2
     # via -r reqs/dev.in
 pytest-django-dotenv==0.1.2
     # via -r reqs/dev.in
 pytest-socket==0.6.0
+    # via -r reqs/dev.in
+pytest-xdist==3.3.1
     # via -r reqs/dev.in
 python-dateutil==2.8.2
     # via
@@ -134,6 +144,7 @@ tomli==2.0.1
     # via
     #   black
     #   build
+    #   coverage
     #   pyproject-hooks
     #   pytest
 tzdata==2023.3
