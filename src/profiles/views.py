@@ -1,7 +1,7 @@
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM
 from django.http import JsonResponse
-from django.shortcuts import Http404, get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
 
 from .forms import ProfileForm
@@ -23,12 +23,10 @@ class ProfileView(LRM, View):
             uuid = kwargs.get("uuid")
             profile = get_object_or_404(Profile, uuid=uuid)
             form = ProfileForm(request.POST, request.FILES, profile)
-            if request.headers.get("x-requested_with") == "XMLHttpRequest":
-                print("got an ajax")
-                print(request.FILES)
+            # if request.headers.get("x-requested_with") == "XMLHttpRequest":
+            #     print("got an ajax")
 
             if form.is_valid():
-                print("form valid")
                 ava_img = form.cleaned_data.get("avatar")
                 if ava_img:
                     profile.avatar = ava_img

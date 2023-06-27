@@ -11,11 +11,9 @@ User = get_user_model()
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, *args, **kwargs):
-    print("creating a new user")
     try:
         if created and instance.email:
             Profile.objects.get_or_create(user=instance)
-
     except Exception as e:
         print("Smth went wrong with profile creation", e)
         # TODO logger note
