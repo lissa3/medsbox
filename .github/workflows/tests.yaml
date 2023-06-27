@@ -10,9 +10,11 @@ jobs:
     env:
       ALLOWED_HOSTS: "*"
       SECRET_KEY: "my big secret not seen"
-      EMAIL_HOST: "smtp.gmail.com"
-      EMAIL_HOST_USER: "somemail@mail.com"
-      EMAIL_HOST_PASSWORD: "very-secret"
+      EMAIL_HOST: ${{vars.EMAIL_HOST}}
+      EMAIL_HOST_USER: ${{vars.EMAIL_HOST_USER}}
+      EMAIL_HOST_PASSWORD: ${{secrets.EMAIL_HOST_PASSWORD}}
+      EMAIL_PORT: ${{vars.EMAIL_PORT}}
+      EMAIL_BACKEND: ${{vars.EMAIL_BACKEND}}
 
     steps:
       - name: Get the code

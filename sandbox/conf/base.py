@@ -112,30 +112,29 @@ USE_I18N = True
 USE_TZ = True
 # STATIC_ROOT = BASE_DIR / "src" / "static"
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR.joinpath("src", "assets")]
+STATICFILES_DIRS = [BASE_DIR.joinpath("src", "static")]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR.joinpath("media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+################################
 #                extra's
+################################
+
 # clean widget
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
+
 # EMAIL
-# email settings
 
 DEFAULT_FROM_EMAIL = "optima_helpdesk@zoo.com"
-# EMAIL_HOST = env("EMAIL_HOST")
-# EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-# EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = 587
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = True
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "zoo@mail.com"
-EMAIL_HOST_PASSWORD = "12345abc"
-EMAIL_USE_TLS = True
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = env("EMAIL_BACKEND")
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" # dev.py
 
 
