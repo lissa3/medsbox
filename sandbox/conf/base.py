@@ -6,10 +6,10 @@ from pathlib import Path
 
 import environ
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent  # let op: +parent
 env = environ.Env(ALLOWED_HOSTS=(list, []), DEBUG=(bool, False))
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent  # let op: +parent
 environ.Env.read_env(BASE_DIR / ".env")
 
 
@@ -123,12 +123,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 # EMAIL
 # email settings
-EMAIL_HOST = "smtp.gmail.com"
+
 DEFAULT_FROM_EMAIL = "optima_helpdesk@zoo.com"
-EMAIL_HOST = env("EMAIL_HOST")
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = "587"
+# EMAIL_HOST = env("EMAIL_HOST")
+# EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "zoo@mail.com"
+EMAIL_HOST_PASSWORD = "12345abc"
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" # dev.py
