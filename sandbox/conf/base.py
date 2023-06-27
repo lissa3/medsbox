@@ -112,7 +112,7 @@ USE_I18N = True
 USE_TZ = True
 # STATIC_ROOT = BASE_DIR / "src" / "static"
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR.joinpath("src", "static")]
+STATICFILES_DIRS = [BASE_DIR.joinpath("src", "assets")]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR.joinpath("media")
