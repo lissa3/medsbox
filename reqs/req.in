@@ -7,3 +7,4 @@ pytz
 pillow
 django-widget-tweaks
 django-htmx
+django-treebeard
