@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from treebeard.mp_tree import MP_Node
 
-from core.utils.base import upload_img
+from src.core.utils.base import upload_img
 
 
 class Category(MP_Node):

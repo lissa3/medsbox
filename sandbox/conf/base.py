@@ -36,7 +36,6 @@ THIRD_PARTY = [
     "allauth.socialaccount",
     "widget_tweaks",
     "django_htmx",
-    "django_extensions",
     "treebeard",
 ]
 
