@@ -59,3 +59,5 @@ tzdata==2023.3
     # via django
 urllib3==2.0.2
     # via requests
+django-treebeard==4.7
+    # via -r reqs/req.in

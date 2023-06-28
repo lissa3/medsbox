@@ -36,13 +36,14 @@ THIRD_PARTY = [
     "allauth.socialaccount",
     "widget_tweaks",
     "django_htmx",
+    "treebeard",
 ]
 
 
 LOCAL_APPS = [
     "src.accounts.apps.AccountsConfig",
     "src.profiles.apps.ProfilesConfig",
-    # "src.posts.apps.PostsConfig",
+    "src.posts.apps.PostsConfig",
     "src.core.apps.CoreConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY + LOCAL_APPS
