@@ -1,6 +1,5 @@
 from autoslug import AutoSlugField
 from django.db import models
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from treebeard.mp_tree import MP_Node
 
@@ -20,8 +19,11 @@ class Category(MP_Node):
         verbose_name = "Category"
         verbose_name_plural = "Categories"
 
-    def __str__(self):
-        return f"Category: {self.name}"
+    @classmethod
+    def get_default_pk(cls, *args, **kwargs):
+        """create or use existed default category"""
+        obj, _ = cls.objects.get_or_create(name="unspecified")
+        return obj.pk
 
     def get_full_path(self):
         if self.is_root():
@@ -32,6 +34,9 @@ class Category(MP_Node):
             )
             path_slug += f"/{self.slug}"
         return path_slug
+
+    def __str__(self):
+        return f"Category: {self.name}"
 
     # def get_absolute_url(self):
     #     """for bread crumbs UI"""

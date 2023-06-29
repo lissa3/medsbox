@@ -5,9 +5,9 @@ local:
 check:
 	python manage.py check
 migration:
-	python manage.py runserver makemigrations
+	python manage.py  makemigrations
 migrate:
-	python manage.py runserver migrate
+	python manage.py migrate
 
 # coverage vs fcov: both for coverage but coverage runs migrations
 coverage:

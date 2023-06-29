@@ -10,8 +10,9 @@ prod.py
 dump
 media
 static
+src/static
 *.env
-
+memory
 venv
 prod.py
 templatetags
