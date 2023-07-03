@@ -15,7 +15,6 @@ src/static
 memory
 venv
 prod.py
-templatetags
 tags_note.txt
 *pytest_cache
 locale

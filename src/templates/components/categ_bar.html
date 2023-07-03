@@ -1,0 +1,18 @@
+{% load tree_cats %}
+<h5>Categ menu</h5>
+<ul>
+  {% recursetree categs %}
+      <li>
+          {{ node.name }}
+          {% if not node.is_leaf %}
+              <ul>
+                  {{ children }}
+              </ul>
+          {% endif %}
+      </li>
+  {% endrecursetree %}
+</ul>
+
+
+
+
