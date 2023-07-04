@@ -9,8 +9,7 @@ prod.py
 *__pycache__
 dump
 media
-static
-src/static
+static/admin
 *.env
 memory
 venv
