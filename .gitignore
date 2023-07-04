@@ -9,7 +9,7 @@ prod.py
 *__pycache__
 dump
 media
-static/admin
+src/static/admin/*
 *.env
 memory
 venv

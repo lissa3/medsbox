@@ -1,6 +1,7 @@
 from django import template
 from django.utils.html import format_html
 
+from src.core.utils.tree_help import get_cached_trees
 from src.posts.models.categ_model import Category
 
 register = template.Library()
@@ -35,7 +36,8 @@ class RecrTreeNode(template.Node):
         # use the Variable class, instantiate it with
         # the name of the variable to be resolved,
         # and then call variable.resolve(context).
-        roots = self.queryset_var.resolve(context)
+        qs = self.queryset_var.resolve(context)
+        roots = get_cached_trees(qs)
         bits = [self._render_node(context, node) for node in roots]
 
         return "".join(bits)
