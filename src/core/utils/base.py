@@ -56,10 +56,20 @@ def get_temporary_text_file():
 
 
 def get_temporary_image():
-    """help func for testing"""
-    file = io.BytesIO()
+    """help func for testing in views: SimpleUpload file"""
+    _file = io.BytesIO()
     image = Image.new("RGBA", size=(200, 200), color=(255, 0, 0, 0))
-    image.save(file, format="png")
-    img_file = SimpleUploadedFile("iop.png", file.getvalue())
+    image.save(_file, format="png")
+    img_file = SimpleUploadedFile("iop.png", _file.getvalue())
     img_file.seek(0)
     return img_file
+
+
+def get_temp_img_bytes():
+    """help func for testing in webtest: just bytes;
+    cannot write mode RGBA as JPEG!"""
+    _file = io.BytesIO()
+    img = Image.new("RGB", size=(20, 20), color=(255, 0, 0))
+    img.save(_file, format="JPEG")
+    _bytes = _file.getvalue()
+    return _bytes

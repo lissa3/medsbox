@@ -35,8 +35,6 @@ class ProfileView(LRM, View):
                 profile.save()
                 return JsonResponse({"status_code": 200, "resp": "upload success"})
             else:
-                print("form is not valid")
-                print(form.errors)
                 return JsonResponse({"status_code": 404, "err": form.errors})
         except Exception as e:
             print("exeption", e)
