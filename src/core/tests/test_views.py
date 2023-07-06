@@ -1,15 +1,18 @@
+from django.test import TestCase
 from django.urls import reverse
 
-from src.core.views import home
 
+class CategsTempTagsTest(TestCase):
+    """test home and intro view"""
 
-class TestHome:
-    def test_unauth_home(self, client):
-        """Not auth user gets home page"""
-        resp = client.get(reverse("home"))
-        assert resp.status_code == 200
+    def test_home_page(self):
+        """home"""
+        url = reverse("home")
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, 200)
 
-    def test_unaut_intro(self, client):
-        """Not auth user gets intro page"""
-        resp = client.get(reverse("core:intro"))
-        assert resp.status_code == 200
+    def test_intro_page(self):
+        """intro; tempor rendering catges here"""
+        url = reverse("core:intro")
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, 200)

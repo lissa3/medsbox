@@ -35,11 +35,13 @@ class MyTestCase(WebTest):
             base_path, "src", "profiles", "tests", "files_test"
         )
         self.img_empty_file = os.path.join(self.base_path, "empty.png")
-        self.err_file = "Upload a valid image. The file you uploaded \
-        was either not an image or a corrupted image."
+        self.err_file = (
+            "Upload a valid image. The file you uploaded "
+            + "was either not an image or a corrupted image."
+        )
         self.err_empty_file = "The submitted file is empty."
 
-    def test_upload_avatar(self):
+    def test_upload_avatar_ok(self):
         """check form upload avatar diff attrs"""
         avatar = get_temp_img_bytes()
         self.form["avatar"] = Upload("zoo.jpeg", avatar, "image/jpeg")
