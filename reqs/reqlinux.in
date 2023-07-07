@@ -2,7 +2,7 @@ django
 django-allauth
 django-autoslug
 django-environ
-python-magic-bin
+python-magic
 pytz
 pillow
 django-widget-tweaks
