@@ -19,3 +19,5 @@ tags_note.txt
 locale
 docs
 .coverage
+reqs/req.txt
+reqs/req.in

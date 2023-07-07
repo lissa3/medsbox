@@ -38,6 +38,7 @@ THIRD_PARTY = [
     "widget_tweaks",
     "django_htmx",
     "treebeard",
+    "taggit",
 ]
 
 
@@ -179,3 +180,6 @@ ACCOUNT_USERNAME_BLACKLIST = ["admin", "administrator", "moderator"]
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_USERNAME_BLACKLIST = []
+
+# taggit
+TAGGIT_STRIP_UNICODE_WHEN_SLUGIFYING = True
