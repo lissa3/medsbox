@@ -22,7 +22,13 @@ class Category(MP_Node):
     @classmethod
     def get_default_pk(cls, *args, **kwargs):
         """create or use existed default category"""
-        obj, _ = cls.objects.get_or_create(name="unspecified")
+        qs = cls.objects.filter(name="Unspecified")
+        try:
+            obj = qs.get()
+        except qs.model.DoesNotExist:
+            cls.add_root(name="Unspecified")
+            obj = cls.objects.get(name="Unspecified")
+        # obj, _ = cls.objects.get_or_create(name="Unspecified")
         return obj.pk
 
     def get_full_path(self):
@@ -37,21 +43,3 @@ class Category(MP_Node):
 
     def __str__(self):
         return f"Category: {self.name}"
-
-    # def get_absolute_url(self):
-    #     """for bread crumbs UI"""
-    #     return reverse("products:cat_detail", kwargs={"slug": self.get_full_path()})
-
-
-#  C.dump_bulk()
-# C.get_annotated_list()
-"""
-
->>> zoo = Category.get_annotated_list()
->>> pprint(zoo)
-[(<Category: Comps>, {'close': [], 'level': 0, 'open': True}),
- (<Category: desktop>, {'close': [], 'level': 1, 'open': True}),
- (<Category: tablet>, {'close': [0, 1], 'level': 1, 'open': False})]
->>>
-
-"""
