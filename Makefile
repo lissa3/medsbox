@@ -19,7 +19,7 @@ coverage:
 fcov:
 	@echo "Running fast coverage check"
 	@pytest --cov=sandbox -n 2 --dist loadfile -q
-	# @pytest --cov=sandbox
+
 
 # handmatig pre-commit
 lint:

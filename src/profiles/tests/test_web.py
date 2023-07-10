@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 
 from django.conf import settings
@@ -52,6 +53,11 @@ class MyTestCase(WebTest):
         self.assertEqual(self.form.id, "upForm")
         self.assertIsNotNone(self.form["csrfmiddlewaretoken"])
         self.assertEqual(response.status_code, 200)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(MEDIA_ROOT, ignore_errors=True)  # delete the temp dir
+        super().tearDownClass()
 
     @override_settings(MAX_UPLOAD_SIZE=5)
     def test_upload_big_avatar(self):
