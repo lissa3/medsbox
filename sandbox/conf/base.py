@@ -39,6 +39,7 @@ THIRD_PARTY = [
     "django_htmx",
     "treebeard",
     "taggit",
+    "django_extensions",
 ]
 
 

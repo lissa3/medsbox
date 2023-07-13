@@ -9,3 +9,4 @@ django-widget-tweaks
 django-htmx
 django-treebeard
 django-taggit==3.1.0
+django-extensions==3.2.1
