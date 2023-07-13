@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from src.core.models import TimeStamp
 from src.core.utils.base import upload_img
 from src.core.utils.magic_valid_files import validate_img_mimetype
+from src.profiles.managers import ProfileManager
 
 User = get_user_model()
 
@@ -24,7 +25,7 @@ class Profile(TimeStamp):
         CANCELLED = 4
         TRIAL_EXPIRED = 5
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # ?PROTECT
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     avatar = models.ImageField(
         _("Avatar"),
@@ -38,6 +39,7 @@ class Profile(TimeStamp):
     status = models.IntegerField(
         choices=Status.choices, default=Status.EXEMPT, db_index=True, blank=True
     )
+    objects = ProfileManager.as_manager()
 
     def get_absolute_url(self):
         return reverse("profiles:profile_detail", kwargs={"uuid": self.uuid})

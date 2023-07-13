@@ -20,3 +20,18 @@ class UserTestCase(TestCase):
         self.assertEqual(profile.avatar, "")
         self.assertFalse(profile.user.blackListEmail, False)
         self.assertTrue(profile.created_at, "2023-01-01")
+
+    def test_user_delete(self):
+        """when user deleted profile deleted too"""
+        self.user.delete()
+
+        with self.assertRaises(Profile.DoesNotExist):
+            Profile.objects.get(user=self.user)
+
+    def test_profile_delete(self):
+        """when profile deleted user becomes inactive"""
+        self.user.profile.delete()
+
+        with self.assertRaises(Profile.DoesNotExist):
+            Profile.objects.get(id=self.user.profile.id)
+        self.assertFalse(self.user.is_active)
