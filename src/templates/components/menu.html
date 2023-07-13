@@ -1,10 +1,9 @@
 {% load widget_tweaks static %}
 {% load i18n %}
-{% comment %}
 {% get_current_language as LANGUAGE_CODE %}
 {% get_available_languages as LANGUAGES %}
 {% get_language_info_list for LANGUAGES as languages %}
-{% endcomment %}
+
 
 <header>
   <nav class="navbar navbar-expand-md navbar-dark fixed-top navbar-custom p-3">
@@ -60,7 +59,6 @@
             </li>
         {% endif %}
       </ul>
-      {% comment %}
       <form action="{% url 'set_language' %}" method="post">
         {% csrf_token %}
         <input name="next" type="hidden" value="{{ redirect_to }}">
@@ -73,7 +71,7 @@
         </select>
         <input type="submit" value="Go">
       </form>
-      {% endcomment %}
+
 
     </div>
   </div>

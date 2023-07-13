@@ -47,15 +47,13 @@ class CustomUploadImageField(ImageField):
             file_types = settings.UPLOAD_FILE_TYPES
             if up_file.content_type not in file_types.split(","):
                 raise ValidationError(err_msg["file_type"])
-            else:
-                print("line file extentions is ok", up_file.content_type)
             if up_file.size < min_upload_size:
                 raise ValidationError(
                     err_msg["min_size"],
                     params={"size": filesizeformat(min_upload_size)},
                 )
             if up_file.size > max_upload_size:
-                print("too big ...")
+                # print("too big ...")
                 raise ValidationError(
                     err_msg["max_size"],
                     params={"size": filesizeformat(max_upload_size)},

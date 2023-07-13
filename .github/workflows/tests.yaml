@@ -27,7 +27,7 @@ jobs:
           cache: "pip"
           cache-dependency-path: "reqs/*.txt"
       - name: Install OS packages
-        run: sudo apt install python3-dev
+        run: sudo apt install python3-dev get_text
       - name: Install Python packages
         run: pip install -r reqs/reqlinux.txt -r reqs/dev.txt
 

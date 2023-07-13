@@ -93,7 +93,6 @@ class PostTagsTestCase(TestCase):
         )
         posts_annotated_tags = similar_posts.annotate(same_tags=Count("tags"))
         post_4_annot = posts_annotated_tags.filter(id=self.post_4.id).last()
-        print("post4 annotated ", post_4_annot.__dict__)
 
         self.assertEqual(similar_posts.count(), 8)
         self.assertEqual(post_4_annot.same_tags, 2)

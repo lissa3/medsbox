@@ -18,6 +18,7 @@ base_path = settings.BASE_DIR
 MEDIA_ROOT = tempfile.mkdtemp()
 
 
+@override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class MyTestCase(WebTest):
     def setUp(self):

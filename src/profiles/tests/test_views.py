@@ -17,6 +17,7 @@ User = get_user_model()
 MEDIA_ROOT = tempfile.mkdtemp()
 
 
+@override_settings(LANGUAGE_CODE="ru", LANGUAGES=(("ru", "Russian"),))
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class UploadImgTestCase(TestCase):
     def setUp(self) -> None:
@@ -35,11 +36,12 @@ class UploadImgTestCase(TestCase):
     def test_auth_upload_and_remove_avatar(self):
         """Auth-ed user can first upload avatar;
         and remove it"""
-        self.client.force_login(self.user)
 
+        self.client.force_login(self.user)
         img_file = get_temporary_image()
         data_add_img = {"avatar": img_file}
         # upload avatar
+
         resp1 = self.client.post(self.url, data_add_img, format="multipart")
         self.profile.refresh_from_db()
         avatar_img = self.profile.avatar
@@ -77,7 +79,7 @@ class UploadImgTestCase(TestCase):
         profile_uuid = self.profile.uuid
         img_file = get_temporary_image()
         data = {"avatar": img_file}
-        to_login_url = f"/accounts/login?next=/profile/{profile_uuid}/"
+        to_login_url = f"/accounts/login?next=/ru/profile/{profile_uuid}/"
 
         #  post request with an img file(allowed)
         resp = self.client.post(self.url, data, format="multipart", follow=True)
