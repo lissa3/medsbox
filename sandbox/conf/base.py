@@ -21,6 +21,7 @@ AUTH_USER_MODEL = "accounts.User"
 
 ALLOWED_HOSTS: list[str] = env("ALLOWED_HOSTS")
 DJANGO_APPS = [
+    "modeltranslation",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -41,6 +42,7 @@ THIRD_PARTY = [
     "treebeard",
     "taggit",
     "django_extensions",
+    # "modeltranslation", # see above
 ]
 
 
@@ -129,6 +131,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 ################################
 #                extra's
 ################################
+# auto-slug (trans)
+autoslug_modeltranslation_enable = True
 
 # clean widget
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
@@ -187,3 +191,11 @@ ACCOUNT_USERNAME_BLACKLIST = []
 
 # taggit
 TAGGIT_STRIP_UNICODE_WHEN_SLUGIFYING = True
+
+# modeltranslation
+MODELTRANSLATION_DEFAULT_LANGUAGE = "ru"
+MODELTRANSLATION_LANGUAGES = (
+    "ru",
+    "en",
+    "uk",
+)
