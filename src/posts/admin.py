@@ -15,7 +15,7 @@ from src.posts.models.post_model import Post
 
 
 @admin.register(Category)
-class CategoryAdmin(TreeAdmin):
+class CategoryAdmin(TreeAdmin, TranslationAdmin):
     form = movenodeform_factory(Category)
     list_display = ["name", "slug"]
     ordering = ["path"]
