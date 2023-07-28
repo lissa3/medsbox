@@ -19,14 +19,11 @@ urlpatterns = [
         include("django.conf.urls.i18n"),
     ),
     path("admin/", admin.site.urls),
-    path("accounts/", include("allauth.urls")),
-    # path("", home, name="home"),
-    # path("core/", include("src.core.urls")),
-    # path("profile/", include("src.profiles.urls")),
 ]
 
 urlpatterns += i18n_patterns(
     path("", home, name="home"),
+    path("accounts/", include("allauth.urls")),
     path("core/", include("src.core.urls")),
     path("profile/", include("src.profiles.urls")),
 )
