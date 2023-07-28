@@ -25,3 +25,4 @@ pytest-django-dotenv
 # needs pytest-xdist
 pytest-cov
 pytest-xdist==3.3.1
+time-machine==2.11.0
