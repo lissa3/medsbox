@@ -12,7 +12,7 @@ class TimeStamp(models.Model):
 
 
 class MediaStamp(models.Model):
-    """it is abstract for Image and Video models"""
+    """it is abstract for diff media models"""
 
     title = models.CharField(max_length=255, default="", blank=True)
     added_at = models.DateTimeField(auto_now_add=True)

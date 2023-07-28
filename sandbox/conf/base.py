@@ -51,6 +51,7 @@ LOCAL_APPS = [
     "src.profiles.apps.ProfilesConfig",
     "src.posts.apps.PostsConfig",
     "src.core.apps.CoreConfig",
+    "src.contacts.apps.ContactsConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY + LOCAL_APPS
 
