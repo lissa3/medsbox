@@ -2,13 +2,13 @@ from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 from modeltranslation.admin import TranslationAdmin
 from treebeard.admin import TreeAdmin
 from treebeard.forms import movenodeform_factory
 
+from src.contacts.models import NewsLetter
 from src.core.utils.admin_help import admin_link
 from src.posts.models.categ_model import Category
 from src.posts.models.post_model import Post
@@ -81,9 +81,6 @@ class PostAdmin(TranslationAdmin):
         """if top_img show small thumbnail in admin table"""
         if obj.top_img:
             return format_html("<img src={} width='60' />", obj.top_img_url)
-        # return format_html("<a href={}>{}</a>", url, func(self, related_obj))
-        # if obj.top_img:
-        #     return mark_safe(f"<img src=`!r{obj.top_img_url}` width='60' />")
 
     def display_tags(self, obj):
         """if tags make a flat list of them"""
@@ -98,6 +95,8 @@ class PostAdmin(TranslationAdmin):
             kwargs["queryset"] = get_user_model().objects.filter(
                 username=request.user.username
             )
+        if db_field.name == "letter":
+            kwargs["queryset"] = NewsLetter.objects.filter(letter_status=1)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_readonly_fields(self, request, obj=None):
@@ -106,12 +105,13 @@ class PostAdmin(TranslationAdmin):
         author field will be current user from request
         """
         if obj is not None:
-            return self.readonly_fields + ("author",)
+            return self.readonly_fields + ("author", "letter")
         return self.readonly_fields
 
     def add_view(self, request, form_url="", extra_context=None):
         data = request.GET.copy()
         data["author"] = request.user
+        data["letter"] = NewsLetter.objects.filter(letter_status=1).last()
         request.GET = data
         return super().add_view(request, form_url="", extra_context=extra_context)
 

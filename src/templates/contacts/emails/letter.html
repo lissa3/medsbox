@@ -1,0 +1,29 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head><style></style></head>
+<body>
+  <div>
+    <h3>Greetings from MedSandbox</h3>
+    <p>Here is some fresh content on our site</p>
+    {% if letter %}
+      <p>Letter title: {{letter.title}}</p>
+      <p>Letter text: {{ letter.text|linebreaksbr }}</p>
+      <p>Here is a link to read a new article:
+        {% if posts %}
+          {% for post in posts %}
+            <a href="#">Post title: {{post.title}}</a>
+    {% comment %}
+    <a href="{{domain}}{% url 'posts:post_detail' letter.post.slug %}">Some post</a></p>
+    {% endcomment %}
+          {% endfor%}
+          {% else %}
+          <p>No posts</p>
+         {% endif %}
+      {% endif %}
+      <p>Best regards,</p>
+      <p>Admin</p>
+      <!-- TODO: Link to unsubscribe: placeholder by now  -->
+    </div>
+  </body>
+</html>

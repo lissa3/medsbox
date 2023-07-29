@@ -8,19 +8,8 @@ User = get_user_model()
 faker = Faker()
 
 
-# @factory.django.mute_signals(pre_save, post_save)
-# class UserFactory(factory.django.DjangoModelFactory):
-#     username = factory.Sequence(lambda n: f"user-{n}")
-#     email = factory.LazyAttribute(lambda _: faker.unique.email())
-#     password = factory.PostGenerationMethodCall("set_password", "12345abc")
-
-#     class Meta:
-#         model = User
-#         django_get_or_create = ("username", "email")
-
-
 class UserFactory(factory.django.DjangoModelFactory):
-    username = factory.Sequence(lambda n: f"user-{n}")
+    username = factory.Sequence(lambda _: faker.unique.user_name())
     email = factory.LazyAttribute(lambda _: faker.unique.email())
     password = factory.PostGenerationMethodCall("set_password", "12345abc")
 
@@ -30,7 +19,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 
 class AdminSupUserFactory(factory.django.DjangoModelFactory):
-    username = factory.Sequence(lambda n: f"user-{n}")
+    username = factory.Sequence(lambda _: faker.unique.user_name())
     email = factory.LazyAttribute(lambda _: faker.unique.email())
     password = factory.PostGenerationMethodCall("set_password", "12345abc")
     is_staff = True
@@ -42,7 +31,7 @@ class AdminSupUserFactory(factory.django.DjangoModelFactory):
 
 
 class StaffUserFactory(factory.django.DjangoModelFactory):
-    username = factory.Sequence(lambda n: f"user-{n}")
+    username = factory.Sequence(lambda _: faker.unique.user_name())
     email = factory.LazyAttribute(lambda _: faker.unique.email())
     password = factory.PostGenerationMethodCall("set_password", "12345abc")
     is_staff = True

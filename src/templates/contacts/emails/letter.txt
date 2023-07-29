@@ -1,0 +1,11 @@
+{% load i18n %}Greetings from MedSandbox
+Here is some fresh content on our site
+{% if letter %}
+Date {{ letter.added_at|date:"l, M. j, Y" }}
+Letter title: {{letter.title}}
+Letter text: {{ letter.text|linebreaksbr }}
+{% if posts %}{% for post in posts %}
+Post title: {{post.title}}{% endfor%}
+{% endif %}{% endif %}
+{% comment %} TODO: Link to unsubscribe: placeholder by now
+{% endcomment %}

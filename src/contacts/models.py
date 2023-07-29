@@ -21,6 +21,7 @@ class NewsLetter(MediaStamp):
     letter_status = models.IntegerField(
         choices=Status.choices, default=Status.PENDING, blank=True
     )
+    sended_at = models.DateField(null=True, blank=True)
 
     def __str__(self) -> str:
         return f"sent news {self.id}"
