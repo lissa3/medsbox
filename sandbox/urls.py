@@ -8,6 +8,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 
+from src.core.utils.views_help import clear
 from src.core.views import home
 
 # from django.views.generic import TemplateView
@@ -19,6 +20,11 @@ urlpatterns = [
         include("django.conf.urls.i18n"),
     ),
     path("admin/", admin.site.urls),
+    path("contacts/", include("src.contacts.urls")),
+]
+
+htmx_urlpatterns = [
+    path("clear", clear, name="clear"),
 ]
 
 urlpatterns += i18n_patterns(
@@ -27,6 +33,7 @@ urlpatterns += i18n_patterns(
     path("core/", include("src.core.urls")),
     path("profile/", include("src.profiles.urls")),
 )
+urlpatterns += htmx_urlpatterns
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
