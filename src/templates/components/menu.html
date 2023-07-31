@@ -19,10 +19,7 @@
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li> -->
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#"">Posts</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">user:{{user}}</a>
+            <a class="nav-link active" aria-current="page" href="#">Posts</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Contact
@@ -37,16 +34,30 @@
               </a>
             </li>     -->
             {% endif %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'account_logout' %}">
+            <!-- May be here small img? -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{user.username}}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'profiles:profile_detail' uuid=user.profile.uuid %}">{% trans "Profile" %}</a>
+              </li>
+
+              {% if not news_negative %}
+              <li><hr class="dropdown-divider"></li>
+              <li class="nav-item">
+              <a class="dropdown-item" href="{% url 'contacts:subscribe' %}" >
+                  {% trans 'Subscribe to news' %}
+              </a>
+            </li>
+            {% endif %}
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'account_logout' %}">
                 {% trans 'Log out' %}
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'profiles:profile_detail' uuid=user.profile.uuid %}">
-                {% trans 'Profile' %}
-              </a>
-            </li>
+            </a>
+          </li>
           {% else %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'account_signup' %}">{% trans 'Sign Up' %}
@@ -77,6 +88,9 @@
   </div>
   </nav>
 </header>
+{% block js %}
+
+{% endblock js%}
 
 
 

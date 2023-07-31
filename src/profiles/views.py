@@ -17,6 +17,7 @@ class ProfileView(LRM, View):
         return render(request, "profiles/profile_detail.html", ctx)
 
     def post(self, request, **kwargs):
+        # htmx_based
         # bug TODO: if user (avatar +) by chance click on upload without attached file
         # user contradicts themselves problem;
         try:
@@ -51,6 +52,7 @@ class ProfileDelete(LRM, View):
         return render(request, "profiles/profile_delete.html", ctx)
 
     def post(self, request, **kwargs):
+        # TODO implement htmx?
         uuid = kwargs.get("uuid")
         profile = get_object_or_404(Profile, uuid=uuid, user=request.user)
         profile.delete()

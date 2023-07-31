@@ -13,7 +13,9 @@ class Job(WeeklyJob):
     """
     users: active status and profile wanted_niews
     will get email with news weekly;
-    let op: Job package;
+    News letter may not contain links to posts
+    TODO: better way to arrange unsubscribe
+
     """
 
     help = "Send news letter"  # noqa
@@ -25,15 +27,16 @@ class Job(WeeklyJob):
         domain = settings.ABSOLUTE_URL_BASE
         profiles = Profile.objects.send_news().select_related("user")
         letter = NewsLetter.objects.filter(letter_status=1).last()
-        ctx = {"letter": letter}
+        ctx = {"letter": letter, "domain": domain}
         posts = Post.objects.filter(send_status=1, letter=letter)
-        if letter.posts:
-            ctx.update({"posts": letter.posts.all(), "domain": domain})
         if letter and profiles:
-            text_msg = render_to_string("contacts/emails/letter.txt", ctx)
-            html_msg = render_to_string("contacts/emails/letter.html", ctx)
+            if letter.posts:
+                ctx.update({"posts": letter.posts.all()})
             try:
                 for profile in profiles:
+                    ctx.update({"uuid": profile.uuid})
+                    text_msg = render_to_string("contacts/emails/letter.txt", ctx)
+                    html_msg = render_to_string("contacts/emails/letter.html", ctx)
                     mail.send_mail(
                         subject=stamp,
                         message=text_msg,
@@ -44,9 +47,10 @@ class Job(WeeklyJob):
                 letter.sended_at = timezone.now()
                 letter.letter_status = 2
                 letter.save()
-                for post in posts:
-                    post.send_status = 2
-                    post.save()
+                if posts.count() > 0:
+                    for post in posts:
+                        post.send_status = 2
+                        post.save()
 
             except Exception as e:
                 print(e)

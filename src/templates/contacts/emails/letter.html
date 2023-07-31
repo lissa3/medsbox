@@ -23,7 +23,10 @@
       {% endif %}
       <p>Best regards,</p>
       <p>Admin</p>
-      <!-- TODO: Link to unsubscribe: placeholder by now  -->
+      <hr>
+    <a href="{{domain}}{% url 'contacts:end_news' uuid=uuid %}">
+      Unsubscribe
+    </a>
     </div>
   </body>
 </html>

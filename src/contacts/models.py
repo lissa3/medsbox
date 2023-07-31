@@ -24,4 +24,4 @@ class NewsLetter(MediaStamp):
     sended_at = models.DateField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return f"sent news {self.id}"
+        return f"Letter #id {self.id}"
