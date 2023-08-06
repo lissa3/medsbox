@@ -52,6 +52,7 @@ LOCAL_APPS = [
     "src.posts.apps.PostsConfig",
     "src.core.apps.CoreConfig",
     "src.contacts.apps.ContactsConfig",
+    "src.sentry.apps.SentryConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY + LOCAL_APPS
 
@@ -201,3 +202,8 @@ MODELTRANSLATION_LANGUAGES = (
     "en",
     "uk",
 )
+
+# sentry-sdk
+SENTRY_ENABLED = False
+# SENTRY_ENABLED = env("SENTRY_ENABLED")
+SENTRY_DSN = "https://examplePublicKey@o0.ingest.sentry.io/0"
