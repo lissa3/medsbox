@@ -9,7 +9,7 @@ from django.urls import reverse
 from django_webtest import WebTest
 from webtest import Upload
 
-from src.accounts.tests.factories.user_factory import UserFactory
+from src.accounts.tests.factories import UserFactory
 from src.core.utils.base import get_temp_img_bytes
 from src.profiles.models import Profile
 

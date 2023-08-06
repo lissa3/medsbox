@@ -35,12 +35,12 @@
             </li>     -->
             {% endif %}
             <!-- May be here small img? -->
-          <li class="nav-item dropdown">
+  t        <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 {{user.username}}
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="{% url 'profiles:profile_detail' uuid=user.profile.uuid %}">{% trans "Profile" %}</a>
+              <li><a class="dropdown-item" id="subLink" href="{% url 'profiles:profile_detail' uuid=user.profile.uuid %}">{% trans "Profile" %}</a>
               </li>
 
               {% if not news_negative %}

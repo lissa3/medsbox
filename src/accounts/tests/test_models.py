@@ -3,7 +3,7 @@ from django.test import TestCase
 
 from src.profiles.models import Profile
 
-from .factories.user_factory import UserFactory
+from .factories import UserFactory
 
 User = get_user_model()
 

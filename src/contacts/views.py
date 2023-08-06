@@ -11,13 +11,12 @@ from src.profiles.models import Profile
 class Subscribe(LRM, View):
     def get(self, request):
         """
-        only autent-ed users can subscribe to a news letter
+        only auth-ed users can subscribe to a news letter
         via menu dropdown item
         """
         return render(
             request,
-            "contacts/subscription/\
-                      confirmation.html",
+            "contacts/subscription/confirmation.html",
         )
 
     def post(self, request, **kwargs):

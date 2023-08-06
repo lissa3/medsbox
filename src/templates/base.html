@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,11 +19,12 @@
     <link rel="stylesheet" href="{% static 'css/search.css' %}">
     <link rel="stylesheet" href="{% static 'css/editor.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-
+<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js">
+</script>
 </head>
-<body>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
   {% include "components/menu.html" %}
-
 <!-- class wrap to fix footer  -->
 <div class="wraps">
     <section class="container-xxl">
@@ -31,7 +32,15 @@
         {% if messages %}
         <div class="container" id="msg-box">
           <div class="m-2">
-            placeholder for htmx-messages
+            <ul class="p-2" hx-get="{% url 'clear' %}" hx-trigger="load delay:3s">
+              {% for msg in messages %}
+                {% if msg.tags == 'success' %}
+                <div class="green">{{ msg }}</div>
+                {% elif msg.tags == 'error' %}
+                <div class="errorlist" >{{ msg }}</div>
+                {% endif %}
+              {% endfor %}
+            </ul>
           </div>
         </div>
         {% endif %}
@@ -41,7 +50,7 @@
         placeholder for search form
       </div>
     </section>
-    <main>
+    <main id="center-part">
     <!-- <main class="container">     -->
       {% block content %}
       {% endblock %}
@@ -71,10 +80,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="{% static 'js/htmx.min.js' %}" defer></script>
-
-</script>
 <script  src="{% static 'js/utils.js' %}"></script>
 {# <script  src="{% static 'js/categs.js' %}"></script> #}
+
 
   {% block js %}
   {% endblock %}

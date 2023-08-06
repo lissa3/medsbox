@@ -1,0 +1,26 @@
+
+{
+  "name":"Med Sandox",
+ "short_name":"sanbox",
+ "icons":[
+  {"src":"./android-chrome-192x192.png",
+  "sizes":"192x192",
+  "type":"image/png",
+  "purporse":"maskable"
+  },
+  {"src":"./android-chrome-512x512.png",
+  "sizes":"512x512",
+  "type":"image/png",
+  "purporse":"maskable"
+  },
+  {"src":"./apple-touch-icon.png",
+  "sizes":"512x512",
+  "type":"image/png",
+  "purporse":"maskable"
+  }
+
+ ],
+"display":"standalone",
+"description":"Medical education",
+"theme_color":"#f1dfc5"
+}

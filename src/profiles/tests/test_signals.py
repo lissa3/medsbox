@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.db.models.signals import post_delete, post_save
 from django.test import TestCase
 
-from src.accounts.tests.factories.user_factory import UserFactory
+from src.accounts.tests.factories import UserFactory
 from src.profiles.models import Profile
 from src.profiles.tests.factories.profile_factory import ProfileFactory
 

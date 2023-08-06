@@ -3,7 +3,7 @@ from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
 
-from src.accounts.tests.factories.user_factory import UserFactory
+from src.accounts.tests.factories import UserFactory
 
 User = get_user_model()
 

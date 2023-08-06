@@ -7,7 +7,7 @@ from factory.django import DjangoModelFactory
 from faker import Faker
 from taggit.models import Tag
 
-from src.accounts.tests.factories.user_factory import StaffUserFactory
+from src.accounts.tests.factories import StaffUserFactory
 from src.posts.models.categ_model import Category
 from src.posts.models.post_model import Post
 
@@ -37,6 +37,7 @@ class PostFactory(DjangoModelFactory):
     status = factory.fuzzy.FuzzyChoice(Post.CurrentStatus.values)
     title = factory.Faker("word")
     content = factory.Faker("paragraph")
+
     # category = factory.SubFactory(Category) default
 
     class Meta:

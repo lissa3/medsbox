@@ -1,7 +1,7 @@
 import factory
 from django.db.models.signals import post_save
 
-from src.accounts.tests.factories.user_factory import UserFactory
+from src.accounts.tests.factories import UserFactory
 from src.profiles.models import Profile
 
 

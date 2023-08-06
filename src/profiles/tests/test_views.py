@@ -7,7 +7,7 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from src.accounts.tests.factories.user_factory import UserFactory
+from src.accounts.tests.factories import UserFactory
 from src.core.utils.base import get_temporary_image, get_temporary_text_file
 from src.profiles.forms import ProfileForm
 from src.profiles.models import Profile

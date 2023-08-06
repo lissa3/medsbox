@@ -1,9 +1,12 @@
+from smtplib import SMTPException
+
 from django.conf import settings
 from django.core import mail
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django_extensions.management.jobs import WeeklyJob
 
+from src.contacts.exceptions import *  # noqa
 from src.contacts.models import NewsLetter
 from src.posts.models.post_model import Post
 from src.profiles.models import Profile
@@ -28,11 +31,11 @@ class Job(WeeklyJob):
         profiles = Profile.objects.send_news().select_related("user")
         letter = NewsLetter.objects.filter(letter_status=1).last()
         ctx = {"letter": letter, "domain": domain}
-        posts = Post.objects.filter(send_status=1, letter=letter)
-        if letter and profiles:
-            if letter.posts:
-                ctx.update({"posts": letter.posts.all()})
+        if profiles and letter:
             try:
+                posts = Post.objects.filter(send_status=1, letter=letter)
+                if letter.posts:
+                    ctx.update({"posts": letter.posts.all()})
                 for profile in profiles:
                     ctx.update({"uuid": profile.uuid})
                     text_msg = render_to_string("contacts/emails/letter.txt", ctx)
@@ -52,6 +55,12 @@ class Job(WeeklyJob):
                         post.send_status = 2
                         post.save()
 
-            except Exception as e:
-                print(e)
+            except SMTPException as e:
+                print("smth went wrong ", e)
                 # TODO: add Log
+
+        else:
+            if not profiles:
+                raise NewsFansNotFoundException("No profiles not send news")
+            elif not letter:
+                raise LetterNotFoundException("No letter to send")

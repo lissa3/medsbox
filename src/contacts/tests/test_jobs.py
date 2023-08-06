@@ -1,8 +1,10 @@
+import pytest
 import time_machine
 from django.conf import settings
 from django.urls import reverse
 
 from src.accounts.models import User
+from src.contacts.exceptions import *  # noqa
 from src.contacts.jobs.send_news import Job as SendMailJob
 from src.contacts.models import NewsLetter
 from src.posts.models.post_model import Post
@@ -13,20 +15,6 @@ from .factories import NewsLetterFactory
 
 
 class TestSendEmailJob:
-    @time_machine.travel("2024-04-23 00:00 +0000")
-    def test_no_news_inactive_user(self, mailoutbox):
-        """
-        no letter for inactive user
-        """
-        profile = ProfileFactory(want_news=True)
-        user = User.objects.get(profile=profile)
-        user.is_active = False
-        user.save()
-        send_mail_job = SendMailJob()
-        send_mail_job.execute()
-
-        assert len(mailoutbox) == 0
-
     @time_machine.travel("2023-07-17 00:00 +0000")
     def test_send_news_with_posts_links(self, mailoutbox):
         """

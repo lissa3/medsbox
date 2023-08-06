@@ -1,7 +1,7 @@
 import time_machine
 from django.test import TestCase
 
-from src.accounts.tests.factories.user_factory import UserFactory
+from src.accounts.tests.factories import UserFactory
 from src.profiles.models import Profile
 
 

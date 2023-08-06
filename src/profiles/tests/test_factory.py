@@ -1,10 +1,7 @@
-import pytest
-
 from src.profiles.models import Profile
 from src.profiles.tests.factories.profile_factory import ProfileFactory
 
 
-@pytest.mark.django_db
 class TestProfile:
     def test_factory(self):
         profile = ProfileFactory()

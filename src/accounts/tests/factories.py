@@ -17,10 +17,7 @@ class UserFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("username", "email")
 
 
-class AdminSupUserFactory(factory.django.DjangoModelFactory):
-    username = factory.Sequence(lambda n: f"user-{n}")
-    email = factory.LazyAttribute(lambda _: faker.unique.email())
-    password = factory.PostGenerationMethodCall("set_password", "12345abc")
+class AdminSupUserFactory(UserFactory):
     is_staff = True
     is_superuser = True
 
@@ -29,10 +26,7 @@ class AdminSupUserFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("username", "email", "is_staff", "is_superuser")
 
 
-class StaffUserFactory(factory.django.DjangoModelFactory):
-    username = factory.Sequence(lambda n: f"user-{n}")
-    email = factory.LazyAttribute(lambda _: faker.unique.email())
-    password = factory.PostGenerationMethodCall("set_password", "12345abc")
+class StaffUserFactory(UserFactory):
     is_staff = True
     is_superuser = False
 
