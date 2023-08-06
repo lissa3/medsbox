@@ -1,5 +1,4 @@
-let log = console.log;
-  //click button Categories-> toggle categs
+//click button Categories-> toggle categs
   document.addEventListener('click',(e)=>{
   let isCategBut = e.target.matches("[data-dropdown-but]");
     if(!isCategBut&&e.target.closest("[data-dropdown]")!=null){

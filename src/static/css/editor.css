@@ -1,0 +1,19 @@
+
+/* just for testing */
+.image{
+
+    border:1px solid black;
+
+
+  }
+  .image-style-align-left{
+    float:left;
+    margin-right: 10px;
+
+  }
+  .image-style-align-right{
+    float:right;
+    margin-left: 10px;
+
+  }
+
