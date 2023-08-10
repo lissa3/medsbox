@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from src.accounts.tests.factories import UserFactory
-from src.contacts.exceptions import FailedNewsSubscription, UnsubcribeFail
+from src.contacts.exceptions import HtmxFailureError
 from src.profiles.models import Profile
 from src.profiles.tests.factories.profile_factory import ProfileFactory
 
@@ -36,7 +36,7 @@ class SubscribeTestCase(TestCase):
         profile = user.profile
         self.client.force_login(user)
         url = reverse("contacts:subscribe")
-        with self.assertRaises(FailedNewsSubscription) as e:
+        with self.assertRaises(HtmxFailureError) as e:
             self.client.post(url)  # noqa
 
         profile.refresh_from_db()
@@ -54,7 +54,7 @@ class UnSubscribeTestCase(TestCase):
         url = reverse("contacts:end_news", kwargs={"uuid": profile.uuid})
         resp = self.client.post(url, **headers)
         profile.refresh_from_db()
-        print(resp.items())
+
         self.assertEqual(resp.status_code, 200)
         self.assertIsNotNone(resp.headers["HX-Redirect"])
         self.assertFalse(profile.want_news)
@@ -66,9 +66,9 @@ class UnSubscribeTestCase(TestCase):
         """
         profile = ProfileFactory(want_news=True)
         url = reverse("contacts:end_news", kwargs={"uuid": profile.uuid})
-        with self.assertRaises(UnsubcribeFail) as e:
-            self.client.post(url)  # noqa
 
+        with self.assertRaises(HtmxFailureError) as e:
+            self.client.post(url)  # noqa
         self.assertTrue(profile.want_news)
         self.assertEqual(
             str(e.exception), (_("Something went wrong.Can't unsubscribe."))

@@ -4,3 +4,11 @@ class ProfileException(Exception):
     """
 
     pass
+
+
+class NoAjaxError(Exception):
+    """
+    get triggered if request is not ajax
+    """
+
+    pass

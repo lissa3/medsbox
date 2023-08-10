@@ -24,17 +24,9 @@ class JobError(Exception):
     pass
 
 
-class FailedNewsSubscription(Exception):
+class HtmxFailureError(Exception):
     """
-    get triggered if subscription to news letter failed
-    """
-
-    pass
-
-
-class UnsubcribeFail(Exception):
-    """
-    get triggered if subscription to news letter failed
+    get triggered if request is not htmx
     """
 
     pass

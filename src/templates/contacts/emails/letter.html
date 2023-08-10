@@ -12,15 +12,13 @@
       <p>Here is a link to read a new article:
         {% if posts %}
           {% for post in posts %}
-            <a href="#">Post title: {{post.title}}</a>
-    {% comment %}
-    <a href="{{domain}}{% url 'posts:post_detail' letter.post.slug %}">Some post</a></p>
-    {% endcomment %}
-          {% endfor%}
-          {% else %}
-          <p>No posts</p>
-         {% endif %}
+      <a href="{{domain}}{% url 'posts:post_detail' letter.post.slug %}">{{post.title}}</a>
+    </p>
+      {% endfor%}
+      {% else %}
+      <p>No posts</p>
       {% endif %}
+    {% endif %}
       <p>Best regards,</p>
       <p>Admin</p>
       <hr>

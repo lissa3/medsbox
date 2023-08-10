@@ -2,8 +2,10 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 
+from .exceptions import NoAjaxError
 from .forms import ProfileForm
 from .models import Profile
 
@@ -17,16 +19,15 @@ class ProfileView(LRM, View):
         return render(request, "profiles/profile_detail.html", ctx)
 
     def post(self, request, **kwargs):
-        # htmx_based
+        # ajax request
+        # request.headers.get("x-requested_with") == "XMLHttpRequest")
         # bug TODO: if user (avatar +) by chance click on upload without attached file
         # user contradicts themselves problem;
-        try:
+        ajax = request.headers.get("x-requested_with")
+        if ajax == "XMLHttpRequest":
             uuid = kwargs.get("uuid")
             profile = get_object_or_404(Profile, uuid=uuid)
             form = ProfileForm(request.POST, request.FILES, profile)
-            # if request.headers.get("x-requested_with") == "XMLHttpRequest":
-            #     print("got an ajax")
-
             if form.is_valid():
                 ava_img = form.cleaned_data.get("avatar")
                 if ava_img:
@@ -34,11 +35,11 @@ class ProfileView(LRM, View):
                 else:
                     profile.avatar = None
                 profile.save()
-                return JsonResponse({"status_code": 200, "resp": "upload success"})
+                return JsonResponse({"status_code": 200, "resp": "OK"})
             else:
                 return JsonResponse({"status_code": 404, "err": form.errors})
-        except Exception as e:
-            print("exeption", e)
+        else:
+            raise NoAjaxError(_("Something went wrong"))
 
 
 class ProfileDelete(LRM, View):

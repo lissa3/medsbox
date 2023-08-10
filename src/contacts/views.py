@@ -7,7 +7,7 @@ from django.views.generic import View
 
 from src.profiles.models import Profile
 
-from .exceptions import FailedNewsSubscription, UnsubcribeFail
+from .exceptions import HtmxFailureError
 
 
 class Subscribe(LRM, View):
@@ -38,7 +38,7 @@ class Subscribe(LRM, View):
                 headers={"HX-Redirect": "/"},
             )
         elif htmx_req is None:
-            raise FailedNewsSubscription(_("Subscription failed"))
+            raise HtmxFailureError(_("Subscription failed"))
 
 
 class UnSubscribe(View):
@@ -68,4 +68,4 @@ class UnSubscribe(View):
                 },
             )
         elif htmx_req is None:
-            raise UnsubcribeFail(_("Something went wrong.Can't unsubscribe."))
+            raise HtmxFailureError(_("Something went wrong.Can't unsubscribe."))
