@@ -4,8 +4,8 @@ const sendAvaUpdate = function(url,avatar) {
     fd.append('avatar',avatar)
     fetch(url,{
       method:"POST",
-      body:fd,
-      headers:{"X-Requested-With": "XMLHttpRequest"},
+      headers:{ "x-requested-with": "XMLHttpRequest"},
+      body:fd
       }).then((resp)=>resp.json())
         .then((data)=>{
           if(data.status_code ===200){

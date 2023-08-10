@@ -34,8 +34,7 @@ class Job(WeeklyJob):
         if profiles and letter:
             try:
                 posts = Post.objects.filter(send_status=1, letter=letter)
-                if letter.posts:
-                    ctx.update({"posts": letter.posts.all()})
+                ctx.update({"posts": posts})
                 for profile in profiles:
                     ctx.update({"uuid": profile.uuid})
                     text_msg = render_to_string("contacts/emails/letter.txt", ctx)

@@ -100,7 +100,7 @@ class MyTestCase(WebTest):
         profile_avatar = self.profile.avatar
 
         self.assertEqual(response_final.status_code, 200)
-        self.assertEqual(response_final.json["resp"], "upload success")
+        self.assertEqual(response_final.json["resp"], "OK")
         self.assertEqual(profile_avatar, "")
 
     def test_upload_txt_avatar(self):

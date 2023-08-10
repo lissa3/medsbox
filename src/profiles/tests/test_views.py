@@ -41,8 +41,12 @@ class UploadImgTestCase(TestCase):
         img_file = get_temporary_image()
         data_add_img = {"avatar": img_file}
         # upload avatar
-
-        resp1 = self.client.post(self.url, data_add_img, format="multipart")
+        resp1 = self.client.post(
+            self.url,
+            data_add_img,
+            format="multipart",
+            **{"x-requested-with": "XMLHttpRequest"},
+        )
         self.profile.refresh_from_db()
         avatar_img = self.profile.avatar
 

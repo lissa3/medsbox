@@ -20,26 +20,20 @@ class ProfileView(LRM, View):
 
     def post(self, request, **kwargs):
         # ajax request
-        # request.headers.get("x-requested_with") == "XMLHttpRequest")
-        # bug TODO: if user (avatar +) by chance click on upload without attached file
-        # user contradicts themselves problem;
-        ajax = request.headers.get("x-requested_with")
-        if ajax == "XMLHttpRequest":
-            uuid = kwargs.get("uuid")
-            profile = get_object_or_404(Profile, uuid=uuid)
-            form = ProfileForm(request.POST, request.FILES, profile)
-            if form.is_valid():
-                ava_img = form.cleaned_data.get("avatar")
-                if ava_img:
-                    profile.avatar = ava_img
-                else:
-                    profile.avatar = None
-                profile.save()
-                return JsonResponse({"status_code": 200, "resp": "OK"})
+        # request.headers.get("x-requested-with") == "XMLHttpRequest")
+        uuid = kwargs.get("uuid")
+        profile = get_object_or_404(Profile, uuid=uuid)
+        form = ProfileForm(request.POST, request.FILES, profile)
+        if form.is_valid():
+            ava_img = form.cleaned_data.get("avatar")
+            if ava_img:
+                profile.avatar = ava_img
             else:
-                return JsonResponse({"status_code": 404, "err": form.errors})
+                profile.avatar = None
+            profile.save()
+            return JsonResponse({"status_code": 200, "resp": "OK"})
         else:
-            raise NoAjaxError(_("Something went wrong"))
+            return JsonResponse({"status_code": 404, "err": form.errors})
 
 
 class ProfileDelete(LRM, View):
