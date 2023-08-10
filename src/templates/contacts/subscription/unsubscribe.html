@@ -8,7 +8,7 @@
     <h3>{% trans "Do you really wish to unsubscribe from the newsletter?" %}</h3>
     <div class="d-flex">
       <button  class="btn btn-warning"
-        hx-post="{% url 'contacts:end-news' uuid=uuid %}"
+        hx-post="{% url 'contacts:end_news' uuid=uuid %}"
         >
         {% trans "Unsubscribe" %}
       </button>

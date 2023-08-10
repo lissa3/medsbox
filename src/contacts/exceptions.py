@@ -22,3 +22,19 @@ class JobError(Exception):
     """
 
     pass
+
+
+class FailedNewsSubscription(Exception):
+    """
+    get triggered if subscription to news letter failed
+    """
+
+    pass
+
+
+class UnsubcribeFail(Exception):
+    """
+    get triggered if subscription to news letter failed
+    """
+
+    pass

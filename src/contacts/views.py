@@ -7,6 +7,8 @@ from django.views.generic import View
 
 from src.profiles.models import Profile
 
+from .exceptions import FailedNewsSubscription, UnsubcribeFail
+
 
 class Subscribe(LRM, View):
     def get(self, request):
@@ -24,35 +26,28 @@ class Subscribe(LRM, View):
         htmx_based request with redirect to home page
         and flash msg as a feedback
         """
-        try:
-            htmx_req = request.headers.get("hx-request")
-            if request.user.is_authenticated and htmx_req is not None:
-                _id = request.user.profile.id
-                profile = get_object_or_404(Profile, id=_id)
-                messages.success(request, _("You have subscribed to the news letter"))
-                profile.want_news = True
-                profile.save()
-                return HttpResponse(
-                    headers={
-                        "HX-Redirect": "/",
-                    },
-                )
-        except Profile.DoesNotExist():
-            messages.warning(request, _("Subscription failed"))
+        htmx_req = request.headers.get("hx-request")
+
+        if request.user.is_authenticated and htmx_req is not None:
+            _id = request.user.profile.id
+            profile = get_object_or_404(Profile, id=_id)
+            profile.want_news = True
+            profile.save()
+            messages.success(request, _("You have subscribed to the news letter"))
             return HttpResponse(
-                headers={
-                    "HX-Redirect": "/",
-                },
+                headers={"HX-Redirect": "/"},
             )
+        elif htmx_req is None:
+            raise FailedNewsSubscription(_("Subscription failed"))
 
 
 class UnSubscribe(View):
     def get(self, request, **kwargs):
         """
-        link in newsletter contains profile uuid
+        get request via link in a newsletter
+        contains profile uuid
         """
         uuid = kwargs.get("uuid")
-
         profile = get_object_or_404(Profile, uuid=uuid)
         ctx = {"uuid": profile.uuid}
         print("ctx", ctx)
@@ -60,23 +55,17 @@ class UnSubscribe(View):
 
     def post(self, request, **kwargs):
         # htmx_based
-        try:
-            htmx_req = request.headers.get("hx-request")
-            uuid = kwargs.get("uuid")
-            profile = get_object_or_404(Profile, uuid=uuid)
-            if htmx_req and profile:
-                messages.success(request, _("You have unsubscribed to the news letter"))
-                profile.want_news = False
-                profile.save()
-                return HttpResponse(
-                    headers={
-                        "HX-Redirect": "/",
-                    },
-                )
-        except Profile.DoesNotExist():
-            messages.warning(request, _("Something went wrong.Subscription failed"))
+        htmx_req = request.headers.get("hx-request")
+        uuid = kwargs.get("uuid")
+        profile = get_object_or_404(Profile, uuid=uuid)
+        if htmx_req and profile.want_news:
+            profile.want_news = False
+            profile.save()
+            messages.success(request, _("You have unsubscribed to the news letter"))
             return HttpResponse(
                 headers={
                     "HX-Redirect": "/",
                 },
             )
+        elif htmx_req is None:
+            raise UnsubcribeFail(_("Something went wrong.Can't unsubscribe."))
