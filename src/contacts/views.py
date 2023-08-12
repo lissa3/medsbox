@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
@@ -56,16 +56,20 @@ class UnSubscribe(View):
     def post(self, request, **kwargs):
         # htmx_based
         htmx_req = request.headers.get("hx-request")
-        uuid = kwargs.get("uuid")
-        profile = get_object_or_404(Profile, uuid=uuid)
-        if htmx_req and profile.want_news:
-            profile.want_news = False
-            profile.save()
-            messages.success(request, _("You have unsubscribed to the news letter"))
-            return HttpResponse(
-                headers={
-                    "HX-Redirect": "/",
-                },
-            )
-        elif htmx_req is None:
-            raise HtmxFailureError(_("Something went wrong.Can't unsubscribe."))
+        try:
+            uuid = kwargs.get("uuid")
+            profile = get_object_or_404(Profile, uuid=uuid)
+            if htmx_req and profile.want_news:
+                profile.want_news = False
+                profile.save()
+                messages.success(request, _("You have unsubscribed to the news letter"))
+                return HttpResponse(
+                    headers={
+                        "HX-Redirect": "/",
+                    },
+                )
+            elif htmx_req is None:
+                raise HtmxFailureError(_("Something went wrong.Can't unsubscribe."))
+        except HtmxFailureError:
+            raise
+        return HttpResponseRedirect("/")

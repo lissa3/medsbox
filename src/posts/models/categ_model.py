@@ -13,7 +13,7 @@ class Category(MP_Node):
         verbose_name=_("Icon"), null=True, blank=True, upload_to=upload_img
     )
 
-    node_order_by = ["name"]
+    node_order_by = ["name"]  # defines sorted<->unsorted in create form
 
     class Meta:
         verbose_name = "Category"
