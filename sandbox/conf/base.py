@@ -43,6 +43,7 @@ THIRD_PARTY = [
     "taggit",
     "django_extensions",
     # "modeltranslation", # see above
+    "django_ckeditor_5",
 ]
 
 
