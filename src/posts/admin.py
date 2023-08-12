@@ -1,9 +1,11 @@
 from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
+from django.db import models
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
+from django_ckeditor_5.widgets import CKEditor5Widget
 from modeltranslation.admin import TranslationAdmin
 from treebeard.admin import TreeAdmin
 from treebeard.forms import movenodeform_factory
@@ -52,6 +54,9 @@ class PostAdmin(TranslationAdmin):
     list_per_page = 15
     actions = ("make_posts_published",)
     empty_value_display = "No data"
+    formfield_overrides = {
+        models.TextField: {"widget": CKEditor5Widget(config_name="extends")},
+    }
 
     @admin.action(description="Mark as published")
     def make_posts_published(self, request, queryset):
@@ -90,7 +95,10 @@ class PostAdmin(TranslationAdmin):
     # new feature: adjust admin (see three func below)
     # current admin will be auto-selected in add post view
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        """add current admin kwargs"""
+        """add current admin kwargs:
+        users gets only their names in dropdown;
+        letter only with status 1(ready to send) in dropdown;
+        """
         if db_field.name == "author":
             kwargs["queryset"] = get_user_model().objects.filter(
                 username=request.user.username
