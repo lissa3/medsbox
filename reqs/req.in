@@ -11,3 +11,5 @@ django-treebeard
 django-taggit==3.1.0
 django-extensions==3.2.1
 django-modeltranslation==0.18.9
+sentry-sdk==1.29.2
+django-ckeditor-5
