@@ -1,8 +1,9 @@
-from datetime import datetime, timezone
+from datetime import timezone
 
 import factory
 import factory.fuzzy
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 from factory.django import DjangoModelFactory
 from faker import Faker
 from taggit.models import Tag
@@ -35,8 +36,10 @@ class PostFactory(DjangoModelFactory):
     author = factory.SubFactory(StaffUserFactory)
     published_at = fake.date_time(tzinfo=timezone.utc)
     status = factory.fuzzy.FuzzyChoice(Post.CurrentStatus.values)
-    title = factory.Faker("word")
-    content = factory.Faker("paragraph")
+    title_ru = _("море")
+    content_ru = _("земля")
+    title_en = _("see")
+    content_en = _("earth")
 
     # category = factory.SubFactory(Category) default
 

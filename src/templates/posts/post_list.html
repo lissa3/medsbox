@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static categ_menu i18n %}
+
+{% block content %}
+<div class="row">
+  <aside class="col-md-3 col-sm-12">
+    <!-- <nav role="navigation" aria-label="Sidebar Navigation">
+      <div class="list-group"> -->
+        {% show_categs %}
+        <!-- </div>
+    </nav>     -->
+  </aside>
+  <div class="col-md-6 col-sm-12">
+   {% if posts %}
+    {% for post in posts%}
+    <h3>{{post.title}}</h3>
+    <p>{{post.created_at|date:"F d, Y"}}</p>
+    <strong>{%trans "category" %}: {{post.categ.name}}</strong>
+    <div class="content">
+        {{post.content|safe}}
+    </div>
+    <hr>
+    {% endfor %}
+    <!-- <figure class="figure w-50 float-right m-3">
+        <img src="/media/ckeditor5/geit.jpg" class="figure-img img-fluid rounded img-thumbnail" alt="Alt text.">
+        <figcaption class="figure-caption text-center">Visible text.</figcaption>
+    </figure>        -->
+    {% include "posts/parts/pagination.html" %}
+  {% endif %}
+  </div>
+  <div class="col-md-3 col-sm-12">tags?</div>
+
+</div>
+
+{% endblock%}
+{% block js %}
+<script src="{% static 'js/categs.js' %}"></script>
+{% endblock %}

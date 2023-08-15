@@ -33,6 +33,7 @@ urlpatterns += i18n_patterns(
     path("accounts/", include("allauth.urls")),
     path("core/", include("src.core.urls")),
     path("profile/", include("src.profiles.urls")),
+    path("posts/", include("src.posts.urls")),
 )
 urlpatterns += htmx_urlpatterns
 

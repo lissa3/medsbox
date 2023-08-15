@@ -5,7 +5,7 @@ ABSOLUTE_URL_BASE = "http://127.0.0.1:8000"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "memory",
+        "NAME": "memory.sqlite3",
     }
 }
 # use in-memory-db
