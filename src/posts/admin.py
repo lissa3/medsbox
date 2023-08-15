@@ -1,7 +1,6 @@
 from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
@@ -125,14 +124,6 @@ class PostAdmin(TranslationAdmin):
 
     # new feature: adjust admin (see two func below)
     # using link to access related categ object
-
-    def admin_change_url(self, obj: object):
-        """
-        help func: buil-in schema for detail view (any admin model obj)"""
-
-        app_label = obj._meta.app_label
-        model_name = obj._meta.model.__name__.lower()
-        return reverse(f"admin:{app_label}_{model_name}_change", args=(obj.pk,))
 
     @admin_link("categ", _("Category"))
     def categ_link(self, categ: object):

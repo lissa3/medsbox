@@ -27,8 +27,8 @@ class TestSendEmailJob:
         profile = ProfileFactory(want_news=True)
         domain = settings.ABSOLUTE_URL_BASE
         letter = NewsLetterFactory(letter_status=1)
-        post = PostFactory(send_status=1, letter=letter)
-        post_title = post.title
+        post = PostFactory(send_status=1, letter=letter, title_ru="заголовок")
+        post_title = post.title_ru
 
         short_url = reverse("contacts:end_news", kwargs={"uuid": profile.uuid})
         full_link_unsub = f"{domain}{short_url}"
@@ -69,7 +69,7 @@ class TestSendEmailJob:
         subject = "Newsletter Monday, Jul. 17 17/07/2023"
         profile = ProfileFactory(want_news=True)
         post = PostFactory(send_status=0)
-        post_title = post.title
+        post_title = post.title_ru
         domain = settings.ABSOLUTE_URL_BASE
         letter = NewsLetterFactory(letter_status=1)
 

@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-LANGUAGE_CODE = "en"
+LANGUAGE_CODE = "en-us"
 LANGUAGES = (("ru", _("Russian")), ("en", _("English")), ("uk", _("Ukrainian")))
 
 USE_I18N = True
@@ -195,6 +195,7 @@ ACCOUNT_USERNAME_BLACKLIST = []
 
 # taggit
 TAGGIT_STRIP_UNICODE_WHEN_SLUGIFYING = True
+TAGGIT_CASE_INSENSITIVE = True
 
 # modeltranslation
 MODELTRANSLATION_DEFAULT_LANGUAGE = "ru"
@@ -222,7 +223,9 @@ customColorPalette = [
     {"color": "hsl(207, 90%, 54%)", "label": "Blue"},
 ]
 
-CKEDITOR_5_CUSTOM_CSS = "src/static/css/editor.css"  # optional
+# CKEDITOR_5_FILE_STORAGE = "blog.storage.CustomStorage"
+# CKEDITOR_5_CUSTOM_CSS = STATIC_URL + "django_ckeditor_5/ckeditor_custom.css"
+CKEDITOR_5_CUSTOM_CSS = "css/editor.css"  # optional
 CKEDITOR_5_CONFIGS = {
     "default": {
         "toolbar": [
@@ -244,6 +247,8 @@ CKEDITOR_5_CONFIGS = {
                 {"name": "/.*/", "attributes": True, "classes": True, "styles": True}
             ]
         },
+        # "link": {"addTargetToExternalLinks": "true"},
+        # "mediaEmbed": {"previewsInData": "true"},
         "blockToolbar": [
             "paragraph",
             "heading1",

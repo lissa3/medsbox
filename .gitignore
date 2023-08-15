@@ -10,6 +10,7 @@ prod.py
 dump
 media
 src/static/admin/*
+src/static/images/collection
 *.env
 memory
 venv

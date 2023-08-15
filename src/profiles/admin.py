@@ -58,7 +58,6 @@ class ProfileChartAdmin(admin.ModelAdmin):
         total_num = dict(qs.aggregate(**metrics))
         response.context_data["total"] = total_num
         total = total_num["total"]  # 7
-        print("total is ", total)
         calc_qs = (
             qs.annotate(
                 period=Trunc("created_at", "day", output_field=DateTimeField()),
