@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static categ_menu i18n %}
+{% load static sidebars i18n %}
 
 {% block content %}
 <div class="row">
@@ -28,7 +28,9 @@
     {% include "posts/parts/pagination.html" %}
   {% endif %}
   </div>
-  <div class="col-md-3 col-sm-12">tags?</div>
+  <div class="col-md-3 col-sm-12">
+    {% show_tags %}
+  </div>
 
 </div>
 

@@ -1,15 +1,19 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
+from taggit.models import Tag
+from webtest import TestApp
 
 from src.accounts.tests.factories import AdminSupUserFactory
 from src.contacts.models import NewsLetter
 from src.contacts.tests.factories import NewsLetterFactory
 from src.core.utils.admin_help import admin_change_url
+from src.posts.models.post_model import Post
 from src.posts.tests.factories import PostFactory
 
 User = get_user_model()
+TestApp.__test__ = False
 
 
 class TestAdminPostForm(WebTest):
@@ -62,3 +66,37 @@ class TestAdminPostForm(WebTest):
         html_link = resp.html.find("a", href=categ_link)
 
         self.assertTrue(categ_link, html_link)
+
+
+@override_settings(LANGUAGE_CODE="ru", LANGUAGES=(("ru", "Russian"),))
+class TagSearchPostsTest(WebTest):
+    def setUp(self):
+        super().setUp()
+        self.tag = Tag.objects.create(name="слон")
+        self.post_1 = PostFactory(status=Post.CurrentStatus.PUB.value, tags=(self.tag,))
+        self.post_2 = PostFactory(
+            status=Post.CurrentStatus.DRAFT.value, tags=(self.tag,)
+        )
+
+    def test_tag_seacrh(self):
+        """
+        posts page contains a list of tag(s) triggering
+        filtering posts based on tag
+
+        """
+        start_url = reverse("posts:post_list")
+        # initial request to get a list of tags
+        resp = self.app.get(start_url)
+        a_tag = resp.html.find("a", class_="tag-link")
+        href = a_tag.attrs["href"]
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertIsNotNone(resp.context["tags"])
+        self.assertEqual(a_tag.string, "слон")
+        self.assertIsNotNone(href)
+
+        resp2 = self.app.get(href)
+        posts = resp2.context["posts"]
+
+        self.assertEqual(resp2.status_code, 200)
+        self.assertEqual(posts.count(), 1)

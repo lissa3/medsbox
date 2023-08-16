@@ -1,0 +1,13 @@
+<h5 class="text-center">Tags</h3>
+  <div id="we">Gogi</div>
+  <div class="d-flex flex-wrap justify-content-center">
+    {% if tags %}
+    {% for tag in tags %}
+        <div class="m-1"><a href="{% url 'posts:tag_search' tag=tag.slug %}" class="tag-link"><span class="badge bg-dark fs-6">{{ tag }}</span></a></div>
+    {% endfor %}
+    {% else %}
+    <h4>No tags yet</h4>
+    {% endif%}
+ </div>
+
+

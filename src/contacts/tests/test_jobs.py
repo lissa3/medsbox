@@ -68,7 +68,7 @@ class TestSendEmailJob:
         """
         subject = "Newsletter Monday, Jul. 17 17/07/2023"
         profile = ProfileFactory(want_news=True)
-        post = PostFactory(send_status=0)
+        post = PostFactory(send_status=0, title_ru="слон")
         post_title = post.title_ru
         domain = settings.ABSOLUTE_URL_BASE
         letter = NewsLetterFactory(letter_status=1)
