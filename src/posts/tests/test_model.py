@@ -47,8 +47,8 @@ class PostCreationTestCase(TestCase):
 
         categs_final_count = Category.objects.count()
 
-        self.assertEqual(categ_one.name, "Unspecified")
-        self.assertEqual(categ_two.name, "Unspecified")
+        self.assertEqual(categ_one.name, "Неопределена")
+        self.assertEqual(categ_two.name, "Неопределена")
         self.assertEqual(categs_initial_count, 1)
         self.assertEqual(categs_final_count, 2)
 

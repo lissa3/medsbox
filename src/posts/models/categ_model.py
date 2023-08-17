@@ -22,12 +22,12 @@ class Category(MP_Node):
     @classmethod
     def get_default_pk(cls, *args, **kwargs):
         """create or use existed default category"""
-        qs = cls.objects.filter(name="Unspecified")
+        qs = cls.objects.filter(name=_("Неопределена"))
         try:
             obj = qs.get()
         except qs.model.DoesNotExist:
-            cls.add_root(name="Unspecified")
-            obj = cls.objects.get(name="Unspecified")
+            cls.add_root(name=_("Неопределена"))
+            obj = cls.objects.get(name=_("Неопределена"))
         # obj, _ = cls.objects.get_or_create(name="Unspecified")
         return obj.pk
 

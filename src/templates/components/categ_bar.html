@@ -6,10 +6,10 @@
     {% recursetree categs %}
         <li class="node-name" data-li>
           {% if node.is_leaf %}
-          <a href="#" class="node-link" >{{node.name}}</a>
+          <a href="{% url 'posts:cat_search' node.slug %}" class="node-link" >{{node.name}}</a>
           {% else %}
           <!-- 2 siblings: a tag and ul children -->
-            <a href="#" class="node-link to-toggle" data-dropdown-link>{{node.name}} &#x25B8;</a>
+            <a href="{% url 'posts:cat_search' node.slug %}" class="node-link to-toggle" data-dropdown-link>{{node.name}} &#x25B8;</a>
             <ul class="children">
               {{ children }}
             </ul>
