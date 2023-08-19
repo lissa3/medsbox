@@ -22,7 +22,7 @@
             <a class="nav-link active" aria-current="page" href="{% url 'posts:post_list'%}">{% trans 'Posts'%}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">{% trans 'Contact' %}
+            <a class="nav-link" href="{% url 'contacts:feedback' %}">{% trans 'Contact' %}
             </a>
           </li>
           {% if user.is_authenticated %}

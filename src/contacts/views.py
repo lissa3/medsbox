@@ -1,13 +1,18 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM
+from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.template.loader import get_template
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
+from django.views.generic.edit import FormView
 
 from src.profiles.models import Profile
 
 from .exceptions import HtmxFailureError
+from .forms import ContactForm
 
 
 class Subscribe(LRM, View):
@@ -26,6 +31,7 @@ class Subscribe(LRM, View):
         htmx_based request with redirect to home page
         and flash msg as a feedback
         """
+
         htmx_req = request.headers.get("hx-request")
 
         if request.user.is_authenticated and htmx_req is not None:
@@ -50,7 +56,6 @@ class UnSubscribe(View):
         uuid = kwargs.get("uuid")
         profile = get_object_or_404(Profile, uuid=uuid)
         ctx = {"uuid": profile.uuid}
-        print("ctx", ctx)
         return render(request, "contacts/subscription/unsubscribe.html", ctx)
 
     def post(self, request, **kwargs):
@@ -72,4 +77,44 @@ class UnSubscribe(View):
                 raise HtmxFailureError(_("Something went wrong.Can't unsubscribe."))
         except HtmxFailureError:
             raise
+            # raise Http404(
+            #     _("Something wrong; Failed to unsubscribe")
+            # )
         return HttpResponseRedirect("/")
+
+
+class ContactView(FormView):
+    """unauth or auth user can send a feedback to admin"""
+
+    template_name = "contacts/feedback/feedback.html"
+    form_class = ContactForm
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        name = form.cleaned_data.get("name")
+        email = form.cleaned_data.get("email")
+        subject = form.cleaned_data.get("subject")
+        message = form.cleaned_data.get("message")
+        context = {
+            "user": name,
+            "subject": subject,
+            "email": email,
+            "message": message,
+        }
+
+        from_email = email
+        to_email = ("some-mail@mail.com",)
+        contact_message = get_template("contacts/feedback/contact_msg.txt").render(
+            context
+        )
+
+        # self.send_mail_to_admin() ?
+        send_mail(subject, contact_message, from_email, to_email, fail_silently=True)
+
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            _("Your message is sent"),
+        )
+
+        return HttpResponseRedirect(redirect_to=self.success_url)

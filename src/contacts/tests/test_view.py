@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.messages import get_messages
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -17,17 +18,22 @@ class SubscribeTestCase(TestCase):
         self.url = reverse("contacts:subscribe")
 
     def test_ok_subscription_news(self):
-        """Auth-ed user can subscribe for a news letter"""
+        """Auth-ed user can subscribe for a news letter
+        let op: resp no context->resp.wsgi
+        """
         user = UserFactory()
         self.client.force_login(user)
         profile = Profile.objects.get(user=user)
         headers = {"HTTP_HX-Request": "true"}
         resp = self.client.post(self.url, **headers)
         profile.refresh_from_db()
+        messages = list(get_messages(resp.wsgi_request))
+        msg_txt = _("You have subscribed to the news letter")
 
         self.assertEqual(resp.status_code, 200)
         self.assertIsNotNone(resp.headers["HX-Redirect"])
         self.assertTrue(profile.want_news)
+        self.assertEqual(str(messages[0]), msg_txt)
 
     def test_failed_subscription_news(self):
         """
@@ -67,10 +73,13 @@ class UnSubscribeTestCase(TestCase):
         url = reverse("contacts:end_news", kwargs={"uuid": profile.uuid})
         resp = self.client.post(url, **headers)
         profile.refresh_from_db()
+        messages = list(get_messages(resp.wsgi_request))
+        msg_txt = _("You have unsubscribed to the news letter")
 
         self.assertEqual(resp.status_code, 200)
         self.assertIsNotNone(resp.headers["HX-Redirect"])
         self.assertFalse(profile.want_news)
+        self.assertEqual(str(messages[0]), msg_txt)
 
     def test_failed_unsubscribe_no_htmx(self):
         """
