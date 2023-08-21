@@ -8,7 +8,7 @@ from .models import Profile, ProfileChart
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    """display courses in charts on change_list"""
+    """display profiles count  in charts on change_list"""
 
     list_display = (
         "id",

@@ -56,6 +56,8 @@ pillow==9.5.0
     # via
     #   -r reqs\req.in
     #   django-ckeditor-5
+psycopg2==2.9.5
+    # via -r reqs\req.in
 pycparser==2.21
     # via cffi
 pyjwt[crypto]==2.7.0

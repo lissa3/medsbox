@@ -18,13 +18,6 @@ class Profile(TimeStamp):
     In OneToOne relation with User Model
     """
 
-    class Status(models.IntegerChoices):
-        TRIALING = 1
-        ACTIVE = 2
-        EXEMPT = 3
-        CANCELLED = 4
-        TRIAL_EXPIRED = 5
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     avatar = models.ImageField(
@@ -36,9 +29,6 @@ class Profile(TimeStamp):
     )
     info = models.CharField(max_length=120, default="", blank=True)
     want_news = models.BooleanField(default=False, blank=True)
-    status = models.IntegerField(
-        choices=Status.choices, default=Status.EXEMPT, db_index=True, blank=True
-    )
     objects = ProfileManager.as_manager()
 
     def get_absolute_url(self):
