@@ -2,6 +2,8 @@ import uuid
 
 from autoslug import AutoSlugField
 from django.contrib.auth import get_user_model
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVectorField
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -62,15 +64,19 @@ class Post(TimeStamp):
     tags = TaggableManager(
         blank=True, verbose_name="Tags", help_text="Tags should be separated by comma"
     )
+    vector_ru = SearchVectorField(null=True, blank=True)
+    vector_en = SearchVectorField(null=True, blank=True)
+
     objects = PostFilterManager.as_manager()
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = (GinIndex(fields=["vector_ru", "vector_en"]),)
 
     def soft_delete(self):
         """soft  delete a model instance"""
         self.is_deleted = True
         self.save()
-
-    class Meta:
-        ordering = ["-created_at"]
 
     def get_absolute_url(self):
         assert self.slug
