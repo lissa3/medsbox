@@ -1,11 +1,11 @@
-# from django import template
+from django import template
 
-# from posts.forms import SearchForm
+from src.posts.forms import SearchForm
 
-# register = template.Library()
+register = template.Library()
 
 
-# @register.inclusion_tag("components/search.html")
-# def show_search_form():
-#     search_form = SearchForm()
-#     return {"search_form": search_form}
+@register.inclusion_tag("components/search.html")
+def show_search_form():
+    search_form = SearchForm()
+    return {"search_form": search_form}

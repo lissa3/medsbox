@@ -19,6 +19,7 @@ from src.posts.models.post_model import Post
 class CategoryAdmin(TreeAdmin, TranslationAdmin):
     form = movenodeform_factory(Category)
     list_display = ["name", "slug"]
+    list_display_links = ["name"]
     ordering = ["path"]
 
 

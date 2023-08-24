@@ -95,3 +95,108 @@ class PostCategsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(posts), 1)
         self.assertEqual(categs_count, 5)
+
+
+class PostSearchLangTestCase(TestCase):
+    def setUp(self) -> None:
+        super().setUp()
+
+        self.post_1 = PostFactory.create(
+            title_ru="Паралич Бэлла",
+            content_ru="вирус герпеса, лечение преднизолоном,инфекциями",
+            title_en="Bell's palsy",
+            content_en="herpes virus, treatment,prednisone,infections",
+            status=2,
+        )
+
+        self.post_2 = PostFactory(
+            title_ru="Инфекция кожи",
+            title_en="Skin infections",
+            content_ru="Лечение чего-то там",
+            content_en="Treatment",
+            status=2,
+        )
+        self.post_3 = PostFactory(
+            status=2,
+            title_ru="Гипербиллирубинемия у новорождённых",
+            content_ru="Фото терапия ",
+            title_en="Newborns Hyperbilirubinemia",
+            content_en="Photo therapy",
+        )
+        self.post_4 = PostFactory(
+            status=0,
+            title_ru="Гипербиллирубинемия у новорождённых",
+            content_ru="Фото терапия ",
+            title_en="Newborns Hyperbilirubinemia",
+            content_en="Photo therapy",
+        )
+        self.post_5 = PostFactory(
+            status=1,
+            title_ru="Гипербиллирубинемия у новорождённых",
+            content_ru="Фото терапия ",
+            title_en="Newborns Hyperbilirubinemia",
+            content_en="Photo therapy",
+        )
+
+    @override_settings(LANGUAGE_CODE="ru", LANGUAGES=(("ru", "Russian"),))
+    def test_ru(self):
+        """search in russian lang content"""
+        url = reverse("posts:search_posts")
+
+        search_word = "инфекция"
+        data = {"q": search_word, "lang": "ru", "honeypot": ""}
+        resp = self.client.get(url, data)
+
+        posts = resp.context_data["posts"]
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(posts), 2)
+
+    @override_settings(LANGUAGE_CODE="ru", LANGUAGES=(("ru", "Russian"),))
+    def test_not_public_ru(self):
+        """results for posts only with status public"""
+        url = reverse("posts:search_posts")
+
+        search_word = "Гипербиллирубинемия"
+        data = {"q": search_word, "lang": "ru", "honeypot": ""}
+        resp = self.client.get(url, data)
+
+        posts = resp.context_data["posts"]
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(posts), 1)
+
+    @override_settings(LANGUAGE_CODE="ru", LANGUAGES=(("ru", "Russian"),))
+    def test_no_results_ru(self):
+        """no search results in russian"""
+        url = reverse("posts:search_posts")
+        search_word = "квартирус"
+        data = {"q": search_word, "lang": "ru", "honeypot": ""}
+        resp = self.client.get(url, data)
+
+        posts = resp.context_data["posts"]
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(posts), 0)
+
+    @override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
+    def test_in_en(self):
+        """search in english lang content"""
+        url = reverse("posts:search_posts")
+        search_word = "Hyperbilirubinemia"
+        data = {"q": search_word, "lang": "en", "honeypot": ""}
+        resp = self.client.get(url, data)
+
+        posts = resp.context_data["posts"]
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(posts), 1)
+
+    @override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
+    def test_no_results_en(self):
+        """no results in english"""
+        url = reverse("posts:search_posts")
+        search_word = "kite"
+        data = {"q": search_word, "lang": "en", "honeypot": ""}
+        resp = self.client.get(url, data)
+
+        posts = resp.context_data["posts"]
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(posts), 0)

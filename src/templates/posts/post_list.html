@@ -26,7 +26,14 @@
         <figcaption class="figure-caption text-center">Visible text.</figcaption>
     </figure>        -->
     {% include "posts/parts/pagination.html" %}
+    {% else %}
+    <!-- form search errors:  -->
+    <div id="not-found">
+      {% trans "Sorry. Nothing found for your search" %}
+    </div>
+      {% include "posts/parts/search_errors.html" %}
   {% endif %}
+
   </div>
   <div class="col-md-3 col-sm-12">
     {% show_tags %}

@@ -1,5 +1,6 @@
 <div class="search-inner pe-sm-0">
-    <form method="get" class="search-form" action="{% url 'posts:search_posts' %}">
+
+    <form method="get" class="search-form" id="search" action="{% url 'posts:search_posts' %}">
       <div class="search-box pe-sm-0">
             {{search_form}}
             <a href="#" class="search-btn">
@@ -8,9 +9,8 @@
                 </button>
             </a>
       </div>
-      {% if search_form.errors %}
-        <p class="alert">{{search_form.errors}}</p>
-      {% endif %}
+
     </form>
+
 </div>
 

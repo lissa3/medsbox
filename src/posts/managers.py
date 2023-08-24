@@ -1,3 +1,9 @@
+from django.contrib.postgres.search import (
+    SearchHeadline,
+    SearchQuery,
+    SearchRank,
+    SearchVector,
+)
 from django.db.models import QuerySet
 
 
@@ -20,3 +26,22 @@ class PostFilterManager(QuerySet):
         posts can have diff status
         """
         return self.filter(is_deleted=True)
+
+    def search_uk(self, query_text=""):
+        """search for ukrainian lang"""
+        vector = SearchVector("content_uk", weight="B") + SearchVector(
+            "title_uk", weight="A"
+        )
+        search_query = SearchQuery(query_text)
+        search_rank = SearchRank(vector, search_query)
+        search_headline = SearchHeadline(
+            "content_uk",
+            search_query,
+        )
+        return (
+            self.filter(status=2, is_deleted=False)
+            .annotate(search=vector, headline=search_headline)
+            .filter(search=search_query)
+            .annotate(rank=search_rank)
+            .order_by("-rank")
+        )

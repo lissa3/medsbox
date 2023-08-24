@@ -5,24 +5,14 @@ from django.utils.translation import gettext_lazy as _
 
 
 class SearchForm(forms.Form):
-    """Note: comments preview"""
+    """Hidden inputs: current language and honeypot;
+    form pre-filled with lang from get request
+    """
 
     q = forms.CharField(
-        required=False,
-        label="",
-        validators=[
-            validators.MinLengthValidator(2),
-            validators.MaxLengthValidator(250),  # 00),
-        ],
-        error_messages={"long_query": _("Query is too long")},
+        required=False, label="", validators=[validators.MaxLengthValidator(250)]
     )
-    honeypot = forms.CharField(
-        required=False,
-        widget=forms.HiddenInput,
-        label=_("This will be treated as spam"),
-        validators=[validators.MaxLengthValidator(0)],
-        # error_messages={"spam": _("It should not be here")},
-    )
+    honeypot = forms.CharField(required=False, widget=forms.HiddenInput)
     lang = forms.CharField(
         max_length=24,
         required=False,
@@ -32,16 +22,17 @@ class SearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         lang = self.fields["lang"]
         lang.initial = get_language()
         search = self.fields["q"]
-        search.widget.attrs["class"] = "search-txt"
+        search.widget.attrs["class"] = "search-txt"  # search.css
         search.widget.attrs["placeholder"] = _("Type to search")
 
     def clean_honeypot(self):
         """Check that nothing's been entered into the honeypot."""
         value = self.cleaned_data["honeypot"]
         if value:
-            raise forms.ValidationError(self.fields["honeypot"].label)
+            # print("raising a Validation Error")
+            raise forms.ValidationError(_("It should not be here"))
+
         return value

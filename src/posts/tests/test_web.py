@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import override_settings
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django_webtest import WebTest
 from taggit.models import Tag
 from webtest import TestApp
@@ -85,7 +86,7 @@ class TagSearchPostsTest(WebTest):
 
         """
         start_url = reverse("posts:post_list")
-        # initial request to get a list of tags
+
         resp = self.app.get(start_url)
         a_tag = resp.html.find("a", class_="tag-link")
         href = a_tag.attrs["href"]

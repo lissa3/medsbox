@@ -1,4 +1,4 @@
-{% load static i18n %}
+{% load static i18n search_form %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +32,8 @@
         {% if messages %}
         <div class="container" id="msg-box">
           <div class="m-2">
-            <ul class="p-2" hx-get="{% url 'clear' %}" hx-trigger="load delay:3s">
+            <ul class="p-2">
+            <!-- <ul class="p-2" hx-get="{ url 'clear' %}" hx-trigger="load delay:3s"> -->
               {% for msg in messages %}
                 {% if msg.tags == 'success' %}
                 <div class="green">{{ msg }}</div>
@@ -48,7 +49,7 @@
     <!-- search form  -->
       <div class="row d-flex justify-content-center dmb-lg-4 mb-sm-1 pe-sm-0">
         <div class="col col-md-8 text-center">
-          placeholder for search form
+          {% show_search_form %}
         </div>
       </div>
     </section>
