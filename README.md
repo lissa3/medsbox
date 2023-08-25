@@ -4,7 +4,7 @@
 ## dev
 
 ```
-pip-tools 
+pip-tools
 
 pip-compile reqs/reqlinux.in (or dev.in)
 pip install -r reqs/reqlinux.txt reqs/dev.txt
