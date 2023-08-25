@@ -61,10 +61,12 @@ class PostAdmin(TranslationAdmin):
     def make_posts_published(self, request, queryset):
         """make possbile to mark posts as published in admin bar checkbox"""
         updated = queryset.update(status=2)
+
         self.message_user(
             request,
             ngettext(
-                "%d successfully marked as published.",
+                "%d post successfully marked as published.",
+                "%d posts were successfully marked as published.",
                 updated,
             )
             % updated,
