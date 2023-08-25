@@ -1,5 +1,5 @@
 from django.db.models import Count
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from src.posts.models.categ_model import Category
 from src.posts.models.post_model import Post
@@ -27,6 +27,7 @@ class CategoryPathTestCase(TestCase):
         self.assertEqual(kid.get_full_path(), "grand_pa/pa/kid")
 
 
+@override_settings(LANGUAGE_CODE="ru", LANGUAGES=(("ru", "Russian"),))
 class PostCreationTestCase(TestCase):
     def setUp(self) -> None:
         self.categ = CategoryFactory()

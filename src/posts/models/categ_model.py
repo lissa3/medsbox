@@ -7,7 +7,7 @@ from src.core.utils.base import upload_img
 
 
 class Category(MP_Node):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
     slug = AutoSlugField(populate_from="name", unique=True)
     icon = models.ImageField(
         verbose_name=_("Icon"), null=True, blank=True, upload_to=upload_img
@@ -22,12 +22,20 @@ class Category(MP_Node):
     @classmethod
     def get_default_pk(cls, *args, **kwargs):
         """create or use existed default category"""
-        qs = cls.objects.filter(name=_("Неопределена"))
+        qs = cls.objects.filter(
+            name_ru=_("Неопределена"), name_uk="Невизначений", name_en="Unspecified"
+        )
         try:
             obj = qs.get()
         except qs.model.DoesNotExist:
-            cls.add_root(name=_("Неопределена"))
-            obj = cls.objects.get(name=_("Неопределена"))
+            # cls.add_root(name=_("Неопределена"))
+            # obj = cls.objects.get(name=_("Неопределена"))
+            cls.add_root(
+                name_ru="Неопределена", name_uk="Невизначений", name_en="Unspecified"
+            )
+            obj = cls.objects.filter(
+                name_ru="Неопределена", name_uk="Невизначений", name_en="Unspecified"
+            ).last()
         # obj, _ = cls.objects.get_or_create(name="Unspecified")
         return obj.pk
 
