@@ -3,7 +3,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 
 from src.core.utils.views_help import make_query, search_qs
 from src.posts.forms import SearchForm
@@ -12,6 +12,7 @@ from src.posts.models.post_model import Post
 
 
 class PostList(ListView):
+
     """display only public posts"""
 
     template_name = "posts/post_list.html"
@@ -20,11 +21,17 @@ class PostList(ListView):
     paginate_by = 2
 
     def get_queryset(self):
+        print("looking for posts")
         return (
             Post.objects.get_public()
             .select_related("categ", "author")
             .prefetch_related("tags")
         )
+
+
+class PostDetail(DetailView):
+    model = Post
+    template_name = "posts/post_detail.html"
 
 
 class PostTagSearch(ListView):

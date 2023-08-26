@@ -18,12 +18,12 @@
     <link rel="stylesheet" href="{% static 'css/categs.css' %}">
     <link rel="stylesheet" href="{% static 'css/search.css' %}">
     <link rel="stylesheet" href="{% static 'css/editor.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-<script src=
-"https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js">
-</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"> <!-- small icons-->
+
+
 </head>
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
   {% include "components/menu.html" %}
 <!-- class wrap to fix footer  -->
 <div class="wraps">
@@ -50,6 +50,9 @@
       <div class="row d-flex justify-content-center dmb-lg-4 mb-sm-1 pe-sm-0">
         <div class="col col-md-8 text-center">
           {% show_search_form %}
+        </div>
+        <div class="col col-md-8 mb-2">
+          {% include "components/crumbs.html" %}
         </div>
       </div>
     </section>
