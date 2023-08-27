@@ -60,7 +60,7 @@ def recursetree(parser, token):
     return RecrTreeNode(nodelist, queryset_var)
 
 
-@register.inclusion_tag("components/categ_menu.html")
+@register.inclusion_tag("components/categ_bar.html")
 def show_categs(**kwargs):
     categs = Category.get_root_nodes()
     return {"categs": categs, **kwargs}

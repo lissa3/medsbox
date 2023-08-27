@@ -11,7 +11,7 @@ from src.contacts.models import NewsLetter
 from src.contacts.tests.factories import NewsLetterFactory
 from src.core.utils.admin_help import admin_change_url
 from src.posts.models.post_model import Post
-from src.posts.tests.factories import PostFactory
+from src.posts.tests.factories import CategoryFactory, PostFactory
 
 User = get_user_model()
 TestApp.__test__ = False
@@ -101,3 +101,37 @@ class TagSearchPostsTest(WebTest):
 
         self.assertEqual(resp2.status_code, 200)
         self.assertEqual(posts.count(), 1)
+
+
+@override_settings(LANGUAGE_CODE="ru", LANGUAGES=(("ru", "Russian"),))
+class CategMenuTestCase(WebTest):
+    def setUp(self) -> None:
+        self.categ_root = CategoryFactory(name="grand_pa")
+        self.categ_pa = self.categ_root.add_child(name="pa")
+        self.categ_kid = self.categ_pa.add_child(name="kid")
+        self.post = PostFactory(
+            categ=self.categ_kid, status=Post.CurrentStatus.PUB.value
+        )
+
+    def test_post_detail_categs_menu(self):
+        """display post detail page with corresp categs as links"""
+        chain_ = self.post.categ.get_name_slug_chain()
+        expected_chain = {
+            "path_name": "grand_pa/pa/kid",
+            "path_slug": "grand_pa/pa/kid",
+        }
+
+        start_url = reverse("posts:post_detail", kwargs={"slug": self.post.slug})
+
+        resp = self.app.get(start_url)
+
+        post_categ_menu = resp.html.find("ol", id="post_categ")
+        a_links = resp.html.find_all("a", class_="post_categ__link")
+        href = a_links[0].attrs["href"]
+        lang = href.split("/")[1]
+
+        self.assertEqual(self.categ_root.get_descendants().count(), 2)
+        self.assertEqual(chain_, expected_chain)
+        self.assertIsNotNone(post_categ_menu)
+        self.assertTrue(len(a_links), 3)
+        self.assertTrue(lang, "ru")

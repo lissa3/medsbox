@@ -10,6 +10,8 @@ from src.posts.forms import SearchForm
 from src.posts.models.categ_model import Category
 from src.posts.models.post_model import Post
 
+from .mixins import CategoryCrumbMixin
+
 
 class PostList(ListView):
 
@@ -21,7 +23,7 @@ class PostList(ListView):
     paginate_by = 2
 
     def get_queryset(self):
-        print("looking for posts")
+        # print("looking for posts")
         return (
             Post.objects.get_public()
             .select_related("categ", "author")
@@ -29,9 +31,14 @@ class PostList(ListView):
         )
 
 
-class PostDetail(DetailView):
+class PostDetail(CategoryCrumbMixin, DetailView):
     model = Post
     template_name = "posts/post_detail.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["cats_path"] = self.get_post_categs_path()
+        return ctx
 
 
 class PostTagSearch(ListView):
@@ -70,7 +77,6 @@ class SearchPost(ListView):
     search in ukrainian: via model manager(no config in this lang)
     """
 
-    # model = Post
     template_name = "posts/post_list.html"
     context_object_name = "posts"
     paginate_by = 5

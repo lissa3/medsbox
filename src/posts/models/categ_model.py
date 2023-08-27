@@ -49,5 +49,26 @@ class Category(MP_Node):
             path_slug += f"/{self.slug}"
         return path_slug
 
+    def get_name_slug_chain(self) -> dict:
+        """
+        create dict of name(s)/slug(s) of a given category
+        incl ancestors
+        """
+        if self.is_root():
+            path_name = self.name
+            path_slug = self.slug
+
+        else:
+            path_name = "/".join(
+                list(self.get_ancestors().values_list("name", flat=True))
+            )
+            path_name += f"/{self.name}"
+            path_slug = "/".join(
+                list(self.get_ancestors().values_list("slug", flat=True))
+            )
+            path_slug += f"/{self.slug}"
+
+        return {"path_name": path_name, "path_slug": path_slug}
+
     def __str__(self):
         return f"Category: {self.name}"

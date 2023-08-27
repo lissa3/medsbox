@@ -15,7 +15,10 @@
 
     <h3>{{post.title}}</h3>
     <p>{{post.created_at|date:"F d, Y"}}</p>
-    <strong>{%trans "category" %}: {{post.categ.name}}</strong>
+
+    <div><strong>{%trans "category" %}</strong>:
+      {% include "components/post_categs.html" with categ_dict=cats_path %}
+    </div>
     <div class="content">
         {{post.content|safe}}
     </div>

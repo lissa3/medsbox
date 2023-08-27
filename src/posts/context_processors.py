@@ -15,7 +15,6 @@ def build_crumbs(request):
     crumbs.append({"name": "posts", "url": reverse("posts:post_list")})
     if match.url_name == "post_detail":
         post = get_object_or_404(Post, slug=match.kwargs["slug"])
-        print(post)
         crumbs.append(
             {
                 "name": post.title,
@@ -25,5 +24,4 @@ def build_crumbs(request):
                 ),
             }
         )
-    print("crumbs are ", crumbs)
     return {"crumbs": crumbs}
