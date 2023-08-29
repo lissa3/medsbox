@@ -1,4 +1,20 @@
 from django.urls import reverse
+from django.utils.functional import cached_property
+
+
+class PostListMenuMixin:
+    @cached_property
+    def crumbs(self):
+        """build post breadcrumbs"""
+        return [
+            {"name": "Home", "url": reverse("home")},
+            {"name": "posts", "url": reverse("posts:post_list")},
+        ]
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["crumbs"] = self.crumbs
+        return ctx
 
 
 class CategoryCrumbMixin:

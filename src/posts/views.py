@@ -1,5 +1,3 @@
-from django.contrib import messages
-from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
@@ -10,10 +8,10 @@ from src.posts.forms import SearchForm
 from src.posts.models.categ_model import Category
 from src.posts.models.post_model import Post
 
-from .mixins import CategoryCrumbMixin
+from .mixins import CategoryCrumbMixin, PostListMenuMixin
 
 
-class PostList(ListView):
+class PostList(PostListMenuMixin, ListView):
 
     """display only public posts"""
 
@@ -24,11 +22,7 @@ class PostList(ListView):
 
     def get_queryset(self):
         # print("looking for posts")
-        return (
-            Post.objects.get_public()
-            .select_related("categ", "author")
-            .prefetch_related("tags")
-        )
+        return Post.objects.get_public().prefetch_related("tags")
 
 
 class PostDetail(CategoryCrumbMixin, DetailView):
@@ -41,7 +35,7 @@ class PostDetail(CategoryCrumbMixin, DetailView):
         return ctx
 
 
-class PostTagSearch(ListView):
+class PostTagSearch(PostListMenuMixin, ListView):
     template_name = "posts/post_list.html"
     context_object_name = "posts"
     paginate_by = 2
@@ -52,7 +46,7 @@ class PostTagSearch(ListView):
         return Post.objects.get_public().filter(tags__slug__in=[tag])
 
 
-class PostCategSearch(ListView):
+class PostCategSearch(PostListMenuMixin, ListView):
     """retrieve all posts linked to a given category"""
 
     template_name = "posts/post_list.html"
@@ -71,7 +65,7 @@ class PostCategSearch(ListView):
             return Post.objects.get_public().filter(categ_id=categ.id)
 
 
-class SearchPost(ListView):
+class SearchPost(PostListMenuMixin, ListView):
     """
     search ru and en: via vector_ru,vector_en(triggers in migration files)
     search in ukrainian: via model manager(no config in this lang)

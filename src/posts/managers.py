@@ -19,7 +19,9 @@ class PostFilterManager(QuerySet):
 
     def get_public(self):
         """filter qs for public posts"""
-        return self.filter(status=2, is_deleted=False)
+        return self.select_related("author", "categ", "letter").filter(
+            status=2, is_deleted=False
+        )
 
     def get_soft_deleted(self):
         """filter qs for soft deleted;
@@ -39,7 +41,8 @@ class PostFilterManager(QuerySet):
             search_query,
         )
         return (
-            self.filter(status=2, is_deleted=False)
+            self.select_related("author", "categ", "letter")
+            .filter(status=2, is_deleted=False)
             .annotate(search=vector, headline=search_headline)
             .filter(search=search_query)
             .annotate(rank=search_rank)

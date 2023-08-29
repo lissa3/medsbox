@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% load static sidebars i18n %}
 {% block content %}
+<div class="row d-flex justify-content-center dmb-lg-4 mb-sm-1 pe-sm-0">
+  <div class="col col-md-8 mb-2">
+  {% include "components/crumbs.html" %}
+  </div>
+
+</div>
 <div class="row">
   <aside class="col-md-3 col-sm-12">
     <!-- <nav role="navigation" aria-label="Sidebar Navigation">
@@ -9,6 +15,8 @@
         <!-- </div>
     </nav>     -->
   </aside>
+
+
   <div class="col-md-6 col-sm-12">
    {% if posts %}
     {% for post in posts%}
