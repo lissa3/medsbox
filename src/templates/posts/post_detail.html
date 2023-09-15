@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
-{% load static sidebars i18n %}
-
-
+{% load static sidebars i18n tree_comms%}
 {% block content %}
-<div class="row">
+  <div class="row">
   <aside class="col-md-3 col-sm-12">
     <!-- <nav role="navigation" aria-label="Sidebar Navigation">
       <div class="list-group"> -->
@@ -23,16 +21,40 @@
         {{post.content|safe}}
     </div>
     <hr>
-
+    {% if user.is_authenticated %}
+    <form action="{% url 'posts:post_detail' post.slug %}" id="top_form" method="POST"
+    >
+      {% csrf_token %}
+      {{form.as_p}}
+      <hr>
+      <button type="submit">Comment</button>
+    </form>
+    {% endif %}
 
   </div>
   <div class="col-md-3 col-sm-12">
     {% show_tags %}
   </div>
-
-</div>
-
+  </div>
+  {% if comments %}
+  <div class="container">
+      <h3>Comments</h3>
+      <div class="row comms">
+        <div class="col-sm-3"></div>
+          <div class="col-sm-6 col-md-12 ">
+            <div id="comms_list"
+            hx-trigger="load, updateCommList from:body"
+            hx-get="{% url 'comments:all_comms' post_id=post.id %}"
+            hx-target="#mycomms">
+            <div id="mycomms"class="green"></div>
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+      </div>
+  </div>
+  {% endif %}
 {% endblock%}
+
 {% block js %}
 <script src="{% static 'js/categs.js' %}"></script>
 {% endblock %}

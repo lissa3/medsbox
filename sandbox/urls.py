@@ -34,6 +34,7 @@ urlpatterns += i18n_patterns(
     path("core/", include("src.core.urls")),
     path("profile/", include("src.profiles.urls")),
     path("posts/", include("src.posts.urls")),
+    path("comments/", include("src.comments.urls")),
 )
 urlpatterns += htmx_urlpatterns
 

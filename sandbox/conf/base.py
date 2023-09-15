@@ -56,6 +56,7 @@ LOCAL_APPS = [
     "src.core.apps.CoreConfig",
     "src.contacts.apps.ContactsConfig",
     "src.sentry.apps.SentryConfig",
+    "src.comments.apps.CommentsConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY + LOCAL_APPS
 

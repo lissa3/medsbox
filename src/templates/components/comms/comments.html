@@ -1,0 +1,130 @@
+{% load tree_comms  static  i18n %}
+<ul class="mt-3 list" >
+{% recursetree comments %}
+  <li class="list_item">
+    {% if node.is_leaf %}
+      {% if node.deleted %}
+        <div class="card mb-2 deleted">
+          <p class="text-center">Comment is deleted</p>
+        </div>
+      {% else %}
+      <!-- node leaf and NOT deleted -->
+      <div class="card mb-2 ps-1">
+        <div class="card-header">
+          <div class="d-flex justify-content-between">
+            <div class="d-flex align-items-md-center">
+              <div class="me-2">
+                {% if node.user.profile.avatar %}
+                <img src="{{node.user.profile.avatar.url}}" alt="avatar" class="shape-img-comms rounded-circle">
+                {% else %}
+                <img src="{% static 'images/svgs/user_pic.svg' %}" alt="edit-pen">
+                {% endif %}
+              </div>
+              <div># <strong>{{node.user}}</strong>
+                {% if node.reply_to %}&#8594; {{node.reply_to}}{% endif %}
+              </div>
+
+            </div>
+            {% if user.is_authenticated and node.user == user %}
+            <div class="d-flex w-20 ">
+              <div class="tool-frame me-2"
+              hx-get="{% url 'comments:handle_edit' post.id node.id %}"
+                  hx-target="#dialog">
+                  <img src="{% static 'images/svgs/pen.svg' %}" alt="edit-pen">
+              </div>
+              <div class="tool-frame ms-2"
+                hx-get="{% url 'comments:handle_delete' post.id node.id %}"
+                hx-target="#dialog">
+                <img src="{% static 'images/svgs/trash.svg' %}" alt="delete-trash">
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div>
+          {% if node.mark_edited %}
+          <p>Edited: {{node.updated_at}}</p>
+          {% else %}
+          <p>Created: {{node.updated_at}}</p>
+          {% endif %}
+        </div>
+          <p class="card-text">{{node.body}}</p>
+          {% if user.is_authenticated %}
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-primary" hx-get="{% url 'comments:add_comm' post.id node.id %}"
+            hx-target="#dialog"
+            >{% trans 'Reply' %}
+            </button>
+          </div>
+          {% endif %}
+     </div>
+      {% endif %}
+    {% else %}
+    <!-- node is NOT leaf: render self + ul children -->
+    {% if node.deleted %}
+      <div class="card mb-2 deleted">
+        <p class="text-center">Comment is deleted</p>
+      </div>
+    {% else %}
+      <div class="card mb-2 ps-1">
+        <div class="card-header">
+          <div class="d-flex justify-content-between">
+            <div class="d-flex align-items-md-center">
+              <div class="me-2">
+                {% if node.user.profile.avatar %}
+                <img src="{{node.user.profile.avatar.url}}" alt="avatar" class="shape-img-comms rounded-circle">
+                {% else %}
+                <img src="{% static 'images/svgs/user_pic.svg' %}" alt="edit-pen">
+                {% endif %}
+
+              </div>
+              <div># <strong>{{node.user}} </strong>
+                {% if node.reply_to %}&#8594; {{node.reply_to}}{% endif %}
+              </div>
+            </div>
+            {% if user.is_authenticated and node.user == user %}
+            <div class="d-flex ">
+              <div class="tool-frame me-2"
+                  hx-get="{% url 'comments:handle_edit' post.id node.id %}"
+                  hx-target="#dialog">
+                  <img src="{% static 'images/svgs/pen.svg' %}" alt="edit-pen">
+              </div>
+              <div class="tool-frame ms-2"
+                hx-get="{% url 'comments:handle_delete' post.id node.id %}"
+                hx-target="#dialog">
+                <img src="{% static 'images/svgs/trash.svg' %}" alt="delete-trash">
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div>
+          {% if node.mark_edited %}
+          <p>Edited: {{node.updated_at}}</p>
+          {% else %}
+          <p>Created: {{node.updated_at}}</p>
+          {% endif %}
+        </div>
+        <p class="card-text">{{node.body}}</p>
+        {% if user.is_authenticated %}
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary"
+            hx-get="{% url 'comments:add_comm' post.id node.id %}"
+            hx-target="#dialog">
+            {% trans 'Reply' %}
+            </button>
+        </div>
+      {% endif %}
+      </div>
+      {% endif %}
+        <ul class="list">
+            {{ children }}
+        </ul>
+    {% endif %}
+   </li>
+   {% endrecursetree %}
+  </ul>
+
+
+
+
