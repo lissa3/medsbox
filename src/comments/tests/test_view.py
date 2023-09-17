@@ -34,7 +34,7 @@ class HtmxCommentsFunctionsViewsTestCase(TestCase):
 
         url = reverse(
             "comments:add_comm",
-            kwargs={"post_id": self.post.id, "comm_id": self.comment.id},
+            kwargs={"post_uuid": self.post.uuid, "comm_id": self.comment.id},
         )
         headers = {"HTTP_HX-Request": "true"}
         resp = self.client.get(url, **headers)
@@ -52,7 +52,7 @@ class HtmxCommentsFunctionsViewsTestCase(TestCase):
         self.client.force_login(user)
         url = reverse(
             "comments:process_comm",
-            kwargs={"post_id": self.post.id},
+            kwargs={"post_uuid": self.post.uuid},
         )
         data = {"body": "reply to a root comment", "comm_parent_id": self.comment.id}
         headers = {"HTTP_HX-Request": "true"}
@@ -76,7 +76,7 @@ class HtmxCommentsFunctionsViewsTestCase(TestCase):
         """comment author has links to fetch a form for edit and delete"""
 
         self.client.force_login(self.author_comment)
-        url = reverse("comments:all_comms", kwargs={"post_id": self.post.id})
+        url = reverse("comments:all_comms", kwargs={"post_uuid": self.post.uuid})
         headers = {"HTTP_HX-Request": "true"}
         resp = self.client.get(url, **headers)
 
@@ -89,7 +89,7 @@ class HtmxCommentsFunctionsViewsTestCase(TestCase):
         """auth user not comment author has No links for edit and delete"""
 
         self.client.force_login(self.user)
-        url = reverse("comments:all_comms", kwargs={"post_id": self.post.id})
+        url = reverse("comments:all_comms", kwargs={"post_uuid": self.post.uuid})
         headers = {"HTTP_HX-Request": "true"}
         resp = self.client.get(url, **headers)
 
@@ -101,7 +101,7 @@ class HtmxCommentsFunctionsViewsTestCase(TestCase):
     def test_anonymous_no_reply_no_comment_tools(self):
         """not auth user has no link to reply or edit/delete cooment"""
 
-        url = reverse("comments:all_comms", kwargs={"post_id": self.post.id})
+        url = reverse("comments:all_comms", kwargs={"post_uuid": self.post.uuid})
         headers = {"HTTP_HX-Request": "true"}
         resp = self.client.get(url, **headers)
 

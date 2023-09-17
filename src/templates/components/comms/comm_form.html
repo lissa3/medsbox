@@ -1,5 +1,5 @@
 
-<form hx-post="{% url 'comments:process_comm' post_id %}" class="modal-content">
+<form hx-post="{% url 'comments:process_comm' post_uuid %}" class="modal-content">
     {% csrf_token %}
     <div class="modal-header">
       <h5 class="modal-title">Reply</h5>

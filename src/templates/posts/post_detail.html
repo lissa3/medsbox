@@ -21,7 +21,7 @@
         {{post.content|safe}}
     </div>
     <hr>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and post.allow_comments %}
     <form action="{% url 'posts:post_detail' post.slug %}" id="top_form" method="POST"
     >
       {% csrf_token %}
@@ -44,7 +44,7 @@
           <div class="col-sm-6 col-md-12 ">
             <div id="comms_list"
             hx-trigger="load, updateCommList from:body"
-            hx-get="{% url 'comments:all_comms' post_id=post.id %}"
+            hx-get="{% url 'comments:all_comms' post_uuid=post.uuid %}"
             hx-target="#mycomms">
             <div id="mycomms"class="green"></div>
             </div>

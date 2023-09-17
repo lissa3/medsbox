@@ -28,7 +28,9 @@ class HtmxRenderedCommentsTest(WebTest):
         self.url = reverse("posts:post_detail", kwargs={"slug": self.post.slug})
 
     def test_root_comment_on_post_detail(self):
-        all_comms_url = reverse("comments:all_comms", kwargs={"post_id": self.post.id})
+        all_comms_url = reverse(
+            "comments:all_comms", kwargs={"post_uuid": self.post.uuid}
+        )
         headers = {"HTTP_HX-Request": "true"}
         response = self.client.get(all_comms_url, **headers)
 

@@ -1,5 +1,5 @@
 
-<form hx-put="{% url 'comments:handle_edit' post_id comm_id %}" class="modal-content">
+<form hx-put="{% url 'comments:handle_edit' post_uuid comm_id %}" class="modal-content">
     {% csrf_token %}
     <div class="modal-header">
       <h5 class="modal-title">Edit</h5>

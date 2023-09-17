@@ -28,12 +28,12 @@
             {% if user.is_authenticated and node.user == user %}
             <div class="d-flex w-20 ">
               <div class="tool-frame me-2"
-              hx-get="{% url 'comments:handle_edit' post.id node.id %}"
+              hx-get="{% url 'comments:handle_edit' post.uuid node.id %}"
                   hx-target="#dialog">
                   <img src="{% static 'images/svgs/pen.svg' %}" alt="edit-pen">
               </div>
               <div class="tool-frame ms-2"
-                hx-get="{% url 'comments:handle_delete' post.id node.id %}"
+                hx-get="{% url 'comments:handle_delete' post.uuid node.id %}"
                 hx-target="#dialog">
                 <img src="{% static 'images/svgs/trash.svg' %}" alt="delete-trash">
               </div>
@@ -51,7 +51,7 @@
           <p class="card-text">{{node.body}}</p>
           {% if user.is_authenticated %}
           <div class="d-flex justify-content-end">
-            <button class="btn btn-primary" hx-get="{% url 'comments:add_comm' post.id node.id %}"
+            <button class="btn btn-primary" hx-get="{% url 'comments:add_comm' post.uuid node.id %}"
             hx-target="#dialog"
             >{% trans 'Reply' %}
             </button>
@@ -85,12 +85,12 @@
             {% if user.is_authenticated and node.user == user %}
             <div class="d-flex ">
               <div class="tool-frame me-2"
-                  hx-get="{% url 'comments:handle_edit' post.id node.id %}"
+                  hx-get="{% url 'comments:handle_edit' post.uuid node.id %}"
                   hx-target="#dialog">
                   <img src="{% static 'images/svgs/pen.svg' %}" alt="edit-pen">
               </div>
               <div class="tool-frame ms-2"
-                hx-get="{% url 'comments:handle_delete' post.id node.id %}"
+                hx-get="{% url 'comments:handle_delete' post.uuid node.id %}"
                 hx-target="#dialog">
                 <img src="{% static 'images/svgs/trash.svg' %}" alt="delete-trash">
               </div>
@@ -109,7 +109,7 @@
         {% if user.is_authenticated %}
         <div class="d-flex justify-content-end">
           <button class="btn btn-primary"
-            hx-get="{% url 'comments:add_comm' post.id node.id %}"
+            hx-get="{% url 'comments:add_comm' post.uuid node.id %}"
             hx-target="#dialog">
             {% trans 'Reply' %}
             </button>

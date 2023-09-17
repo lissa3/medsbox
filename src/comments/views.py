@@ -8,8 +8,8 @@ from src.comments.models import Comment
 from src.posts.models.post_model import Post
 
 
-def display_all_comments(request, post_id):
-    post = Post.objects.get(id=post_id)
+def display_all_comments(request, post_uuid):
+    post = Post.objects.get(uuid=post_uuid)
     post_comms = Comment.objects.filter(post=post)
     return render(
         request,
@@ -19,22 +19,21 @@ def display_all_comments(request, post_id):
 
 
 @login_required
-def get_reply_form(request, post_id, comm_id):
+def get_reply_form(request, post_uuid, comm_id):
     """get req to get form for reply"""
     form = CommentForm(initial={"comm_parent_id": comm_id})
     ctx = {}
     ctx["form"] = form
-    ctx["post_id"] = post_id
+    ctx["post_uuid"] = post_uuid
     return render(request, "components/comms/comm_form.html", ctx)
 
 
 @login_required
-def process_reply(request, post_id):
+def process_reply(request, post_uuid):
     form = CommentForm(request.POST)
     if form.is_valid():
         comm_parent_id = form.cleaned_data["comm_parent_id"]
-        post = get_object_or_404(Post, id=post_id)
-        print("found post ", post)
+        post = get_object_or_404(Post, uuid=post_uuid)
         parent_comm = get_object_or_404(Comment, id=comm_parent_id)
         replied_to = parent_comm.user
         comm = form.save(commit=False)
@@ -46,11 +45,12 @@ def process_reply(request, post_id):
 
 
 @login_required
-def handle_edit_comment(request, post_id, comm_id):
+def handle_edit_comment(request, post_uuid, comm_id):
     """htmx based + modal UI in bootstrap5"""
 
-    ctx = {"post_id": post_id, "comm_id": comm_id}
-    obj = get_object_or_404(Comment, post_id=post_id, id=comm_id)
+    ctx = {"post_uuid": post_uuid, "comm_id": comm_id}
+    post = get_object_or_404(Post, uuid=post_uuid)
+    obj = get_object_or_404(Comment, post_id=post.id, id=comm_id)
     parent = obj.get_parent()
     if request.method == "GET":
         if parent:
@@ -74,14 +74,16 @@ def handle_edit_comment(request, post_id, comm_id):
         else:
             print("form NOT valid")
             print("errs: ", form.errors)
+            ctx["fomr"] = form
     return render(request, "components/comms/comm_edit_form.html", ctx)
 
 
 @login_required
-def handle_delete_comment(request, post_id, comm_id):
+def handle_delete_comment(request, post_uuid, comm_id):
     """htmx based"""
-    ctx = {"post_id": post_id, "comm_id": comm_id}
-    comm_to_del = get_object_or_404(Comment, id=comm_id, post_id=post_id)
+    ctx = {"post_uuid": post_uuid, "comm_id": comm_id}
+    post = get_object_or_404(Post, uuid=post_uuid)
+    comm_to_del = get_object_or_404(Comment, id=comm_id, post_id=post.id)
     if request.method == "GET":
         return render(request, "components/comms/del_confirm.html", ctx)
     else:
