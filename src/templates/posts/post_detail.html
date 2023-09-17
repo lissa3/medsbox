@@ -21,36 +21,51 @@
         {{post.content|safe}}
     </div>
     <hr>
-    {% if user.is_authenticated and post.allow_comments %}
-    <form action="{% url 'posts:post_detail' post.slug %}" id="top_form" method="POST"
-    >
-      {% csrf_token %}
-      {{form.as_p}}
-      <hr>
-      <button type="submit">Comment</button>
-    </form>
-    {% endif %}
 
   </div>
   <div class="col-md-3 col-sm-12">
     {% show_tags %}
   </div>
   </div>
-  {% if comments %}
-  <div class="container">
-      <h3>Comments</h3>
-      <div class="row comms">
-        <div class="col-sm-3"></div>
-          <div class="col-sm-6 col-md-12 ">
-            <div id="comms_list"
+ <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          {% trans "Leave a comment" %}
+        </button>
+      </div>
+    </div>
+    <div class="row collapse" id="collapseExample" >
+      <div class="col-md-12">
+        {% if user.is_authenticated and post.allow_comments %}
+        <form action="{% url 'posts:post_detail' post.slug %}" id="top_form" method="POST" class="form-main"
+        >
+          {% csrf_token %}
+          {% for field in form.visible_fields %}
+            <p>{{ field.errors }}</p>
+              {{ field }}
+            <p class="text-center"><strong>{{ field.help_text }}</strong></p>
+          {% endfor %}
+
+          <button class="btn btn-primary" type="submit">Comment</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    {% if comments %}
+    <div class="">Comments : {{comms_total}}</div>
+    <div class="row comms">
+      <div class="col-sm-3"></div>
+        <div class="col-sm-6 col-md-12 ">
+          <div id="comms_list"
             hx-trigger="load, updateCommList from:body"
             hx-get="{% url 'comments:all_comms' post_uuid=post.uuid %}"
             hx-target="#mycomms">
             <div id="mycomms"class="green"></div>
-            </div>
+          </div>
         </div>
-        <div class="col-sm-3"></div>
-      </div>
+      <div class="col-sm-3"></div>
+    </div>
   </div>
   {% endif %}
 {% endblock%}

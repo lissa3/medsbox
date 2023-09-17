@@ -36,10 +36,12 @@ class PostDetail(CategoryCrumbMixin, DetailView):
     template_name = "posts/post_detail.html"
 
     def get_context_data(self, **kwargs):
-        comms = Comment.objects.exists()
+        comms = Comment.objects.filter(post=self.get_object()).exists()
         ctx = super().get_context_data(**kwargs)
         ctx["cats_path"] = self.get_post_categs_path()
         ctx["comments"] = comms
+        if comms:
+            ctx["comms_total"] = Comment.objects.filter(post=self.get_object()).count()
         form = CommentForm()
         ctx["form"] = form
         return ctx

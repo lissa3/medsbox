@@ -11,7 +11,13 @@ class CommentForm(forms.ModelForm):
     body = forms.CharField(
         max_length=4000,
         help_text=_("Comment can't be empty"),
-        widget=forms.Textarea(attrs={"rows": 15}),
+        widget=forms.Textarea(
+            attrs={
+                "rows": 15,
+                "class": "form-control",
+                "placeholder": _("Write your comment here"),
+            }
+        ),
     )
     comm_parent_id = forms.IntegerField(required=False, widget=forms.HiddenInput)
 
