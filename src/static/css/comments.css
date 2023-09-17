@@ -5,6 +5,11 @@
     width:30px;
     height: 30px;
 }
+.comms_bg{
+    background-color:#c5c4c3;
+    padding:10px;
+    border-radius: 10px;
+  }
 .deleted{
     background-color: cornsilk;
 }
