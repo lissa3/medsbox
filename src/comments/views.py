@@ -5,6 +5,7 @@ from django.utils import timezone
 
 from src.comments.forms import CommentForm
 from src.comments.models import Comment
+from src.notifications.models import Notification
 from src.posts.models.post_model import Post
 
 
@@ -37,10 +38,18 @@ def process_reply(request, post_uuid):
         parent_comm = get_object_or_404(Comment, id=comm_parent_id)
         replied_to = parent_comm.user
         comm = form.save(commit=False)
+        comm_body = form.cleaned_data["body"]
         comm.user = request.user
         comm.reply_to = replied_to
         comm.post = post
         parent_comm.add_child(instance=comm)
+        if replied_to != request.user:
+            short_body = comm_body[:100]
+            msg = f"User {comm.user} replied to your comment: {short_body}"
+            new_notif = Notification.objects.create(recipient=replied_to, text=msg)
+            print("new notif created", new_notif)
+        else:
+            print("user replied to himself")
         return HttpResponse(status=204, headers={"HX-Trigger": "updateCommList"})
 
 

@@ -1,3 +1,5 @@
+from functools import cached_property
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.timezone import now
@@ -9,8 +11,17 @@ class NotificationManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset()
 
-    def all_notifics(self, recipient):
+    def all_unread_notifics(self, recipient):
         return self.get_queryset().filter(recipient=recipient, read=False)
+
+    def count_unread_notifics(self, recipient):
+        return self.get_queryset().filter(recipient=recipient, read=False).count()
+
+    def all_notifics(self, recipient):
+        return self.get_queryset().filter(recipient=recipient)
+
+    def get_first_five(self, recipient):
+        return self.get_queryset().filter(recipient=recipient, read=False)[:5]
 
     def make_all_read(self, recipient):
         qs = self.get_queryset().filter(recipient=recipient, read=False)
@@ -30,6 +41,8 @@ class Notification(models.Model):
     # @cached_property
     # def notifications(self):
     #     return Notification.objects.order_by('-id')[:5]
+    class Meta:
+        ordering = ["-created"]
 
     def __str__(self):
-        return f"Notification for {self.recipient.user.username} | id={self.id}"
+        return f"Notification for {self.recipient} | id={self.id}"

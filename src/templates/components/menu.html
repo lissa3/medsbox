@@ -1,5 +1,4 @@
-{% load widget_tweaks static %}
-{% load i18n %}
+{% load widget_tweaks static i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 {% get_available_languages as LANGUAGES %}
 {% get_language_info_list for LANGUAGES as languages %}
@@ -8,8 +7,7 @@
 <header>
   <nav class="navbar navbar-expand-md navbar-dark fixed-top navbar-custom p-3">
     <div class="container-fluid">
-
-      <a class="navbar-brand logo fs-2" href="/">MedSandBox</a>
+      <a class="navbar-brand logo" href="/">MedSandBox</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -21,6 +19,7 @@
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'posts:post_list'%}">{% trans 'Posts'%}</a>
           </li>
+
           <li class="nav-item">
             <a class="nav-link" href="{% url 'contacts:feedback' %}">{% trans 'Contact' %}
             </a>
@@ -57,6 +56,26 @@
                 {% trans 'Log out' %}
             </a>
           </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link bell">
+              <img src="{% static 'images/bell48.png' %}" alt="notifications">
+            </a>
+          </li>
+        {% if notifs %}
+          <li class="nav-item dropdown">
+            <div class="note-badge">
+            <a class="nav-link dropdown-toggle" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false"
+            id="notifs"
+            hx-get="{% url 'notifications:all_notifics' %}"
+            hx-target="#notis">
+               <span class="badge rounded-pill bg-danger">{{notifs}}</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="notifs" id="notis">
+              </div>
+            </div>
+          </li>
+          {% endif %}
           {% else %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'account_signup' %}">{% trans 'Sign Up' %}
@@ -81,8 +100,6 @@
         </select>
         <input type="submit" value="Go">
       </form>
-
-
     </div>
   </div>
   </nav>
