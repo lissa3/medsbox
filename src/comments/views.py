@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, QueryDict
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
+from django.views.decorators.http import require_http_methods
 
 from src.comments.forms import CommentForm
 from src.comments.models import Comment
@@ -29,8 +30,13 @@ def get_reply_form(request, post_uuid, comm_id):
     return render(request, "components/comms/comm_form.html", ctx)
 
 
+@require_http_methods(["POST"])
 @login_required
 def process_reply(request, post_uuid):
+    """
+    if parent comm is deleted->no notifications;
+    also no notif on users own comment
+    """
     form = CommentForm(request.POST)
     if form.is_valid():
         comm_parent_id = form.cleaned_data["comm_parent_id"]
@@ -42,14 +48,20 @@ def process_reply(request, post_uuid):
         comm.user = request.user
         comm.reply_to = replied_to
         comm.post = post
+        comm.body = comm_body
+        if replied_to == request.user:
+            comm.own_reply = True
+        # comm.save()
         parent_comm.add_child(instance=comm)
-        if replied_to != request.user:
-            short_body = comm_body[:100]
-            msg = f"User {comm.user} replied to your comment: {short_body}"
-            new_notif = Notification.objects.create(recipient=replied_to, text=msg)
-            print("new notif created", new_notif)
-        else:
-            print("user replied to himself")
+        # if not parent_comm.deleted and (replied_to != request.user):
+        #     short_body = comm_body[:100]
+        #     msg = f"User {comm.user} replied to your comment: {short_body}"
+        #     new_notif = Notification.objects.create(
+        #         recipient=replied_to, text=msg, post=post, parent_comment=parent_comm
+        #     )
+        #     print("new notif created", new_notif)
+        # else:
+        #     print("user replied to himself")
         return HttpResponse(status=204, headers={"HX-Trigger": "updateCommList"})
 
 

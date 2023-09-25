@@ -14,7 +14,7 @@ class CommentAdmin(TreeAdmin):
         "body",
         "created_at",
         "updated_at",
-        "id",
+        "uuid",
         "deleted",
         "reply_to",
     ]

@@ -4,6 +4,9 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.timezone import now
 
+from src.comments.models import Comment
+from src.posts.models.post_model import Post
+
 User = get_user_model()
 
 
@@ -33,6 +36,10 @@ class Notification(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     read = models.BooleanField(default=False)
+    post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.CASCADE)
+    parent_comment = models.ForeignKey(
+        Comment, null=True, blank=True, on_delete=models.SET_NULL
+    )
     objects = NotificationManager()
 
     # @cached_property

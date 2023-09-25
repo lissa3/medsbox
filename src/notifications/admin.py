@@ -7,12 +7,7 @@ from src.notifications.models import Notification
 class NotificationAdmin(admin.ModelAdmin):
     """display notifications list"""
 
-    list_display = (
-        "id",
-        "created",
-        "recipient",
-        "read",
-    )
+    list_display = ("id", "recipient", "read", "text", "post_id")
     list_filter = ("created", "recipient")
     list_display_links = ["recipient"]
     date_hierarchy = "created"

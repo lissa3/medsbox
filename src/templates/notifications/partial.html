@@ -8,7 +8,8 @@
    </div>
    <hr>
    {% for n in top_five %}
-   <div>{{n.text}}</div>
+   <div>{{n.text|truncatewords:50|linebreaks}}</div>
+   <div>Details: <a href="#">{% trans 'See details' %}</a></div>
    <hr>
    {% endfor %}
 </div>
