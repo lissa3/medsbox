@@ -1,0 +1,40 @@
+.tool-frame{
+    cursor: pointer;
+}
+.shape-img-comms{
+    width:30px;
+    height: 30px;
+}
+.comms_bg{
+    background-color:#c5c4c3;
+    padding:10px;
+    border-radius: 10px;
+  }
+.deleted{
+    background-color: cornsilk;
+}
+.form-main{
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    width:100%;
+
+}
+.form-main > label{
+    color:black;
+    text-align: center;
+    font-weight: bold;
+}
+.input-main{
+    margin-top: .5rem;
+    padding:.5rem;
+    font-size: 20px;
+    border-radius: 5px;
+    outline: none;
+    /* border: 1px solid transparent; */
+    border: 1px solid rgba(0,0,0,0.2);
+    background:#f9f4eb;
+    width:100%;
+}

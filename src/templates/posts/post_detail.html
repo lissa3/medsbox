@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
-{% load static sidebars i18n %}
-
-
+{% load static sidebars i18n tree_comms%}
 {% block content %}
-<div class="row">
+  <div class="row">
   <aside class="col-md-3 col-sm-12">
     <!-- <nav role="navigation" aria-label="Sidebar Navigation">
       <div class="list-group"> -->
@@ -14,7 +12,7 @@
   <div class="col-md-6 col-sm-12">
 
     <h3>{{post.title}}</h3>
-    <p>{{post.created_at|date:"F d, Y"}}</p>
+    <p>{{post.updated_at|date:"F d, Y"}}</p>
 
     <div><strong>{%trans "category" %}</strong>:
       {% include "components/post_categs.html" with categ_dict=cats_path %}
@@ -24,15 +22,57 @@
     </div>
     <hr>
 
-
   </div>
   <div class="col-md-3 col-sm-12">
     {% show_tags %}
   </div>
+  </div>
+ <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          {% trans "Show form" %}
+        </button>
+      </div>
+    </div>
+    <div class="row collapse" id="collapseExample" >
+      <div class="col-md-12">
+        {% if user.is_authenticated and post.allow_comments %}
+        <form action="{% url 'posts:post_detail' post.slug %}" id="top_form" method="POST" class="form-main"
+        >
+          {% csrf_token %}
+          {% for field in form.visible_fields %}
+            <p>{{ field.errors }}</p>
+              {{ field }}
+            <p class="text-center"><strong>{{ field.help_text }}</strong></p>
+          {% endfor %}
+          {% for error in field.errors %}
+          <div class="errorlist">{{ error }}</div>
+          {% endfor %}
 
-</div>
-
+          <button class="btn btn-primary" type="submit">Comment</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    {% if comments %}
+    <div class="">Comments : {{comms_total}}</div>
+    <div class="row comms">
+      <div class="col-sm-3"></div>
+        <div class="col-sm-6 col-md-12 ">
+          <div id="comms_list"
+            hx-trigger="load, updateCommList from:body"
+            hx-get="{% url 'comments:all_comms' post_uuid=post.uuid %}"
+            hx-target="#mycomms">
+            <div id="mycomms"class="comms_bg"></div>
+          </div>
+        </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+  {% endif %}
 {% endblock%}
+
 {% block js %}
 <script src="{% static 'js/categs.js' %}"></script>
 {% endblock %}

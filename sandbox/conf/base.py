@@ -56,6 +56,8 @@ LOCAL_APPS = [
     "src.core.apps.CoreConfig",
     "src.contacts.apps.ContactsConfig",
     "src.sentry.apps.SentryConfig",
+    "src.comments.apps.CommentsConfig",
+    "src.notifications.apps.NotificationsConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY + LOCAL_APPS
 
@@ -85,6 +87,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "src.contacts.context_processors.check_subscription",
+                "src.notifications.context_processors.check_nofications",
             ],
         },
     },
@@ -92,16 +95,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "sandbox.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PSW"),
-        "HOST": "localhost",
-        "PORT": "5432",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": env("DB_NAME"),
+#         "USER": env("DB_USER"),
+#         "PASSWORD": env("DB_PSW"),
+#         "HOST": "localhost",
+#         "PORT": "5432",
+#     }
+# }
 
 # DATABASES = {
 #     "default": {

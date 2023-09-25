@@ -22,6 +22,7 @@ urlpatterns = [
     path("ckeditor5/", include("django_ckeditor_5.urls")),
     path("admin/", admin.site.urls),
     path("contacts/", include("src.contacts.urls")),
+    path("notifications/", include("src.notifications.urls")),
 ]
 
 htmx_urlpatterns = [
@@ -34,6 +35,7 @@ urlpatterns += i18n_patterns(
     path("core/", include("src.core.urls")),
     path("profile/", include("src.profiles.urls")),
     path("posts/", include("src.posts.urls")),
+    path("comments/", include("src.comments.urls")),
 )
 urlpatterns += htmx_urlpatterns
 
