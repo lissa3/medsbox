@@ -16,20 +16,20 @@ class SubscribeLinkTest(WebTest):
     def test_auth_user_has_subscr_link_in_menu(self):
         """Auth user has link to subscribe for a newsletter"""
         self.app.set_user(self.user)
-        self.response = self.app.get(self.url)
-        self.assertEqual(self.response.status_code, 200)
+        response = self.app.get(self.url)
+        self.assertEqual(response.status_code, 200)
 
-        subs_link = self.response.html.find("a", id="subLink")
+        subs_link = response.html.find("a", id="subLink")
 
         self.assertIsNotNone(subs_link)
 
     def test_unauth_user_no_link_in_menu(self):
         """Unauth used - no link in menu to subscribe for a newsletter"""
 
-        self.response = self.app.get(self.url)
-        self.assertEqual(self.response.status_code, 200)
+        response = self.app.get(self.url)
+        self.assertEqual(response.status_code, 200)
 
-        subs_link = self.response.html.find("a", id="subLink")
+        subs_link = response.html.find("a", id="subLink")
 
         self.assertIsNone(subs_link)
 

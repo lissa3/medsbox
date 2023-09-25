@@ -35,7 +35,7 @@ def get_reply_form(request, post_uuid, comm_id):
 def process_reply(request, post_uuid):
     """
     if parent comm is deleted->no notifications;
-    also no notif on users own comment
+    also no notif users own comment
     """
     form = CommentForm(request.POST)
     if form.is_valid():
@@ -51,17 +51,7 @@ def process_reply(request, post_uuid):
         comm.body = comm_body
         if replied_to == request.user:
             comm.own_reply = True
-        # comm.save()
         parent_comm.add_child(instance=comm)
-        # if not parent_comm.deleted and (replied_to != request.user):
-        #     short_body = comm_body[:100]
-        #     msg = f"User {comm.user} replied to your comment: {short_body}"
-        #     new_notif = Notification.objects.create(
-        #         recipient=replied_to, text=msg, post=post, parent_comment=parent_comm
-        #     )
-        #     print("new notif created", new_notif)
-        # else:
-        #     print("user replied to himself")
         return HttpResponse(status=204, headers={"HX-Trigger": "updateCommList"})
 
 

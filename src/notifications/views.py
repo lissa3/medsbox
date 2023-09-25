@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import View
 
@@ -16,4 +16,9 @@ def get_top_five(request):
 def make_notifs_read(request):
     """htmx post"""
     Notification.objects.make_all_read(request.user)
-    return HttpResponseRedirect(request.headers["referer"])
+    return HttpResponse(
+        headers={
+            "HX-Redirect": "/",
+        },
+    )
+    # return HttpResponseRedirect(request.headers["referer"])
