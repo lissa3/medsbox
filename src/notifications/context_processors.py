@@ -7,4 +7,6 @@ def check_nofications(request):
     """
     if request.user.is_authenticated:
         notifs = Notification.objects.count_unread_notifics(recipient=request.user)
-        return {"notifs": notifs}
+    else:
+        notifs = None
+    return {"notifs": notifs}
