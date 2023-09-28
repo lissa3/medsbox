@@ -3,11 +3,8 @@
 {% block content %}
   <div class="row">
   <aside class="col-md-3 col-sm-12">
-    <!-- <nav role="navigation" aria-label="Sidebar Navigation">
-      <div class="list-group"> -->
-        {% show_categs %}
-        <!-- </div>
-    </nav>     -->
+    {% show_categs %}
+
   </aside>
   <div class="col-md-6 col-sm-12">
 
@@ -56,19 +53,36 @@
       </div>
     </div>
     {% if comments %}
-    <div class="">Comments : {{comms_total}}</div>
+    <div class="number"><string>{% trans 'Total comments' %} : {{comms_total}}</string></div>
+
     <div class="row comms">
       <div class="col-sm-3"></div>
         <div class="col-sm-6 col-md-12 ">
+          {% if thread_uuid %}
+          <div class="mb-2"><button class="btn btn-secondary"
+          hx-get="{% url 'comments:all_comms' post.uuid %}"
+          hx-target="#mycomms"
+            >{% trans 'Refresh all comments' %}</button>
+          </div>
           <div id="comms_list"
             hx-trigger="load, updateCommList from:body"
-            hx-get="{% url 'comments:all_comms' post_uuid=post.uuid %}"
+            hx-get="{% url 'comments:select_comms' post_uuid=post.uuid thread_uuid=thread_uuid %}"
             hx-target="#mycomms">
             <div id="mycomms"class="comms_bg"></div>
           </div>
+          {% else %}
+          <div id="comms_list"
+          hx-trigger="load, updateCommList from:body"
+          hx-get="{% url 'comments:all_comms' post.uuid %}"
+          hx-target="#mycomms">
+          <div id="mycomms"class="comms_bg"></div>
+        </div>
+
+          {% endif %}
         </div>
       <div class="col-sm-3"></div>
     </div>
+
   </div>
   {% endif %}
 {% endblock%}

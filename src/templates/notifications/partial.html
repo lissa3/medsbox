@@ -9,7 +9,11 @@
    <hr>
    {% for n in top_five %}
    <div>{{n.text|truncatewords:50|linebreaks}}</div>
-   <div>Details: <a href="#">{% trans 'See details' %}</a></div>
+   <div>Details:
+      <a href="{% url 'posts:get_branch'  slug=n.post.slug thread_uuid=n.parent_comment.uuid%}"
+      >{% trans 'See details' %}
+     </a>
+   </div>
    <hr>
    {% endfor %}
 </div>

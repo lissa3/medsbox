@@ -60,6 +60,9 @@ class UnSubscribe(View):
 
     def post(self, request, **kwargs):
         # htmx_based
+        """
+        if OK -> redirect ot Home page with success msg
+        """
         htmx_req = request.headers.get("hx-request")
         try:
             uuid = kwargs.get("uuid")
@@ -77,9 +80,7 @@ class UnSubscribe(View):
                 raise HtmxFailureError(_("Something went wrong.Can't unsubscribe."))
         except HtmxFailureError:
             raise
-            # raise Http404(
-            #     _("Something wrong; Failed to unsubscribe")
-            # )
+
         return HttpResponseRedirect("/")
 
 

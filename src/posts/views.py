@@ -1,5 +1,5 @@
 from django.http import HttpResponseForbidden
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
@@ -22,29 +22,40 @@ class PostList(PostListMenuMixin, ListView):
 
     template_name = "posts/post_list.html"
     context_object_name = "posts"
-
     paginate_by = 2
 
     def get_queryset(self):
-        # print("looking for posts")
         return Post.objects.get_public().prefetch_related("tags")
 
 
 class PostDetail(CategoryCrumbMixin, DetailView):
+    """
+    Detail view to display post object with comments;
+    they can be either  all related comments or selected(via notifications)
+    """
+
     model = Post
     form_class = CommentForm
     template_name = "posts/post_detail.html"
+    _thread_uuid = None
 
     def get_context_data(self, **kwargs):
+        print("detailed view here, kwargs are ", self._thread_uuid)
         comms = Comment.objects.filter(post=self.get_object()).exists()
         ctx = super().get_context_data(**kwargs)
         ctx["cats_path"] = self.get_post_categs_path()
         ctx["comments"] = comms
+        if self._thread_uuid:
+            ctx["thread_uuid"] = self._thread_uuid
         if comms:
             ctx["comms_total"] = Comment.objects.filter(post=self.get_object()).count()
         form = CommentForm()
         ctx["form"] = form
         return ctx
+
+    def dispatch(self, *args, **kwargs):
+        self._thread_uuid = kwargs.pop("thread_uuid", None)
+        return super().dispatch(*args, **kwargs)
 
 
 class PostCommFormView(SingleObjectMixin, FormView):
@@ -64,7 +75,6 @@ class PostCommFormView(SingleObjectMixin, FormView):
             Comment.add_root(instance=comm)
             return self.form_valid(form)
         else:
-            print("form invalid")
             return self.form_invalid(form)
 
     def get_success_url(self):

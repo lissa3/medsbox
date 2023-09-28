@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import (
     display_all_comments,
+    display_selected_comments,
     get_reply_form,
     handle_delete_comment,
     handle_edit_comment,
@@ -12,6 +13,11 @@ app_name = "comments"
 
 urlpatterns = [
     path("all-comms/<post_uuid>/", display_all_comments, name="all_comms"),
+    path(
+        "selected-thread/<post_uuid>/<thread_uuid>/",
+        display_selected_comments,
+        name="select_comms",
+    ),
     # create
     path("add-comm/<post_uuid>/<comm_id>/", get_reply_form, name="add_comm"),
     path("process-reply/<post_uuid>/", process_reply, name="process_comm"),
