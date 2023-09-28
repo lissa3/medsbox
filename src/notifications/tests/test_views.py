@@ -50,27 +50,26 @@ class NotificationsFabricTestCase(TestCase):
         self.assertEqual(notif_to_author.recipient, self.author_comment)
         self.assertEqual(notif_count, 1)
 
+    def test_no_notif_own_reply_to_yourself(self):
+        """if user reply's own comment -> no notifications"""
+        self.client.force_login(self.author_comment)
+        url = reverse(
+            "comments:process_comm",
+            kwargs={"post_uuid": self.post.uuid},
+        )
+        data = {
+            "body": "Sally reply's to herself",
+            "comm_parent_id": self.comment.id,
+            "post": self.post,
+        }
+        headers = {"HTTP_HX-Request": "true"}
 
-def test_no_notif_own_reply_to_yourself(self):
-    """if user reply's own comment -> no notifications"""
-    self.client.force_login(self.author_comment)
-    url = reverse(
-        "comments:process_comm",
-        kwargs={"post_uuid": self.post.uuid},
-    )
-    data = {
-        "body": "Sally reply's to herself",
-        "comm_parent_id": self.comment.id,
-        "post": self.post,
-    }
-    headers = {"HTTP_HX-Request": "true"}
+        resp = self.client.post(url, data=data, **headers)
 
-    resp = self.client.post(url, data=data, **headers)
+        notif_count = Notification.objects.count()
 
-    notif_count = Notification.objects.count()
-
-    self.assertEqual(resp.status_code, 204)
-    self.assertEqual(notif_count, 0)
+        self.assertEqual(resp.status_code, 204)
+        self.assertEqual(notif_count, 0)
 
 
 @override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))

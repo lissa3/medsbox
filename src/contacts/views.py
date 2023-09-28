@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM
-from django.core.mail import BadHeaderError, send_mail
+from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import get_template
@@ -90,6 +90,14 @@ class ContactView(FormView):
     template_name = "contacts/feedback/feedback.html"
     form_class = ContactForm
     success_url = reverse_lazy("home")
+
+    def get_form_kwargs(self) -> dict:
+        kwargs = super().get_form_kwargs()
+        if self.request.user.is_authenticated:
+            kwargs.update({"request": self.request})
+        else:
+            kwargs.update({"request": None})
+        return kwargs
 
     def form_valid(self, form):
         name = form.cleaned_data.get("name")
