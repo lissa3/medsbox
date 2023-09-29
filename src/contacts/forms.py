@@ -31,16 +31,6 @@ class ContactForm(forms.Form):
     #     #     private_key=settings.RECAPTCHA_PRIVATE_KEY,
     #     # )
 
-    def __init__(self, **kwargs):
-        """if user is auth form should be pre-filled with exist user data"""
-        self.request = kwargs.pop("request")
-        super().__init__(**kwargs)
-        if self.request:
-            name = self.fields["name"]
-            name.initial = self.request.user.username
-            email = self.fields["email"]
-            email.initial = self.request.user.email
-
     def clean_message(self):
         message = self.cleaned_data.get("message", "no input")
         words = message.split()

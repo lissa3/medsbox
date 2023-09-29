@@ -94,9 +94,14 @@ class ContactView(FormView):
     def get_form_kwargs(self) -> dict:
         kwargs = super().get_form_kwargs()
         if self.request.user.is_authenticated:
-            kwargs.update({"request": self.request})
-        else:
-            kwargs.update({"request": None})
+            kwargs.update(
+                {
+                    "initial": {
+                        "name": self.request.user.username,
+                        "email": self.request.user.email,
+                    }
+                }
+            )
         return kwargs
 
     def form_valid(self, form):
