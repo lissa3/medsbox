@@ -1,5 +1,18 @@
 ### Med Sandbox
 
+## Site about different medical topcs
+
+# Main features:
+
+1. django 4.2
+
+2. Templates
+
+3. Authentication (all-auth)
+
+4. Nested comments (django-tree-bread) with crud's on them
+
+5. Notifications (currently without email notifications)
 
 ## dev
 
