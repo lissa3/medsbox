@@ -39,7 +39,7 @@ class Comment(TimeStamp, MP_Node):
         ordering = ("path",)
 
     def __str__(self):
-        return f"commet to {self.body}"
+        return f"Body: {self.body}"
 
     # TODO: add time delta : created_at  == updated_at for edit
     @property

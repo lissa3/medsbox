@@ -1,6 +1,3 @@
-from pprint import pprint
-
-from django.template.loader import render_to_string
 from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _

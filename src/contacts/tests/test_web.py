@@ -16,20 +16,20 @@ class SubscribeLinkTest(WebTest):
     def test_auth_user_has_subscr_link_in_menu(self):
         """Auth user has link to subscribe for a newsletter"""
         self.app.set_user(self.user)
-        self.response = self.app.get(self.url)
-        self.assertEqual(self.response.status_code, 200)
+        response = self.app.get(self.url)
+        self.assertEqual(response.status_code, 200)
 
-        subs_link = self.response.html.find("a", id="subLink")
+        subs_link = response.html.find("a", id="subLink")
 
         self.assertIsNotNone(subs_link)
 
     def test_unauth_user_no_link_in_menu(self):
         """Unauth used - no link in menu to subscribe for a newsletter"""
 
-        self.response = self.app.get(self.url)
-        self.assertEqual(self.response.status_code, 200)
+        response = self.app.get(self.url)
+        self.assertEqual(response.status_code, 200)
 
-        subs_link = self.response.html.find("a", id="subLink")
+        subs_link = response.html.find("a", id="subLink")
 
         self.assertIsNone(subs_link)
 
@@ -39,6 +39,7 @@ class ContactFormTest(WebTest):
     def setUp(self):
         super().setUp()
         self.url = reverse("contacts:feedback")
+        self.user = UserFactory(username="Snork", email="jaga@mail.com")
 
     def test_contact_form_valid(self):
         response = self.app.get(self.url)
@@ -56,6 +57,18 @@ class ContactFormTest(WebTest):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), _("Your message is sent"))
+
+    def test_contact_form_auth_user(self):
+        """auth loggen in user's form is pre-filled with name and mail"""
+        self.app.set_user(self.user)
+        response = self.app.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+        form = response.forms["feedback"]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(form["name"].value, "Snork")
+        self.assertEqual(form["email"].value, "jaga@mail.com")
 
     def test_contact_form_honeypot(self):
         response = self.app.get(self.url)
@@ -77,8 +90,8 @@ class ContactFormTest(WebTest):
             resp.context["form"].errors, {"honeypot": [_("It should not be here")]}
         )
 
-    def test_short_msg(self):
-        """min 2 words in message"""
+    def test_failure_short_msg(self):
+        """failure: error min 2 words in message"""
 
         response = self.app.get(self.url)
         form = response.forms["feedback"]

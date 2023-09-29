@@ -1,6 +1,4 @@
 """config URL Configuration 4.1"""
-# import os
-
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
@@ -11,7 +9,9 @@ from django.urls import include, path
 from src.core.utils.views_help import clear
 from src.core.views import home
 
-# from django.views.generic import TemplateView
+# handler404 = "src.core.utils.views_help.handler404"
+# handler500 = "src.core.utils.views_help.handler500"
+
 
 urlpatterns = [
     # path(eve('SECRET_ADMIN_URL') + '/admin/', admin.site.urls),

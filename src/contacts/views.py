@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM
-from django.core.mail import BadHeaderError, send_mail
+from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import get_template
@@ -60,6 +60,9 @@ class UnSubscribe(View):
 
     def post(self, request, **kwargs):
         # htmx_based
+        """
+        if OK -> redirect ot Home page with success msg
+        """
         htmx_req = request.headers.get("hx-request")
         try:
             uuid = kwargs.get("uuid")
@@ -77,9 +80,7 @@ class UnSubscribe(View):
                 raise HtmxFailureError(_("Something went wrong.Can't unsubscribe."))
         except HtmxFailureError:
             raise
-            # raise Http404(
-            #     _("Something wrong; Failed to unsubscribe")
-            # )
+
         return HttpResponseRedirect("/")
 
 
@@ -89,6 +90,14 @@ class ContactView(FormView):
     template_name = "contacts/feedback/feedback.html"
     form_class = ContactForm
     success_url = reverse_lazy("home")
+
+    def get_form_kwargs(self) -> dict:
+        kwargs = super().get_form_kwargs()
+        if self.request.user.is_authenticated:
+            kwargs.update({"request": self.request})
+        else:
+            kwargs.update({"request": None})
+        return kwargs
 
     def form_valid(self, form):
         name = form.cleaned_data.get("name")

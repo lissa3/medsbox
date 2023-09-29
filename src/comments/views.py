@@ -6,11 +6,14 @@ from django.views.decorators.http import require_http_methods
 
 from src.comments.forms import CommentForm
 from src.comments.models import Comment
-from src.notifications.models import Notification
 from src.posts.models.post_model import Post
 
 
 def display_all_comments(request, post_uuid):
+    """
+    htmx based; triggered if post detail page
+    loaded or comments updated
+    """
     post = Post.objects.get(uuid=post_uuid)
     post_comms = Comment.objects.filter(post=post)
     return render(
@@ -20,9 +23,24 @@ def display_all_comments(request, post_uuid):
     )
 
 
+def display_selected_comments(request, post_uuid, thread_uuid):
+    """
+    htmx based;
+    triggered from dropdown-menu link:
+    comments refer to replied comment and it's children
+    """
+    post = Post.objects.get(uuid=post_uuid)
+    post_comms = Comment.objects.filter(post=post, uuid=thread_uuid)
+    return render(
+        request,
+        "components/comms/wraps.html",
+        {"comments": post_comms, "post": post, "user": request.user},
+    )
+
+
 @login_required
 def get_reply_form(request, post_uuid, comm_id):
-    """get req to get form for reply"""
+    """htmx + modal; get req to get form for reply"""
     form = CommentForm(initial={"comm_parent_id": comm_id})
     ctx = {}
     ctx["form"] = form
@@ -34,8 +52,10 @@ def get_reply_form(request, post_uuid, comm_id):
 @login_required
 def process_reply(request, post_uuid):
     """
-    if parent comm is deleted->no notifications;
-    also no notif on users own comment
+    htmx-modal;
+    no notifications in cases:
+    - parent(replied) comm is deleted;
+    - users comment their own comment
     """
     form = CommentForm(request.POST)
     if form.is_valid():
@@ -51,23 +71,17 @@ def process_reply(request, post_uuid):
         comm.body = comm_body
         if replied_to == request.user:
             comm.own_reply = True
-        # comm.save()
         parent_comm.add_child(instance=comm)
-        # if not parent_comm.deleted and (replied_to != request.user):
-        #     short_body = comm_body[:100]
-        #     msg = f"User {comm.user} replied to your comment: {short_body}"
-        #     new_notif = Notification.objects.create(
-        #         recipient=replied_to, text=msg, post=post, parent_comment=parent_comm
-        #     )
-        #     print("new notif created", new_notif)
-        # else:
-        #     print("user replied to himself")
         return HttpResponse(status=204, headers={"HX-Trigger": "updateCommList"})
 
 
 @login_required
 def handle_edit_comment(request, post_uuid, comm_id):
-    """htmx based + modal UI in bootstrap5"""
+    """
+    htmx based + modal UI in bootstrap5;
+    provide pre-filled comment form and proccess it.
+    incl method PUT (htmx)
+    """
 
     ctx = {"post_uuid": post_uuid, "comm_id": comm_id}
     post = get_object_or_404(Post, uuid=post_uuid)
@@ -76,26 +90,20 @@ def handle_edit_comment(request, post_uuid, comm_id):
     if request.method == "GET":
         if parent:
             form = CommentForm(instance=obj, initial={"comm_parent_id": comm_id})
-
         else:
-            print("should be a root comment")
             form = CommentForm(instance=obj)
         ctx["form"] = form
         return render(request, "components/comms/comm_edit_form.html", ctx)
 
     if request.method == "PUT":
         data_dict = QueryDict(request.body).dict()
-
         form = CommentForm(data_dict, instance=obj)
         if form.is_valid():
-            print("cleaned data reply is ", form.cleaned_data)
             obj.updated_at = timezone.now()
             obj.save()
             return HttpResponse(status=204, headers={"HX-Trigger": "updateCommList"})
         else:
-            print("form NOT valid")
-            print("errs: ", form.errors)
-            ctx["fomr"] = form
+            ctx["form"] = form
     return render(request, "components/comms/comm_edit_form.html", ctx)
 
 

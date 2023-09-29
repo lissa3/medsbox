@@ -14,4 +14,7 @@ urlpatterns = [
         PostTagSearch.as_view(),
         name="tag_search",
     ),
+    path(
+        "comments/<slug:slug>/<thread_uuid>/", PostComment.as_view(), name="get_branch"
+    ),
 ]

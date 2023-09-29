@@ -5,7 +5,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 
-from .exceptions import NoAjaxError
 from .forms import ProfileForm
 from .models import Profile
 
@@ -19,7 +18,7 @@ class ProfileView(LRM, View):
         return render(request, "profiles/profile_detail.html", ctx)
 
     def post(self, request, **kwargs):
-        # ajax request
+        # ajax(fetch) request
         # request.headers.get("x-requested-with") == "XMLHttpRequest")
         uuid = kwargs.get("uuid")
         profile = get_object_or_404(Profile, uuid=uuid)
