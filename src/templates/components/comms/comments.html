@@ -1,0 +1,29 @@
+{% load tree_comms  static  i18n %}
+<ul class="mt-3 list" >
+{% recursetree comments %}
+  <li class="list_item">
+    {% if node.is_leaf %}
+      {% if node.deleted %}
+        {% include 'components/comms/deleted_node.html' %}
+      {% else %}
+      <!-- node leaf and NOT deleted -->
+      {% include 'components/comms/card.html' with node=node%}
+      {% endif %}
+    {% else %}
+    <!-- node is NOT leaf: render node self + ul children -->
+    {% if node.deleted %}
+      {% include 'components/comms/deleted_node.html' %}
+    {% else %}
+      {% include 'components/comms/card.html' with node=node%}
+      {% endif %}
+        <ul class="list">
+            {{ children }}
+        </ul>
+    {% endif %}
+   </li>
+   {% endrecursetree %}
+  </ul>
+
+
+
+

@@ -1,0 +1,15 @@
+{% load i18n %}
+<div class="notif_container d-flex flex-column m-2">
+   <div>
+      <button class="btn btn-primary"
+      hx-post="{% url 'notifications:mark_top_read' %}">
+      {% trans 'Mark all as read' %}
+      </button>
+   </div>
+   <hr>
+   {% for n in top_five %}
+   <div>{{n.text|truncatewords:50|linebreaks}}</div>
+   <div>Details: <a href="#">{% trans 'See details' %}</a></div>
+   <hr>
+   {% endfor %}
+</div>

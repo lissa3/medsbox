@@ -1,8 +1,13 @@
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, FormView, ListView, View
+from django.views.generic.detail import SingleObjectMixin
 
+from src.comments.forms import CommentForm
+from src.comments.models import Comment
 from src.core.utils.views_help import make_query, search_qs
 from src.posts.forms import SearchForm
 from src.posts.models.categ_model import Category
@@ -27,12 +32,53 @@ class PostList(PostListMenuMixin, ListView):
 
 class PostDetail(CategoryCrumbMixin, DetailView):
     model = Post
+    form_class = CommentForm
     template_name = "posts/post_detail.html"
 
     def get_context_data(self, **kwargs):
+        comms = Comment.objects.filter(post=self.get_object()).exists()
         ctx = super().get_context_data(**kwargs)
         ctx["cats_path"] = self.get_post_categs_path()
+        ctx["comments"] = comms
+        if comms:
+            ctx["comms_total"] = Comment.objects.filter(post=self.get_object()).count()
+        form = CommentForm()
+        ctx["form"] = form
         return ctx
+
+
+class PostCommFormView(SingleObjectMixin, FormView):
+    model = Post
+    form_class = CommentForm
+    template_name = "posts/post_detail.html"
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            comm = form.save(commit=False)
+            comm.user = request.user
+            comm.post = self.object
+            Comment.add_root(instance=comm)
+            return self.form_valid(form)
+        else:
+            print("form invalid")
+            return self.form_invalid(form)
+
+    def get_success_url(self):
+        return reverse("posts:post_detail", kwargs={"slug": self.object.slug})
+
+
+class PostComment(View):
+    def get(self, request, *args, **kwargs):
+        view = PostDetail.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = PostCommFormView.as_view()
+        return view(request, *args, **kwargs)
 
 
 class PostTagSearch(PostListMenuMixin, ListView):

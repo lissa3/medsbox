@@ -230,7 +230,7 @@ a.red{
 /* sign-up form: red star for required fields   */
 .control-label::after {
     content: " *";
-    color: red;
+    color: rgb(255, 0, 0);
   }
 /* overriding form-control  */
 .form-control {
