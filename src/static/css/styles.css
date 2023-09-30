@@ -145,7 +145,7 @@ footer{
 }
 .btn-outline {
     border-color:black;
-    font-size: larger;
+    background-color: #eceae3cc;
 }
 .btn-outline:hover {
     background-color:#bbb3b3;
@@ -390,6 +390,7 @@ a.reply:visited {
 .number{
     font-weight: bold;
     font-size: 1.5rem;
+    margin-top: 1rem;
 }
 /* profile page */
 .shape-img{

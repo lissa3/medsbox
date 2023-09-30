@@ -1,7 +1,7 @@
 {% load tree_comms  static  i18n %}
-<ul class="mt-3 list" >
+<div class="mt-3 kind" >
 {% recursetree comments %}
-  <li class="list_item">
+  <div class="list_item kind">
     {% if node.is_leaf %}
       {% if node.deleted %}
         {% include 'components/comms/deleted_node.html' %}
@@ -16,13 +16,14 @@
     {% else %}
       {% include 'components/comms/card.html' with node=node%}
       {% endif %}
-        <ul class="list">
+
+        <div class="kind {% if node.depth_limit %}list{% endif %}">
             {{ children }}
-        </ul>
+        </div>
     {% endif %}
-   </li>
+   </div>
    {% endrecursetree %}
-  </ul>
+  </div>
 
 
 

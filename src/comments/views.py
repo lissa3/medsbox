@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, QueryDict
+from django.http import HttpResponse, HttpResponseForbidden, QueryDict
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
@@ -41,6 +41,8 @@ def display_selected_comments(request, post_uuid, thread_uuid):
 @login_required
 def get_reply_form(request, post_uuid, comm_id):
     """htmx + modal; get req to get form for reply"""
+    if request.user.banned:
+        return HttpResponseForbidden()
     form = CommentForm(initial={"comm_parent_id": comm_id})
     ctx = {}
     ctx["form"] = form
@@ -57,6 +59,8 @@ def process_reply(request, post_uuid):
     - parent(replied) comm is deleted;
     - users comment their own comment
     """
+    if request.user.banned:
+        return HttpResponseForbidden()
     form = CommentForm(request.POST)
     if form.is_valid():
         comm_parent_id = form.cleaned_data["comm_parent_id"]
@@ -82,6 +86,8 @@ def handle_edit_comment(request, post_uuid, comm_id):
     provide pre-filled comment form and proccess it.
     incl method PUT (htmx)
     """
+    if request.user.banned:
+        return HttpResponseForbidden()
 
     ctx = {"post_uuid": post_uuid, "comm_id": comm_id}
     post = get_object_or_404(Post, uuid=post_uuid)
@@ -110,6 +116,8 @@ def handle_edit_comment(request, post_uuid, comm_id):
 @login_required
 def handle_delete_comment(request, post_uuid, comm_id):
     """htmx based"""
+    if request.user.banned:
+        return HttpResponseForbidden()
     ctx = {"post_uuid": post_uuid, "comm_id": comm_id}
     post = get_object_or_404(Post, uuid=post_uuid)
     comm_to_del = get_object_or_404(Comment, id=comm_id, post_id=post.id)

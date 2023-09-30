@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -64,7 +65,7 @@ class PostCommFormView(SingleObjectMixin, FormView):
     template_name = "posts/post_detail.html"
 
     def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
+        if not request.user.is_authenticated and not request.user.banned:
             return HttpResponseForbidden()
         self.object = self.get_object()
         form = self.get_form()
