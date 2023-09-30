@@ -1,12 +1,21 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.mixins import LoginRequiredMixin as LRM
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponse, HttpResponseForbidden, QueryDict
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.decorators.http import require_http_methods
 
 from src.comments.forms import CommentForm
+from src.comments.mixins import CheckBannedMixin
 from src.comments.models import Comment
 from src.posts.models.post_model import Post
+
+
+def good_user(user):
+    return user.is_authenticated and not user.banned
 
 
 def display_all_comments(request, post_uuid):
@@ -38,45 +47,45 @@ def display_selected_comments(request, post_uuid, thread_uuid):
     )
 
 
-@login_required
-def get_reply_form(request, post_uuid, comm_id):
-    """htmx + modal; get req to get form for reply"""
-    if request.user.banned:
-        return HttpResponseForbidden()
-    form = CommentForm(initial={"comm_parent_id": comm_id})
-    ctx = {}
-    ctx["form"] = form
-    ctx["post_uuid"] = post_uuid
-    return render(request, "components/comms/comm_form.html", ctx)
+class GetReplyFormView(LRM, CheckBannedMixin, View):
+    def get(self, request, post_uuid, comm_id):
+        """htmx + modal; get req to get form for reply"""
+        if request.htmx:
+            form = CommentForm(initial={"comm_parent_id": comm_id})
+            ctx = {}
+            ctx["form"] = form
+            ctx["post_uuid"] = post_uuid
+            return render(request, "components/comms/comm_form.html", ctx)
+        else:
+            print("req is NOT htmx")
+            return redirect("/")
 
 
-@require_http_methods(["POST"])
-@login_required
-def process_reply(request, post_uuid):
-    """
-    htmx-modal;
-    no notifications in cases:
-    - parent(replied) comm is deleted;
-    - users comment their own comment
-    """
-    if request.user.banned:
-        return HttpResponseForbidden()
-    form = CommentForm(request.POST)
-    if form.is_valid():
-        comm_parent_id = form.cleaned_data["comm_parent_id"]
-        post = get_object_or_404(Post, uuid=post_uuid)
-        parent_comm = get_object_or_404(Comment, id=comm_parent_id)
-        replied_to = parent_comm.user
-        comm = form.save(commit=False)
-        comm_body = form.cleaned_data["body"]
-        comm.user = request.user
-        comm.reply_to = replied_to
-        comm.post = post
-        comm.body = comm_body
-        if replied_to == request.user:
-            comm.own_reply = True
-        parent_comm.add_child(instance=comm)
-        return HttpResponse(status=204, headers={"HX-Trigger": "updateCommList"})
+class ProccessReplyView(LRM, CheckBannedMixin, View):
+    def post(self, request, post_uuid):
+        """
+        htmx-modal;
+        no notifications in cases:
+        - parent(replied) comm is deleted;
+        - users comment their own comment
+        """
+        print("is anna here? ", request.user, request.user.banned)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comm_parent_id = form.cleaned_data["comm_parent_id"]
+            post = get_object_or_404(Post, uuid=post_uuid)
+            parent_comm = get_object_or_404(Comment, id=comm_parent_id)
+            replied_to = parent_comm.user
+            comm = form.save(commit=False)
+            comm_body = form.cleaned_data["body"]
+            comm.user = request.user
+            comm.reply_to = replied_to
+            comm.post = post
+            comm.body = comm_body
+            if replied_to == request.user:
+                comm.own_reply = True
+            parent_comm.add_child(instance=comm)
+            return HttpResponse(status=204, headers={"HX-Trigger": "updateCommList"})
 
 
 @login_required
@@ -113,17 +122,14 @@ def handle_edit_comment(request, post_uuid, comm_id):
     return render(request, "components/comms/comm_edit_form.html", ctx)
 
 
-@login_required
-def handle_delete_comment(request, post_uuid, comm_id):
-    """htmx based"""
-    if request.user.banned:
-        return HttpResponseForbidden()
-    ctx = {"post_uuid": post_uuid, "comm_id": comm_id}
-    post = get_object_or_404(Post, uuid=post_uuid)
-    comm_to_del = get_object_or_404(Comment, id=comm_id, post_id=post.id)
-    if request.method == "GET":
+class DeleteCommentView(LRM, CheckBannedMixin, View):
+    def get(self, request, post_uuid, comm_id):
+        ctx = {"post_uuid": post_uuid, "comm_id": comm_id}
         return render(request, "components/comms/del_confirm.html", ctx)
-    else:
+
+    def post(self, request, post_uuid, comm_id):
+        post = get_object_or_404(Post, uuid=post_uuid)
+        comm_to_del = get_object_or_404(Comment, id=comm_id, post_id=post.id)
         comm_to_del.deleted = True
         comm_to_del.save()
         print("Comm deleted successfully!")

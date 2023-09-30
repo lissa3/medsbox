@@ -17,6 +17,7 @@ class HtmxCommentsFunctionsViewsTestCase(TestCase):
     def setUp(self) -> None:
         super().setUp()
         self.user = UserFactory(username="tata")
+        self.anna_author = UserFactory(username="anna")
         self.author_comment = UserFactory(username="sally")
         self.post = PostFactory.create(
             title_en="Bell's palsy",
@@ -26,9 +27,12 @@ class HtmxCommentsFunctionsViewsTestCase(TestCase):
         self.comment = Comment.add_root(
             post=self.post, user=self.author_comment, body="it's me root comment"
         )
+        self.anna_comment = Comment.add_root(
+            post=self.post, user=self.anna_author, body="I will be soon banned"
+        )
 
     def test_get_reply_form(self):
-        """ """
+        """auth and not banned user gets reply form on post detail"""
         user = UserFactory()
         self.client.force_login(user)
 
@@ -44,8 +48,23 @@ class HtmxCommentsFunctionsViewsTestCase(TestCase):
         self.assertFalse(form.is_bound)
         self.assertTrue(form.initial, {"comm_parent_id": str(self.comment.id)})
 
+    def test_no_reply_form_for_banned(self):
+        """auth but banned user gets no reply form"""
+        self.anna_author.banned = True
+        self.anna_author.save()
+        self.client.force_login(self.anna_author)
+        url = reverse(
+            "comments:add_comm",
+            kwargs={"post_uuid": self.post.uuid, "comm_id": self.comment.id},
+        )
+        headers = {"HTTP_HX-Request": "true"}
+
+        resp = self.client.get(url, **headers)
+
+        self.assertEqual(resp.status_code, 403)
+
     def test_post_reply_comment(self):
-        """test adding child comment(reply to a root comment)"""
+        """auth not banned user can add child comment(reply to a root comment)"""
         start_comments = Comment.objects.all()
         count_start = start_comments.count()
         user = UserFactory()
@@ -67,13 +86,32 @@ class HtmxCommentsFunctionsViewsTestCase(TestCase):
         kid = parent.get_children()[0]
 
         self.assertEqual(resp.status_code, 204)
-        self.assertEqual(count_start, 1)
-        self.assertEqual(final_comments.count(), 2)
+        self.assertEqual(count_start, 2)
+        self.assertEqual(final_comments.count(), 3)
         self.assertEqual(kids, 1)
         self.assertEqual(kid.reply_to, self.author_comment)
 
+    def test_no_reply_comment_for_banned(self):
+        """auth but banned user can not add child comment(reply to a root comment)"""
+        self.anna_author.banned = True
+        self.anna_author.save()
+        self.client.force_login(self.anna_author)
+        url = reverse(
+            "comments:process_comm",
+            kwargs={"post_uuid": self.post.uuid},
+        )
+        data = {
+            "body": "reply to a root comment",
+            "comm_parent_id": self.anna_comment.id,
+        }
+        headers = {"HTTP_HX-Request": "true"}
+
+        resp = self.client.post(url, data=data, **headers)
+
+        self.assertEqual(resp.status_code, 403)
+
     def test_auth_comment_tools(self):
-        """comment author has links to fetch a form for edit and delete"""
+        """auth and not banned comment author has links to fetch a form for edit and delete"""
 
         self.client.force_login(self.author_comment)
         url = reverse("comments:all_comms", kwargs={"post_uuid": self.post.uuid})
@@ -85,8 +123,22 @@ class HtmxCommentsFunctionsViewsTestCase(TestCase):
         self.assertContains(resp, 'hx-get="/en/comments/edit-comm')
         self.assertContains(resp, 'hx-get="/en/comments/process-delete')
 
-    def test_auth_user_no_comment_tools(self):
-        """auth user not comment author has No links for edit and delete"""
+    def test_banned_author_comment_no_tools(self):
+        """banned comment author gets NO links to fetch a form for edit and delete"""
+        self.anna_author.banned = True
+        self.anna_author.save()
+        self.client.force_login(self.anna_author)
+        url = reverse("comments:all_comms", kwargs={"post_uuid": self.post.uuid})
+        headers = {"HTTP_HX-Request": "true"}
+        resp = self.client.get(url, **headers)
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertNotContains(resp, 'hx-target="#dialog"')
+        self.assertNotContains(resp, 'hx-get="/en/comments/edit-comm')
+        self.assertNotContains(resp, 'hx-get="/en/comments/process-delete')
+
+    def test_not_author_auth_user_no_comment_tools(self):
+        """auth user but NOT comment author has No links for edit and delete"""
 
         self.client.force_login(self.user)
         url = reverse("comments:all_comms", kwargs={"post_uuid": self.post.uuid})
