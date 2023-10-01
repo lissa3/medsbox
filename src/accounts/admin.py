@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.forms import UserChangeForm
 
 from .forms import UserCreationForm
 
@@ -13,14 +14,18 @@ class UserAdmin(BaseUserAdmin):
 
     search_fields = ("email", "username")
     add_form = UserCreationForm
+    form = UserChangeForm
     list_display = (
-        "id",
+        "username",
+        "banned",
         "email",
         "last_login",
         "is_staff",
         "is_active",
         "is_superuser",
+        "id",
     )
+    list_display_links = ["username", "email"]
     readonly_fields = ["last_login", "date_joined"]
     list_filter = ("is_active", "is_superuser")
     add_fieldsets = (
@@ -29,6 +34,21 @@ class UserAdmin(BaseUserAdmin):
             {
                 "classes": ("wide",),
                 "fields": ("username", "email", "password1", "password2"),
+            },
+        ),
+    )
+    fieldsets = (
+        (
+            ("Main"),
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "username",
+                    "email",
+                    "banned",
+                    "deactivated_on",
+                    "blackListEmail",
+                ),
             },
         ),
     )
