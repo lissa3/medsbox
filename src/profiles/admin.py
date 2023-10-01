@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.db.models import Count, DateTimeField, Max, Min
 from django.db.models.functions import Trunc
-from django.urls import reverse
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 from .models import Profile, ProfileChart
 
@@ -10,16 +11,18 @@ from .models import Profile, ProfileChart
 class ProfileAdmin(admin.ModelAdmin):
     """display profiles count  in charts on change_list"""
 
-    list_display = (
-        "id",
-        "created_at",
-        "user",
-        "avatar",
-        "info",
-    )
+    list_display = ("id", "created_at", "user", "avatar", "info", "show_ava")
     list_filter = ("created_at", "user")
     list_display_links = ["user"]
     date_hierarchy = "created_at"
+
+    def show_ava(self, obj):
+        """small thumbnail img in admin.py"""
+        if obj.avatar:
+            return format_html("<img src={} width='60' />", obj.avatar.url)
+        return "None"
+
+    show_ava.__name__ = "ava"
 
 
 def get_next_in_date_hierarchy(request, date_hierarchy):

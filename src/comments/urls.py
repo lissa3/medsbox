@@ -1,12 +1,12 @@
 from django.urls import path
 
 from .views import (
+    DeleteCommentView,
+    GetReplyFormView,
+    ProccessReplyView,
     display_all_comments,
     display_selected_comments,
-    get_reply_form,
-    handle_delete_comment,
     handle_edit_comment,
-    process_reply,
 )
 
 app_name = "comments"
@@ -19,12 +19,16 @@ urlpatterns = [
         name="select_comms",
     ),
     # create
-    path("add-comm/<post_uuid>/<comm_id>/", get_reply_form, name="add_comm"),
-    path("process-reply/<post_uuid>/", process_reply, name="process_comm"),
+    path(
+        "add-comm/<post_uuid>/<comm_id>/", GetReplyFormView.as_view(), name="add_comm"
+    ),
+    path(
+        "process-reply/<post_uuid>/", ProccessReplyView.as_view(), name="process_comm"
+    ),
     # delete
     path(
         "process-delete/<post_uuid>/<comm_id>/",
-        handle_delete_comment,
+        DeleteCommentView.as_view(),
         name="handle_delete",
     ),
     # edit

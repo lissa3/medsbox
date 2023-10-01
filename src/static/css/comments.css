@@ -1,3 +1,15 @@
+.modal-header{
+    border-bottom-color: #fff;
+    /* display: flex;
+    justify-content: center; */
+}
+.modal-title{
+    font-size: 0.9em;
+    text-align: center;
+}
+.modal-footer {
+    border-top-color:#fff;
+}
 .tool-frame{
     cursor: pointer;
 }
@@ -6,19 +18,18 @@
     height: 30px;
 }
 .comms_bg{
-    background-color:#c5c4c3;
     padding:10px;
     border-radius: 10px;
   }
 .deleted{
-    background-color: cornsilk;
+    background-color:#ecebe6;
+    font-size: 0.7em;
 }
 .form-main{
     width:100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* align-items: center; */
     width:100%;
 
 }
@@ -33,8 +44,40 @@
     font-size: 20px;
     border-radius: 5px;
     outline: none;
-    /* border: 1px solid transparent; */
     border: 1px solid rgba(0,0,0,0.2);
     background:#f9f4eb;
     width:100%;
+}
+/* define indentation od node with depth <=3 */
+.list{
+    margin-left:30px;
+}
+/* bg for whole comment thread  */
+.kind{
+    background-color: #84998040;
+}
+.date-comment{
+    background-color:#e9f0ea;
+    font-size:0.8em;
+}
+
+/* reply buttons on modile's bg darker and font smaller */
+@media all and (max-width:900px){
+    .btn-primary {
+        font-size:0.6em;
+        background-color: #2f3335d4;
+        border-color:#2f3335d4;
+        padding:3px;
+    }
+    .btn-outline {
+        font-size:0.6em;
+        padding:3px;
+    }
+    .comm-text{
+        font-size:0.75em;
+    }
+    .number{
+        font-size: 1em;
+        margin-top:1rem;
+    }
 }

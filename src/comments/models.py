@@ -21,7 +21,7 @@ class Comment(TimeStamp, MP_Node):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     user = models.ForeignKey(User, related_name="comments", on_delete=models.DO_NOTHING)
-    body = models.CharField(max_length=4500)
+    body = models.CharField(max_length=2000)
     banned = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
     reply_to = models.ForeignKey(
@@ -45,3 +45,8 @@ class Comment(TimeStamp, MP_Node):
     @property
     def mark_edited(self):
         return self.created_at != self.updated_at
+
+    @property
+    def depth_limit(self):
+        """help for UI rendering: nested depth limit for indentaion to left"""
+        return self.depth < 2

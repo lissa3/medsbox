@@ -10,7 +10,7 @@ User = get_user_model()
 class CommentForm(forms.ModelForm):
     body = forms.CharField(
         max_length=4000,
-        help_text=_("Comment can't be empty"),
+        help_text=_("Comment can't be empty; maximum = 2000 chars"),
         widget=forms.Textarea(
             attrs={
                 "rows": 15,
