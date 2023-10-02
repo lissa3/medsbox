@@ -69,7 +69,6 @@ class ProccessReplyView(LRM, CheckBannedMixin, View):
         - parent(replied) comm is deleted;
         - users comment their own comment
         """
-        print("is anna here? ", request.user, request.user.banned)
         form = CommentForm(request.POST)
         if form.is_valid():
             comm_parent_id = form.cleaned_data["comm_parent_id"]

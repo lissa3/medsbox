@@ -4,12 +4,12 @@
     <button class="btn btn-success hide" id="show-cats" data-dropdown-but>Show Categories</button>
     <ul class="root-cats mt-3" data-dropdown>
     {% recursetree categs %}
-        <li class="node-name" data-li>
+        <li class="node-name categ_item" data-li>
           {% if node.is_leaf %}
-          <a href="{% url 'posts:cat_search' node.slug %}" class="node-link" >{{node.name}}</a>
+          <a hx-get="{% url 'posts:cat_search' node.slug %}" hx-target="#post_list" class="node-link" >{{node.name}}</a>
           {% else %}
           <!-- 2 siblings: a tag and ul children -->
-            <a href="{% url 'posts:cat_search' node.slug %}" class="node-link to-toggle" data-dropdown-link>{{node.name}} &#x25B8;</a>
+            <a hx-get="{% url 'posts:cat_search' node.slug %}" hx-target="#post_list" class="node-link to-toggle" data-dropdown-link>{{node.name}} &#x25B8;</a>
             <ul class="children">
               {{ children }}
             </ul>

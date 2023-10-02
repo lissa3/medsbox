@@ -3,7 +3,8 @@
   <div class="d-flex flex-wrap justify-content-center">
     {% if tags %}
     {% for tag in tags %}
-        <div class="m-1"><a href="{% url 'posts:tag_search' tag=tag.slug %}" class="tag-link"><span class="badge bg-dark fs-6">{{ tag }}</span></a></div>
+        <div class="m-1 tag_item"><a hx-get="{% url 'posts:tag_search' tag=tag.slug %}"
+        hx-target="#post_list" class="tag-link"><span class="badge bg-dark fs-6">{{ tag }}</span></a></div>
     {% endfor %}
     {% else %}
     <h4>No tags yet</h4>

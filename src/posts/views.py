@@ -23,7 +23,7 @@ class PostList(PostListMenuMixin, ListView):
 
     template_name = "posts/post_list.html"
     context_object_name = "posts"
-    paginate_by = 2
+    paginate_by = 4
 
     def get_queryset(self):
         return Post.objects.get_public().prefetch_related("tags")
@@ -93,22 +93,26 @@ class PostComment(View):
 
 
 class PostTagSearch(PostListMenuMixin, ListView):
-    template_name = "posts/post_list.html"
     context_object_name = "posts"
-    paginate_by = 2
+    paginate_by = 4
 
     def get_queryset(self):
         """slug in ASCII"""
         tag = self.kwargs.get("tag")
         return Post.objects.get_public().filter(tags__slug__in=[tag])
 
+    def get_template_names(self) -> list[str]:
+        if self.request.htmx:
+            return "posts/parts/posts_collection.html"
+        else:
+            return "posts/post_list.html"
+
 
 class PostCategSearch(PostListMenuMixin, ListView):
     """retrieve all posts linked to a given category"""
 
-    template_name = "posts/post_list.html"
     context_object_name = "posts"
-    paginate_by = 2
+    paginate_by = 4
 
     def get_queryset(self):
         """filter public post for a given category(and it's categ descendants)"""
@@ -120,6 +124,12 @@ class PostCategSearch(PostListMenuMixin, ListView):
         else:
             # given categ has no kids
             return Post.objects.get_public().filter(categ_id=categ.id)
+
+    def get_template_names(self) -> list[str]:
+        if self.request.htmx:
+            return "posts/parts/posts_collection.html"
+        else:
+            return "posts/post_list.html"
 
 
 class SearchPost(PostListMenuMixin, ListView):

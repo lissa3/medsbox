@@ -15,35 +15,8 @@
         <!-- </div>
     </nav>     -->
   </aside>
-
-
-  <div class="col-md-6 col-sm-12">
-   {% if posts %}
-    {% for post in posts%}
-    <h3>{{post.title}}</h3>
-    <p>{{post.created_at|date:"F d, Y"}}</p>
-    <strong>{%trans "category" %}: {{post.categ.name}}</strong>
-    <div class="content">
-        {{post.content|safe}}
-    </div>
-    <div class="details">
-      <a href="{% url 'posts:post_detail' post.slug %}">More details</a>
-    </div>
-    <hr>
-    {% endfor %}
-    <!-- <figure class="figure w-50 float-right m-3">
-        <img src="/media/ckeditor5/geit.jpg" class="figure-img img-fluid rounded img-thumbnail" alt="Alt text.">
-        <figcaption class="figure-caption text-center">Visible text.</figcaption>
-    </figure>        -->
-    {% include "posts/parts/pagination.html" %}
-    {% else %}
-    <!-- form search errors:  -->
-    <div id="not-found">
-      {% trans "Sorry. Nothing found for your search" %}
-    </div>
-      {% include "posts/parts/search_errors.html" %}
-  {% endif %}
-
+  <div class="col-md-6 col-sm-12" id="post_list">
+  {% include "posts/parts/posts_collection.html" %}
   </div>
   <div class="col-md-3 col-sm-12">
     {% show_tags %}

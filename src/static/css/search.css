@@ -1,5 +1,5 @@
 /* ************************
-    search button
+    global search
 ************************ */
 .search{
     margin: .5rem 1rem 0;
@@ -115,4 +115,17 @@
         max-width: 500px;
     }  */
 }
-/* ********** end search *************** */
+/* ********** end global search *************** */
+
+/* start tag search  */
+.tag_item{
+    cursor: pointer;
+}
+
+/* end tags search  */
+/* start categ search  */
+.categ_item{
+    cursor: pointer;
+}
+
+/* end categs search  */
