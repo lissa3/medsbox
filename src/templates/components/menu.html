@@ -6,7 +6,7 @@
 
 <header>
   <nav class="navbar navbar-expand-md navbar-dark fixed-top navbar-custom p-3">
-    <div class="container-fluid">
+    <div class="container-fluid align-items-md-baseline">
       <a class="navbar-brand logo" href="/">MedSandBox</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -88,18 +88,21 @@
             </li>
         {% endif %}
       </ul>
+
       <form action="{% url 'set_language' %}" method="post">
         {% csrf_token %}
         <input name="next" type="hidden" value="{{ redirect_to }}">
-        <select name="language">
+        <select name="language" class="lang-drop">
             {% for language in languages %}
-                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                    {{ language.name_local }} ({{ language.code }})
+                <option class="lang-drop__item" value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                    {{ language.code }}
+
                 </option>
             {% endfor %}
         </select>
-        <input type="submit" value="Go">
+        <input type="submit" class="but-go" value="Go">
       </form>
+
     </div>
   </div>
   </nav>

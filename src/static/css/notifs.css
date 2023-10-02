@@ -1,7 +1,7 @@
 .bell{
-   background-color:#797e82 ;
+   background-color:#e5e9ed6e ;
    border-radius: 8px;
-
+   display: flex;
 }
 
 .notif_container{

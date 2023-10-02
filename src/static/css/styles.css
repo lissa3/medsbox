@@ -179,6 +179,21 @@ footer{
    font-family: "Archivo",sans-serif;
    letter-spacing: -1.5px;
 }
+/* lang input and button */
+.lang-drop{
+  border-radius: 5px;
+  background-color:#eceae3cc;
+  padding:4px;
+}
+.lang-drop__item{
+  color:black;
+  background-color:#918c8c;
+}
+
+.but-go{
+  border-radius: 5px;
+  background-color:#eceae3cc;
+}
 /* HOME PAGE + LIST POSTS*/
 
 @media only screen and (max-width: 599px) {
