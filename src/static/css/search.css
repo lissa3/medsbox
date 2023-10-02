@@ -8,9 +8,8 @@
 .search-inner{
     /* border-bottom: 1px solid rgba(166,164,162,.5); */
     display:flex;
-
     max-width: 900px;
-    margin: auto;
+    /* margin-top: 60px; */
     justify-content: flex-end;
     padding:1rem 0;
 }
