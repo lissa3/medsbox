@@ -1,6 +1,5 @@
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
@@ -41,7 +40,6 @@ class PostDetail(CategoryCrumbMixin, DetailView):
     _thread_uuid = None
 
     def get_context_data(self, **kwargs):
-        print("detailed view here, kwargs are ", self._thread_uuid)
         comms = Comment.objects.filter(post=self.get_object()).exists()
         ctx = super().get_context_data(**kwargs)
         ctx["cats_path"] = self.get_post_categs_path()

@@ -48,6 +48,31 @@ class HtmxCommentsFunctionsViewsTestCase(TestCase):
         self.assertFalse(form.is_bound)
         self.assertTrue(form.initial, {"comm_parent_id": str(self.comment.id)})
 
+    def test_failure_get_reply_form(self):
+        """if NOT htmx _> auth and not banned user gets No reply form on post detail"""
+        user = UserFactory()
+        self.client.force_login(user)
+
+        url = reverse(
+            "comments:add_comm",
+            kwargs={"post_uuid": self.post.uuid, "comm_id": self.comment.id},
+        )
+        resp = self.client.get(url)
+
+        self.assertEqual(resp.status_code, 400)
+
+    def test_failure_process_reply_form(self):
+        """if no htmx -> bad request"""
+        self.client.force_login(self.anna_author)
+        url = reverse(
+            "comments:add_comm",
+            kwargs={"post_uuid": self.post.uuid, "comm_id": self.comment.id},
+        )
+
+        resp = self.client.get(url)
+
+        self.assertEqual(resp.status_code, 400)
+
     def test_no_reply_form_for_banned(self):
         """auth but banned user gets no reply form"""
         self.anna_author.banned = True

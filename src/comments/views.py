@@ -1,21 +1,15 @@
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponse, HttpResponseForbidden, QueryDict
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
-from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.http import require_http_methods
 
 from src.comments.forms import CommentForm
-from src.comments.mixins import CheckBannedMixin
+from src.comments.mixins import CheckRequestMixin
 from src.comments.models import Comment
 from src.posts.models.post_model import Post
-
-
-def good_user(user):
-    return user.is_authenticated and not user.banned
 
 
 def display_all_comments(request, post_uuid):
@@ -47,21 +41,18 @@ def display_selected_comments(request, post_uuid, thread_uuid):
     )
 
 
-class GetReplyFormView(LRM, CheckBannedMixin, View):
+class GetReplyFormView(LRM, CheckRequestMixin, View):
     def get(self, request, post_uuid, comm_id):
         """htmx + modal; get req to get form for reply"""
-        if request.htmx:
-            form = CommentForm(initial={"comm_parent_id": comm_id})
-            ctx = {}
-            ctx["form"] = form
-            ctx["post_uuid"] = post_uuid
-            return render(request, "components/comms/comm_form.html", ctx)
-        else:
-            print("req is NOT htmx")
-            return redirect("/")
+        form = CommentForm(initial={"comm_parent_id": comm_id})
+
+        ctx = {}
+        ctx["form"] = form
+        ctx["post_uuid"] = post_uuid
+        return render(request, "components/comms/comm_form.html", ctx)
 
 
-class ProccessReplyView(LRM, CheckBannedMixin, View):
+class ProccessReplyView(LRM, CheckRequestMixin, View):
     def post(self, request, post_uuid):
         """
         htmx-modal;
@@ -121,7 +112,7 @@ def handle_edit_comment(request, post_uuid, comm_id):
     return render(request, "components/comms/comm_edit_form.html", ctx)
 
 
-class DeleteCommentView(LRM, CheckBannedMixin, View):
+class DeleteCommentView(LRM, CheckRequestMixin, View):
     def get(self, request, post_uuid, comm_id):
         ctx = {"post_uuid": post_uuid, "comm_id": comm_id}
         return render(request, "components/comms/del_confirm.html", ctx)
@@ -131,5 +122,4 @@ class DeleteCommentView(LRM, CheckBannedMixin, View):
         comm_to_del = get_object_or_404(Comment, id=comm_id, post_id=post.id)
         comm_to_del.deleted = True
         comm_to_del.save()
-        print("Comm deleted successfully!")
         return HttpResponse(status=204, headers={"HX-Trigger": "updateCommList"})
