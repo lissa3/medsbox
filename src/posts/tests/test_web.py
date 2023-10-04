@@ -89,14 +89,14 @@ class TagSearchPostsTest(WebTest):
 
         resp = self.app.get(start_url)
         a_tag = resp.html.find("a", class_="tag-link")
-        href = a_tag.attrs["href"]
+        hx_get = a_tag.attrs["hx-get"]
 
         self.assertEqual(resp.status_code, 200)
         self.assertIsNotNone(resp.context["tags"])
         self.assertEqual(a_tag.string, "слон")
-        self.assertIsNotNone(href)
+        self.assertIsNotNone(hx_get)
 
-        resp2 = self.app.get(href)
+        resp2 = self.app.get(hx_get)
         posts = resp2.context["posts"]
 
         self.assertEqual(resp2.status_code, 200)

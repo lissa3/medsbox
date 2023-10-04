@@ -1,6 +1,5 @@
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
@@ -23,7 +22,7 @@ class PostList(PostListMenuMixin, ListView):
 
     template_name = "posts/post_list.html"
     context_object_name = "posts"
-    paginate_by = 2
+    paginate_by = 4
 
     def get_queryset(self):
         return Post.objects.get_public().prefetch_related("tags")
@@ -41,7 +40,6 @@ class PostDetail(CategoryCrumbMixin, DetailView):
     _thread_uuid = None
 
     def get_context_data(self, **kwargs):
-        print("detailed view here, kwargs are ", self._thread_uuid)
         comms = Comment.objects.filter(post=self.get_object()).exists()
         ctx = super().get_context_data(**kwargs)
         ctx["cats_path"] = self.get_post_categs_path()
@@ -93,22 +91,26 @@ class PostComment(View):
 
 
 class PostTagSearch(PostListMenuMixin, ListView):
-    template_name = "posts/post_list.html"
     context_object_name = "posts"
-    paginate_by = 2
+    paginate_by = 4
 
     def get_queryset(self):
         """slug in ASCII"""
         tag = self.kwargs.get("tag")
         return Post.objects.get_public().filter(tags__slug__in=[tag])
 
+    def get_template_names(self) -> list[str]:
+        if self.request.htmx:
+            return "posts/parts/posts_collection.html"
+        else:
+            return "posts/post_list.html"
+
 
 class PostCategSearch(PostListMenuMixin, ListView):
     """retrieve all posts linked to a given category"""
 
-    template_name = "posts/post_list.html"
     context_object_name = "posts"
-    paginate_by = 2
+    paginate_by = 4
 
     def get_queryset(self):
         """filter public post for a given category(and it's categ descendants)"""
@@ -120,6 +122,12 @@ class PostCategSearch(PostListMenuMixin, ListView):
         else:
             # given categ has no kids
             return Post.objects.get_public().filter(categ_id=categ.id)
+
+    def get_template_names(self) -> list[str]:
+        if self.request.htmx:
+            return "posts/parts/posts_collection.html"
+        else:
+            return "posts/post_list.html"
 
 
 class SearchPost(PostListMenuMixin, ListView):

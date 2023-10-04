@@ -13,7 +13,7 @@ def show_categs(**kwargs):
     return {"categs": categs}
 
 
-@register.inclusion_tag("posts/parts/tags.html")
+@register.inclusion_tag("components/tags.html")
 def show_tags():
     """substitute template sidebar with tags"""
     tags = Tag.objects.all()
