@@ -76,8 +76,8 @@ class PostCategsTestCase(TestCase):
     def test_posts_categ_with_kids(self):
         """display public posts related to a given categ with decendants)"""
         path = reverse("posts:cat_search", kwargs={"slug": self.categ_root_2.slug})
-
-        response = self.client.get(path)
+        headers = {"HTTP_HX-Request": "true"}
+        response = self.client.get(path, **headers)
         posts = response.context["posts"]
 
         self.assertEqual(response.status_code, 200)
