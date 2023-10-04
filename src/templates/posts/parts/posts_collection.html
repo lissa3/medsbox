@@ -2,10 +2,7 @@
   {% for post in posts%}
     {% if forloop.last %}
       {% if page_obj.has_next %}
-      <!-- window.history.pushState onAfterPageLoad ?page=n -->
-        <!-- <div hx-get="request.get_full_path|some_filter:'/&page=[0-9]/'}}&page={{page_obj.next_page_number}}" hx-trigger='revealed' hx-swap='afterend' hx-target='this'> -->
-
-        <div hx-get="{% url 'posts:post_list'%}?page={{page_obj.next_page_number}}" hx-trigger='revealed' hx-swap='afterend' hx-target='this'>
+      <div hx-get="{% url 'posts:post_list'%}?page={{page_obj.next_page_number}}" hx-trigger='revealed' hx-swap='afterend' hx-target='this'>
 
         {% endif %}
 
