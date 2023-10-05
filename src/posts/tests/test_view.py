@@ -59,6 +59,7 @@ class PostCategsTestCase(TestCase):
         self.categ_root_2 = self.categ_root_1.add_sibling(name="parent2")
         self.categ_kid1 = self.categ_root_2.add_child(name="kid1_parent2")
         self.categ_kid2 = self.categ_root_2.add_child(name="kid2_parent2")
+
         self.post_1 = PostFactory(
             status=Post.CurrentStatus.PUB.value, categ=self.categ_root_1
         )
@@ -68,26 +69,32 @@ class PostCategsTestCase(TestCase):
         self.post_3 = PostFactory(
             status=Post.CurrentStatus.PUB.value, categ=self.categ_kid2
         )
-        self.post_4 = PostFactory(categ=self.categ_kid2)
-        self.post_5 = PostFactory()
+        self.post_4 = PostFactory(
+            categ=self.categ_kid2, status=Post.CurrentStatus.DRAFT.value
+        )
+        self.post_5 = PostFactory()  # default categ = unspecified
+        self.post_6 = PostFactory(
+            categ=self.categ_root_2, status=Post.CurrentStatus.PUB.value
+        )
         self.client = Client()
 
     @override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
     def test_posts_categ_with_kids(self):
-        """display public posts related to a given categ with decendants)"""
+        """display public posts related to a given categ and it's decendants)"""
         path = reverse("posts:cat_search", kwargs={"slug": self.categ_root_2.slug})
         headers = {"HTTP_HX-Request": "true"}
         response = self.client.get(path, **headers)
         posts = response.context["posts"]
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(posts), 2)
+        self.assertEqual(len(posts), 3)
 
     @override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
     def test_posts_categ_no_kids(self):
         """display public posts related to a given categ
         without decendants)"""
         categs_count = Category.objects.count()
+        print("all categs ", Category.objects.all())
         path = reverse("posts:cat_search", kwargs={"slug": self.categ_root_1.slug})
 
         response = self.client.get(path)

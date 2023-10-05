@@ -121,13 +121,9 @@ class PostCategSearch(PostListMenuMixin, ListView):
         """filter public post for a given category(and it's categ descendants)"""
         slug = self.kwargs.get("slug")
         categ = get_object_or_404(Category, slug=slug)
-        if categ.posts.exists():
-            categ_descend = categ.get_descendants()
-            if categ_descend:
-                return Post.objects.get_public().filter(categ__in=categ_descend)
-            else:
-                # given categ has no kids
-                return Post.objects.get_public().filter(categ_id=categ.id)
+        _tree_categs = categ.get_tree(categ)
+        if _tree_categs:
+            return Post.objects.get_public().filter(categ__in=_tree_categs)
         else:
             return Post.objects.none()
 
@@ -188,7 +184,7 @@ class SearchPost(PostListMenuMixin, ListView):
             context["posts"] = posts
             context["count"] = posts.count()
         elif self.empty_flag:
-            context["empty_flag"] = _("Sorry.You sent no search word(s)")
+            context["empty_flag"] = _("You sent no search word(s)")
         elif self.inp_errors:
             context["invalid_input"] = _("Query is invalid")
         return context
