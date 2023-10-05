@@ -17,12 +17,18 @@
   </aside>
   <div class="col-md-6 col-sm-12" id="post_list">
     {% if posts %}
-      {% include "posts/parts/posts_collection.html" %}
+      {% for post in posts%}
+        {% include "posts/parts/single_post.html" %}
+      {% endfor %}
+
+      {# {% include "posts/parts/posts_collection.html" %} #}
       {% include "posts/parts/pagination.html" %}
+
+
     {% else %}
-      <div id="not-found">
+    <div id="not-found">
         {% trans "Sorry. Nothing found for your search" %}
-      </div>
+    </div>
     {% include "posts/parts/search_errors.html" %}
     {% endif %}
   </div>

@@ -105,6 +105,11 @@ class PostTagSearch(PostListMenuMixin, ListView):
         else:
             return "posts/post_list.html"
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["count_total"] = self.get_queryset().count()
+        return ctx
+
 
 class PostCategSearch(PostListMenuMixin, ListView):
     """retrieve all posts linked to a given category"""
@@ -116,18 +121,26 @@ class PostCategSearch(PostListMenuMixin, ListView):
         """filter public post for a given category(and it's categ descendants)"""
         slug = self.kwargs.get("slug")
         categ = get_object_or_404(Category, slug=slug)
-        categ_descend = categ.get_descendants()
-        if categ_descend:
-            return Post.objects.get_public().filter(categ__in=categ_descend)
+        if categ.posts.exists():
+            categ_descend = categ.get_descendants()
+            if categ_descend:
+                return Post.objects.get_public().filter(categ__in=categ_descend)
+            else:
+                # given categ has no kids
+                return Post.objects.get_public().filter(categ_id=categ.id)
         else:
-            # given categ has no kids
-            return Post.objects.get_public().filter(categ_id=categ.id)
+            return Post.objects.none()
 
     def get_template_names(self) -> list[str]:
         if self.request.htmx:
             return "posts/parts/posts_collection.html"
         else:
             return "posts/post_list.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["count_total"] = self.get_queryset().count()
+        return ctx
 
 
 class SearchPost(PostListMenuMixin, ListView):
@@ -175,7 +188,7 @@ class SearchPost(PostListMenuMixin, ListView):
             context["posts"] = posts
             context["count"] = posts.count()
         elif self.empty_flag:
-            context["empty_flag"] = _("You sent no search word(s)")
+            context["empty_flag"] = _("Sorry.You sent no search word(s)")
         elif self.inp_errors:
             context["invalid_input"] = _("Query is invalid")
         return context

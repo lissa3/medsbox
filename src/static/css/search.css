@@ -127,5 +127,8 @@
 .categ_item{
     cursor: pointer;
 }
+.not-found{
+    background-color: #b1c3b28a;
+}
 
 /* end categs search  */

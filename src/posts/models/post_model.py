@@ -40,6 +40,7 @@ class Post(TimeStamp):
         Category,
         on_delete=models.SET_DEFAULT,
         default=Category.get_default_pk,
+        related_name="posts",
     )
     content = models.TextField()
     top_img = models.ImageField(upload_to=upload_img, null=True, blank=True)
