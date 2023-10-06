@@ -46,6 +46,7 @@ THIRD_PARTY = [
     "django_extensions",
     # "modeltranslation", # see above
     "django_ckeditor_5",
+    "rosetta",
 ]
 
 

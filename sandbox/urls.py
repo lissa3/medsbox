@@ -38,6 +38,8 @@ urlpatterns += i18n_patterns(
     path("comments/", include("src.comments.urls")),
 )
 urlpatterns += htmx_urlpatterns
+if "rosetta" in settings.INSTALLED_APPS:
+    urlpatterns += [path("rosetta/", include("rosetta.urls"))]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

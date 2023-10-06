@@ -15,3 +15,4 @@ sentry-sdk==1.29.2
 django-ckeditor-5
 unidecode
 psycopg2==2.9.5
+django-rosetta==0.9.9

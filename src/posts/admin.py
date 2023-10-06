@@ -115,7 +115,7 @@ class PostAdmin(TranslationAdmin):
     # new feature: adjust admin (see two func below)
     # using link to access related categ object
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        """add current admin kwargs"""
+        """add current admin kwargs to foreign key fields"""
         if db_field.name == "author":
             kwargs["queryset"] = get_user_model().objects.filter(
                 username=request.user.username
@@ -124,6 +124,22 @@ class PostAdmin(TranslationAdmin):
             kwargs["queryset"] = NewsLetter.objects.filter(letter_status=1)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        """remove no value in widget for select fields"""
+
+        if db_field.name == "status":
+            select_items = db_field.choices
+            kwargs["choices"] = select_items
+        if db_field.name == "send_status":
+            select_items = db_field.choices
+            kwargs["choices"] = select_items
+        return super().formfield_for_choice_field(db_field, request, **kwargs)
+
     @admin_link("categ", _("Категория"))
     def categ_link(self, categ: object):
         return categ
+
+    def get_action_choices(self, request):
+        choices = super().get_action_choices(request)
+        choices.pop(0)
+        return choices
