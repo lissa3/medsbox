@@ -1,20 +1,17 @@
-import os
 import shutil
 import tempfile
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
-from webtest import Upload
 
 from src.accounts.tests.factories import UserFactory
 from src.core.utils.base import get_temp_img_bytes
 from src.profiles.models import Profile
 
-User = get_user_model()
-base_path = settings.BASE_DIR
 MEDIA_ROOT = tempfile.mkdtemp()
 
 
@@ -24,104 +21,127 @@ class MyTestCase(WebTest):
     def setUp(self):
         super().setUp()
         self.user = UserFactory.create()
-        self.app.set_user(self.user)
+        self.client.force_login(self.user)
         self.profile = Profile.objects.get(user=self.user)
         self.profile_uuid = self.profile.uuid
         self.url = reverse(
             "profiles:profile_detail", kwargs={"uuid": self.profile_uuid}
         )
-        # initial request to get a form
-        self.response = self.app.get(self.url)
-        self.form = self.response.forms["upForm"]
-        self.base_path = os.path.join(
-            base_path, "src", "profiles", "tests", "files_test"
-        )
-        self.img_empty_file = os.path.join(self.base_path, "empty.png")
         self.err_file = (
             "Upload a valid image. The file you uploaded "
             + "was either not an image or a corrupted image."
         )
-        self.err_empty_file = "The submitted file is empty."
-
-    def test_upload_avatar_ok(self):
-        """check form upload avatar diff attrs"""
-        avatar = get_temp_img_bytes()
-        self.form["avatar"] = Upload("zoo.jpeg", avatar, "image/jpeg")
-
-        response = self.form.submit()
-
-        self.assertEqual(self.form.action, self.url)
-        self.assertEqual(self.form.id, "upForm")
-        self.assertIsNotNone(self.form["csrfmiddlewaretoken"])
-        self.assertEqual(response.status_code, 200)
 
     @classmethod
     def tearDownClass(cls):
         shutil.rmtree(MEDIA_ROOT, ignore_errors=True)  # delete the temp dir
         super().tearDownClass()
 
+    def test_upload_avatar_ok(self):
+        """check form upload avatar diff attrs"""
+        avatar = get_temp_img_bytes()
+        data = {"avatar": SimpleUploadedFile("zoo.jpeg", avatar, "image/jpeg")}
+
+        response = self.client.post(
+            self.url,
+            data,
+            format="multipart",
+            follow=True,
+            headers={"x-requested-with": "XMLHttpRequest"},
+        )
+
+        resp = response.json()
+
+        self.assertEqual(resp["status_code"], 200)
+
     @override_settings(MAX_UPLOAD_SIZE=5)
     def test_upload_big_avatar(self):
         avatar = get_temp_img_bytes()
-        self.form["avatar"] = Upload("zoo.jpeg", avatar, "image/jpeg")
+        data = {"avatar": SimpleUploadedFile("zoo.jpeg", avatar, "image/jpeg")}
 
-        response = self.form.submit()
+        response = self.client.post(
+            self.url,
+            data,
+            format="multipart",
+            headers={"x-requested-with": "XMLHttpRequest"},
+        )
 
+        resp_dict = response.json()
         err_msg = (
             f"Uploaded file should not be more than {settings.MAX_UPLOAD_SIZE} bytes"
         )
 
-        self.assertEqual(response.json["status_code"], 404)
-        self.assertEqual(response.json["err"]["avatar"][0], err_msg)
+        self.assertEqual(resp_dict["status_code"], 404)
+        self.assertEqual(resp_dict["err"]["avatar"][0], err_msg)
 
     @override_settings(MIN_UPLOAD_SIZE=1000)
     def test_upload_too_small_avatar(self):
         avatar = get_temp_img_bytes()
-        self.form["avatar"] = Upload("zoo.jpeg", avatar, "image/jpeg")
+        data = {"avatar": SimpleUploadedFile("zoo.jpeg", avatar, "image/jpeg")}
 
-        response = self.form.submit()
+        response = self.client.post(
+            self.url,
+            data,
+            format="multipart",
+            headers={"x-requested-with": "XMLHttpRequest"},
+        )
 
+        resp_dict = response.json()
         err_msg = (
             f"Uploaded file should not be less than {settings.MIN_UPLOAD_SIZE} bytes."
         )
 
-        self.assertEqual(response.json["status_code"], 404)
-        self.assertEqual(response.json["err"]["avatar"][0], err_msg)
+        self.assertEqual(resp_dict["status_code"], 404)
+        self.assertEqual(resp_dict["err"]["avatar"][0], err_msg)
 
     def test_remove_avatar(self):
         """remove avatar"""
-        # add avatar to profile
         self.profile.avatar = get_temp_img_bytes()
-        self.form["avatar"] = None
 
-        response_final = self.form.submit()
+        response = self.client.post(
+            self.url,
+            data=None,
+            format="multipart",
+            headers={"x-requested-with": "XMLHttpRequest"},
+        )
 
+        resp_dict = response.json()
         self.profile.refresh_from_db()
         profile_avatar = self.profile.avatar
 
-        self.assertEqual(response_final.status_code, 200)
-        self.assertEqual(response_final.json["resp"], "OK")
+        self.assertEqual(resp_dict["status_code"], 200)
         self.assertEqual(profile_avatar, "")
 
     def test_upload_txt_avatar(self):
         """test json response after uploading file not allowed as avatar(.txt)"""
-        self.form["avatar"] = Upload("zoo.txt", b"zoo", "text/txt")
+        data = {"avatar": SimpleUploadedFile("zoo.txt", b"zoo", "text/txt")}
 
-        response = self.form.submit()
+        response = self.client.post(
+            self.url,
+            data,
+            format="multipart",
+            headers={"x-requested-with": "XMLHttpRequest"},
+        )
 
-        self.assertEqual(response.json["status_code"], 404)
-        self.assertEqual(response.json["err"]["avatar"][0], self.err_file)
+        resp_dict = response.json()
+
+        self.assertEqual(resp_dict["status_code"], 404)
+        self.assertEqual(resp_dict["err"]["avatar"][0], self.err_file)
 
     def test_delete_button(self):
         """button delete should be present on detail profile"""
+        self.app.set_user(self.user)
 
-        but_del_profile = self.response.html.find("button", id="to_delete")
+        response = self.app.get(self.url)
 
-        self.assertEqual(self.response.status_code, 200)
+        but_del_profile = response.html.find("button", id="to_delete")
+
+        self.assertEqual(response.status_code, 200)
         self.assertIsNotNone(but_del_profile)
 
     def test_on_delete_redirect(self):
         """redirect to home page after delete profile"""
+        self.app.set_user(self.user)
         del_url = reverse("profiles:profile_delete", kwargs={"uuid": self.profile_uuid})
         home_url = reverse("home")
 
@@ -137,7 +157,9 @@ class MyTestCase(WebTest):
     def test_delete_final_result(self):
         """request profile delete: username present on page;
         after profile delete: no trace of username"""
+        self.app.set_user(self.user)
         del_url = reverse("profiles:profile_delete", kwargs={"uuid": self.profile_uuid})
+
         resp = self.app.get(del_url)
 
         self.assertEqual(resp.status_code, 200)

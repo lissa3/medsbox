@@ -45,14 +45,19 @@ class UploadImgTestCase(TestCase):
             self.url,
             data_add_img,
             format="multipart",
-            **{"x-requested-with": "XMLHttpRequest"},
+            headers={"x-requested-with": "XMLHttpRequest"},
         )
         self.profile.refresh_from_db()
         avatar_img = self.profile.avatar
 
         # removing avatar
         data_remove = {"avatar": ""}
-        resp2 = self.client.post(self.url, data_remove, format="multipart")
+        resp2 = self.client.post(
+            self.url,
+            data_remove,
+            format="multipart",
+            headers={"x-requested-with": "XMLHttpRequest"},
+        )
         self.profile.refresh_from_db()
 
         self.assertEqual(resp1.status_code, 200)
@@ -67,7 +72,13 @@ class UploadImgTestCase(TestCase):
         img_file = get_temporary_image()
         data = {"avatar": img_file}
         #  post request with an img file(allowed)
-        resp = self.client.post(self.url, data, format="multipart")
+
+        resp = self.client.post(
+            self.url,
+            data,
+            format="multipart",
+            headers={"x-requested-with": "XMLHttpRequest"},
+        )
 
         self.profile.refresh_from_db()
         final_avatar = self.profile.avatar
@@ -86,7 +97,13 @@ class UploadImgTestCase(TestCase):
         to_login_url = f"/accounts/login?next=/ru/profile/{profile_uuid}/"
 
         #  post request with an img file(allowed)
-        resp = self.client.post(self.url, data, format="multipart", follow=True)
+        resp = self.client.post(
+            self.url,
+            data,
+            format="multipart",
+            follow=True,
+            headers={"x-requested-with": "XMLHttpRequest"},
+        )
 
         self.profile.refresh_from_db()
         final_avatar = self.profile.avatar
@@ -109,7 +126,11 @@ class UploadImgTestCase(TestCase):
         # uploaded was either not an image or a corrupted image."
 
         resp = self.client.post(
-            self.url, {"avatar": text_file}, format="multipart", follow=True
+            self.url,
+            {"avatar": text_file},
+            format="multipart",
+            follow=True,
+            headers={"x-requested-with": "XMLHttpRequest"},
         )
         resp_dict = resp.json()
         self.profile.refresh_from_db()
@@ -163,3 +184,14 @@ class UploadImgTestCase(TestCase):
         self.assertTrue(form.is_bound)
         self.assertTrue(form.is_multipart)
         self.assertTrue(form.is_valid())
+
+    def test_fail_no_ajax_auth_upload(self):
+        """Auth-ed user can NOT upload an image without ajax"""
+        self.client.force_login(self.user)
+
+        img_file = get_temporary_image()
+        data = {"avatar": img_file}
+
+        resp = self.client.post(self.url, data, format="multipart")
+
+        self.assertEqual(resp.status_code, 400)

@@ -5,11 +5,13 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 
+from src.profiles.mixins import CheckJSMixin
+
 from .forms import ProfileForm
 from .models import Profile
 
 
-class ProfileView(LRM, View):
+class ProfileView(LRM, CheckJSMixin, View):
     def get(self, request, **kwargs):
         uuid = kwargs.get("uuid")
         profile = get_object_or_404(Profile, uuid=uuid)
@@ -18,8 +20,6 @@ class ProfileView(LRM, View):
         return render(request, "profiles/profile_detail.html", ctx)
 
     def post(self, request, **kwargs):
-        # ajax(fetch) request
-        # request.headers.get("x-requested-with") == "XMLHttpRequest")
         uuid = kwargs.get("uuid")
         profile = get_object_or_404(Profile, uuid=uuid)
         form = ProfileForm(request.POST, request.FILES, profile)
@@ -46,7 +46,6 @@ class ProfileDelete(LRM, View):
         return render(request, "profiles/profile_delete.html", ctx)
 
     def post(self, request, **kwargs):
-        # TODO implement htmx?
         uuid = kwargs.get("uuid")
         profile = get_object_or_404(Profile, uuid=uuid, user=request.user)
         profile.delete()
