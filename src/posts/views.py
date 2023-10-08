@@ -1,5 +1,8 @@
+from datetime import datetime
+
+from django.core.paginator import Paginator
 from django.http import HttpResponseForbidden
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
@@ -9,7 +12,7 @@ from django.views.generic.detail import SingleObjectMixin
 from src.comments.forms import CommentForm
 from src.comments.models import Comment
 from src.core.utils.views_help import make_query, search_qs
-from src.posts.forms import SearchForm
+from src.posts.forms import CalendForm, SearchForm
 from src.posts.models.categ_model import Category
 from src.posts.models.post_model import Post
 
@@ -22,10 +25,15 @@ class PostList(PostListMenuMixin, ListView):
 
     template_name = "posts/post_list.html"
     context_object_name = "posts"
-    paginate_by = 4
+    paginate_by = 2
 
     def get_queryset(self):
         return Post.objects.get_public().prefetch_related("tags")
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["form"] = CalendForm()
+        return ctx
 
 
 class PostDetail(CategoryCrumbMixin, DetailView):
@@ -188,3 +196,28 @@ class SearchPost(PostListMenuMixin, ListView):
         elif self.inp_errors:
             context["invalid_input"] = _("Query is invalid")
         return context
+
+
+class PickDateView(View):
+    def post(self, request):
+        form = CalendForm(request.POST)
+        if form.is_valid():
+            _date = request.POST.get("_date")
+
+            zoo = datetime.strptime(_date, "%Y-%m-%d")
+            print("zoo is ", zoo)
+
+            post_list = Post.objects.get_public().filter(
+                updated_at__year=zoo.year,
+                updated_at__month=zoo.month,
+                updated_at__day=zoo.day,
+            )
+            paginator = Paginator(post_list, 2)
+            page_number = request.GET.get("page")
+            page_obj = paginator.get_page(page_number)
+            context = {"posts": post_list, "page_obj": page_obj}
+            return render(request, "posts/post_list.html", context)
+
+        else:
+            context = {"form": form, "err": "Enter a valid date please"}
+            return render(request, "posts/post_list.html", context)

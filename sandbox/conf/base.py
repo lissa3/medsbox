@@ -47,6 +47,7 @@ THIRD_PARTY = [
     # "modeltranslation", # see above
     "django_ckeditor_5",
     "rosetta",
+    "django_flatpickr",
 ]
 
 
@@ -139,6 +140,8 @@ LOCALE_PATHS = (Path(BASE_DIR / "locale/"),)
 
 TIME_ZONE = "UTC"
 USE_TZ = True
+
+USE_L10N = False
 # STATIC_ROOT = BASE_DIR / "src" / "static"
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR.joinpath("src", "static")]
@@ -379,5 +382,15 @@ CKEDITOR_5_CONFIGS = {
             "startIndex": "true",
             "reversed": "true",
         }
+    },
+}
+
+# DATE_INPUT_FORMATS = ["%d-%m-%Y"]
+DJANGO_FLATPICKR = {
+    "theme_name": "dark",
+    "options": {"locale": "ru", "altFormat": "d-m-Y"},
+    "attrs": {
+        #  "class": "my-custom-class",
+        "placeholder": "Поиск по дате",
     },
 }

@@ -1,6 +1,13 @@
 from django.urls import path, re_path
 
-from .views import PostCategSearch, PostComment, PostList, PostTagSearch, SearchPost
+from .views import (
+    PickDateView,
+    PostCategSearch,
+    PostComment,
+    PostList,
+    PostTagSearch,
+    SearchPost,
+)
 
 app_name = "posts"
 
@@ -17,4 +24,5 @@ urlpatterns = [
     path(
         "comments/<slug:slug>/<thread_uuid>/", PostComment.as_view(), name="get_branch"
     ),
+    path("dates/", PickDateView.as_view(), name="calend"),
 ]

@@ -1,7 +1,9 @@
 from django import forms
+from django.conf import settings
 from django.core import validators
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
+from django_flatpickr.widgets import DatePickerInput
 
 
 class SearchForm(forms.Form):
@@ -36,3 +38,16 @@ class SearchForm(forms.Form):
             raise forms.ValidationError(_("It should not be here"))
 
         return value
+
+
+class CalendForm(forms.Form):
+    _date = forms.DateField(
+        label="Start Date",
+        # required=False,
+        widget=DatePickerInput(),
+    )
+    # _date = forms.DateField(
+    #     label="Start Date",
+    #     input_formats=settings.DATE_INPUT_FORMATS,
+    #     widget=DatePickerInput(),
+    # )

@@ -14,6 +14,29 @@
         {% show_categs %}
         <!-- </div>
     </nav>     -->
+    <div>
+      <!-- date-picker -->
+      <hr>
+      <div style="height: 100px;"></div>
+      <div class="calend">
+        <div class="column is-half">
+            <form action="{% url 'posts:calend' %}" method="post">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit">Start search</button>
+
+            </form>
+          </div>
+          <hr>
+        <div>
+            {{ form.media.css }}
+        </div>
+        <div>
+            {{ form.media.js }}
+        </div>
+        </div>
+
+    </div>
   </aside>
   <div class="col-md-6 col-sm-12" id="post_list">
     {% if posts %}
@@ -41,4 +64,12 @@
 {% endblock%}
 {% block js %}
 <script src="{% static 'js/categs.js' %}"></script>
+<script>
+  window.djangoFlatpickrOptions = {
+    onChange: function (selectedDates) { console.log("Global onChange") }
+  }
+  window.djangoFlatpickrOptions_start_date = {
+    onChange: function (selectedDates) { console.log("start_date onChange") }
+  }
+</script>
 {% endblock %}
