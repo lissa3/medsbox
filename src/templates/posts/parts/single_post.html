@@ -2,7 +2,7 @@
 <!-- short represention -->
 <div class="single_post">
     <h3>{{post.title}}</h3>
-    <p>{{post.created_at|date:"F d, Y"}}</p>
+    <p>{{post.published_at|date:"F d, Y"}}</p>
     <strong>{% trans "category" %}: {{post.categ.name}}</strong>
     <div class="content">
         {{post.content|safe}}
@@ -10,4 +10,5 @@
     <div class="details">
       <a href="{% url 'posts:post_detail' post.slug %}">More details</a>
     </div>
+    <hr>
 </div>
