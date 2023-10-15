@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
-{% load static sidebars i18n tree_comms%}
+{% load static sidebars i18n tree_comms calend %}
 {% block content %}
   <div class="row">
   <aside class="col-md-3 col-sm-12">
     {% show_categs %}
 
   </aside>
-  <div class="col-md-6 col-sm-12">
+  <div class="col-md-6 col-sm-12" id="post_list">
 
     <h3>{{post.title}}</h3>
-    <p>{{post.updated_at|date:"F d, Y"}}</p>
+    <p>{{post.published_at|date:"F d, Y"}}</p>
 
     <div><strong>{%trans "category" %}</strong>:
       {% include "components/post_categs.html" with categ_dict=cats_path %}
@@ -21,10 +21,11 @@
 
   </div>
   <div class="col-md-3 col-sm-12">
+    {% calend_posts %}
     {% show_tags %}
   </div>
   </div>
- <div class="container">
+ <div class="container mt-4">
   {% if user.is_authenticated and not user.banned and post.allow_comments %}
     <div class="row">
       <div class="col-md-12 text-center">
@@ -56,7 +57,12 @@
     {% endif %}
 
     {% if comments %}
-    <div class="number">{% trans 'Comments' %} : {{comms_total}}</div>
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-md-12 col-sm-6 number">{% trans 'Comments' %} : {{comms_total}}</div>
+      <div class="col-sm-3"></div>
+
+    </div>
 
     <div class="row comms">
       <div class="col-sm-3"></div>

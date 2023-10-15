@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
-{% load static sidebars i18n %}
+{% load static sidebars calend i18n %}
 {% block content %}
 <div class="row d-flex justify-content-center dmb-lg-4 mb-sm-1 pe-sm-0">
-  <div class="col col-md-8 mb-2">
-  {% include "components/crumbs.html" %}
+  <div class="col col-md-8 mb-2 ">
+    <div class="d-flex justify-content-center">
+      {% include "components/crumbs.html" %}
+
+    </div>
   </div>
 
 </div>
@@ -33,6 +36,7 @@
     {% endif %}
   </div>
   <div class="col-md-3 col-sm-12">
+    {% calend_posts %}
     {% show_tags %}
   </div>
 
