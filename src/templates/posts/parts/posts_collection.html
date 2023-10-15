@@ -1,11 +1,11 @@
-{% load i18n %}
+{% load i18n pags %}
 <!-- condition only for tag-,catges search  -->
   {% if posts %}
       <h3>{% trans 'Found' %}  {{posts.count}} {% trans 'matches' %} </h3>
       {% for post in posts%}
           {% include "posts/parts/single_post.html" %}
       {% endfor %}
-      {% include "posts/parts/pagination.html" %}
+      {% pags_tag tag=tag slug=slug page_obj=page_obj request=request year=year month=month %}
       {% else %}
       <div class= "not-found p-2 fs-3 fs-sm-1 ms-2 me-2" >
         {% trans "Sorry. Nothing found for your search" %}
