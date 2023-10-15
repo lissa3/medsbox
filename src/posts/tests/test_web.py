@@ -88,12 +88,17 @@ class TagSearchPostsTest(WebTest):
         start_url = reverse("posts:post_list")
 
         resp = self.app.get(start_url)
+
         a_tag = resp.html.find("a", class_="tag-link")
+        span_tag_num = resp.html.find("span", class_="circle_num")
+        a_text = a_tag.text
         hx_get = a_tag.attrs["hx-get"]
+        # /ru/posts/tag-search/t:slon/
 
         self.assertEqual(resp.status_code, 200)
         self.assertIsNotNone(resp.context["tags"])
-        self.assertEqual(a_tag.string, "слон")
+        self.assertIn("слон", a_text)
+        self.assertEqual(span_tag_num.string, str(1))
         self.assertIsNotNone(hx_get)
 
         resp2 = self.app.get(hx_get)

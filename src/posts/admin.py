@@ -1,6 +1,7 @@
 from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
@@ -26,33 +27,34 @@ class CategoryAdmin(TreeAdmin, TranslationAdmin):
 @admin.register(Post)
 class PostAdmin(TranslationAdmin):
     """
-    author field for current user;
-    user== staff can crud only their own objects
+    ordering based on model('-created_at')
+
     """
 
     date_hierarchy = "created_at"
     search_fields = ("title", "categ__name")
 
     list_display = [
-        # "id",
+        "id",
+        # "author",
         "title",
-        "author",
         "status",
         "is_deleted",
-        "show_img",
+        # "show_img",
+        "published_at",
         "display_tags",
         "categ_link",
     ]
     list_select_related = ("categ", "author")
-    list_editable = ["is_deleted"]
+    list_editable = ["is_deleted"]  # , "status"]
     list_display_links = ["title"]
     list_filter = ["status", "created_at"]
     radio_fields = {"status": admin.HORIZONTAL}
     save_on_top = True
     list_filter = ["status", "created_at", "is_deleted"]
     list_per_page = 15
-    actions = ("make_posts_published",)
-    empty_value_display = "No data"
+    actions = ("make_posts_published", "set_to_draft")
+    empty_value_display = " --- # ---"
     formfield_overrides = {
         models.TextField: {"widget": CKEditor5Widget(config_name="extends")},
     }
@@ -60,7 +62,7 @@ class PostAdmin(TranslationAdmin):
     @admin.action(description="Mark as published")
     def make_posts_published(self, request, queryset):
         """make possbile to mark posts as published in admin bar checkbox"""
-        updated = queryset.update(status=2)
+        updated = queryset.update(status=2, published_at=timezone.now())
 
         self.message_user(
             request,
@@ -71,6 +73,22 @@ class PostAdmin(TranslationAdmin):
             )
             % updated,
             messages.SUCCESS,
+        )
+
+    @admin.action(description="to_draft")
+    def set_to_draft(self, request, queryset):
+        """make possbile to undo published status"""
+        updated = queryset.update(status=1, published_at=None)
+
+        self.message_user(
+            request,
+            ngettext(
+                "%d post successfully marked as draft.",
+                "%d posts were successfully marked as draft.",
+                updated,
+            )
+            % updated,
+            messages.WARNING,
         )
 
     def get_queryset(self, request):

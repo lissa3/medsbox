@@ -25,7 +25,9 @@ class PostList(PostListMenuMixin, ListView):
     paginate_by = 4
 
     def get_queryset(self):
-        return Post.objects.get_public().prefetch_related("tags")
+        return (
+            Post.objects.get_public().prefetch_related("tags").order_by("-published_at")
+        )
 
 
 class PostDetail(CategoryCrumbMixin, DetailView):
@@ -90,14 +92,47 @@ class PostComment(View):
         return view(request, *args, **kwargs)
 
 
+class PostDatumFilter(ListView):
+    context_object_name = "posts"
+    paginate_by = 2
+    _year = None
+    _month = None
+    ordering = ["-published_at"]
+
+    def get_queryset(self):
+        return (
+            Post.objects.get_public()
+            .filter(published_at__year=self._year, published_at__month=self._month)
+            .order_by("-published_at")
+        )
+
+    def get_template_names(self) -> list[str]:
+        if self.request.htmx:
+            return "posts/parts/posts_collection.html"
+        else:
+            return "posts/post_list.html"
+
+    def dispatch(self, *args, **kwargs):
+        self._year = kwargs.pop("year", None)
+        self._month = kwargs.pop("month", None)
+        print("year ans month ", self._year, self._month)
+
+        return super().dispatch(*args, **kwargs)
+
+
 class PostTagSearch(PostListMenuMixin, ListView):
     context_object_name = "posts"
-    paginate_by = 4
+    paginate_by = 2
 
     def get_queryset(self):
         """slug in ASCII"""
         tag = self.kwargs.get("tag")
-        return Post.objects.get_public().filter(tags__slug__in=[tag])
+        self._tag = tag
+        return (
+            Post.objects.get_public()
+            .filter(tags__slug__in=[tag])
+            .order_by("-published_at")
+        )
 
     def get_template_names(self) -> list[str]:
         if self.request.htmx:
@@ -115,15 +150,22 @@ class PostCategSearch(PostListMenuMixin, ListView):
     """retrieve all posts linked to a given category"""
 
     context_object_name = "posts"
-    paginate_by = 4
+    paginate_by = 5
+    ordering = ["-published_at"]
 
     def get_queryset(self):
         """filter public post for a given category(and it's categ descendants)"""
         slug = self.kwargs.get("slug")
+
         categ = get_object_or_404(Category, slug=slug)
+        print("view categ is ", categ.name)
         _tree_categs = categ.get_tree(categ)
         if _tree_categs:
-            return Post.objects.get_public().filter(categ__in=_tree_categs)
+            return (
+                Post.objects.get_public()
+                .filter(categ__in=_tree_categs)
+                .order_by("-published_at")
+            )
         else:
             return Post.objects.none()
 

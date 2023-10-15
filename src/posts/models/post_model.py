@@ -6,11 +6,11 @@ from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.search import SearchVectorField
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from taggit.managers import TaggableManager
 from unidecode import unidecode  # noqa
 
-# from src.contacts.models import NewsLetter
 from src.core.models import TimeStamp
 from src.core.utils.base import upload_img
 from src.posts.managers import PostFilterManager
@@ -80,8 +80,15 @@ class Post(TimeStamp):
         self.save()
 
     def get_absolute_url(self):
-        assert self.slug
         return reverse("posts:detail_post", kwargs={"slug": self.slug})
+
+    def save(self, *args, **kwargs):
+        """auto create datetime if public status changes"""
+        if self.status == 2:
+            self.published_at = timezone.now()
+        else:
+            self.published_at = None
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return f"{self.title} | {self.author}"

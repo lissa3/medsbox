@@ -83,7 +83,9 @@ class PostCategsTestCase(TestCase):
         """display public posts related to a given categ and it's decendants)"""
         path = reverse("posts:cat_search", kwargs={"slug": self.categ_root_2.slug})
         headers = {"HTTP_HX-Request": "true"}
+
         response = self.client.get(path, **headers)
+
         posts = response.context["posts"]
 
         self.assertEqual(response.status_code, 200)
@@ -94,10 +96,10 @@ class PostCategsTestCase(TestCase):
         """display public posts related to a given categ
         without decendants)"""
         categs_count = Category.objects.count()
-        print("all categs ", Category.objects.all())
         path = reverse("posts:cat_search", kwargs={"slug": self.categ_root_1.slug})
 
         response = self.client.get(path)
+
         posts = response.context["posts"]
 
         self.assertEqual(response.status_code, 200)

@@ -71,4 +71,4 @@ class Category(MP_Node):
         return {"path_name": path_name, "path_slug": path_slug}
 
     def __str__(self):
-        return f"Category: {self.name}"
+        return f"{self.name}"
