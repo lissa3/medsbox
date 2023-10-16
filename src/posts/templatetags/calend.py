@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django import template
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from src.posts.models.post_model import Post
@@ -31,11 +32,13 @@ def calend_posts(**kwargs):
     _date = datetime.now()
     current_year = int(_date.strftime("%Y"))
     start = datetime(2023, 1, 1)
+    tz_start = timezone.make_aware(start)
     end = datetime(2023, 12, 31)
+    tz_end = timezone.make_aware(end)
     posts = (
         Post.objects.get_public()
         .values("published_at")
-        .filter(published_at__range=[start, end])
+        .filter(published_at__range=[tz_start, tz_end])
     )
     res = []
     for month in month_collection:
