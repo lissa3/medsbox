@@ -112,6 +112,12 @@ class PostDatumFilter(ListView):
         else:
             return "posts/post_list.html"
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["year"] = self._year
+        ctx["month"] = self._month
+        return ctx
+
     def dispatch(self, *args, **kwargs):
         self._year = kwargs.pop("year", None)
         self._month = kwargs.pop("month", None)
@@ -123,6 +129,7 @@ class PostDatumFilter(ListView):
 class PostTagSearch(PostListMenuMixin, ListView):
     context_object_name = "posts"
     paginate_by = 2
+    _tag = None
 
     def get_queryset(self):
         """slug in ASCII"""
@@ -143,6 +150,7 @@ class PostTagSearch(PostListMenuMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["count_total"] = self.get_queryset().count()
+        ctx["tag"] = self._tag
         return ctx
 
 
@@ -152,13 +160,14 @@ class PostCategSearch(PostListMenuMixin, ListView):
     context_object_name = "posts"
     paginate_by = 5
     ordering = ["-published_at"]
+    _slug = None
 
     def get_queryset(self):
         """filter public post for a given category(and it's categ descendants)"""
         slug = self.kwargs.get("slug")
-
+        self._slug = slug
         categ = get_object_or_404(Category, slug=slug)
-        print("view categ is ", categ.name)
+
         _tree_categs = categ.get_tree(categ)
         if _tree_categs:
             return (
@@ -178,6 +187,7 @@ class PostCategSearch(PostListMenuMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["count_total"] = self.get_queryset().count()
+        ctx["slug"] = self._slug
         return ctx
 
 
