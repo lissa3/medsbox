@@ -4,8 +4,8 @@ register = template.Library()
 
 
 @register.inclusion_tag("components/htmx_pags.html")
-def pags_tag(tag=None, slug=None, page_obj=None, request=None, year=None, month=None):
-    """pagination for tags search"""
+def pags_htmx(tag=None, slug=None, page_obj=None, request=None, year=None, month=None):
+    """pagination for htmx  search"""
     ctx = {"page_obj": page_obj, "req_url": request.path}
     if tag:
         ctx.update({"tag": tag})

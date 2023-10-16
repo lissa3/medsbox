@@ -40,6 +40,7 @@ def calend_posts(**kwargs):
         .values("published_at")
         .filter(published_at__range=[tz_start, tz_end])
     )
+
     res = []
     for month in month_collection:
         _count = posts.filter(published_at__month=month[0]).count()

@@ -1,8 +1,13 @@
+from datetime import datetime
+from datetime import timezone as tz
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_webtest import WebTest
+from freezegun import freeze_time
 from taggit.models import Tag
 from webtest import TestApp
 
@@ -140,3 +145,25 @@ class CategMenuTestCase(WebTest):
         self.assertIsNotNone(post_categ_menu)
         self.assertTrue(len(a_links), 3)
         self.assertTrue(lang, "ru")
+
+
+@override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
+@freeze_time("2023-01-12")
+class CalendMenuTestCase(WebTest):
+    @patch("django.utils.timezone.now")
+    def test_public_posts_order(self, mock_timezone):
+        """show public posts per month in year: aside UI menu;
+        posts created in past but later get published"""
+        dt = datetime(2023, 5, 21, tzinfo=tz.utc)
+        mock_timezone.return_value = dt
+        PostFactory.create_batch(6, status=Post.CurrentStatus.PUB.value)
+        path = reverse("posts:post_list")
+
+        resp = self.app.get(path)
+
+        calend_menu_year = resp.html.find("h5", class_="header_right")
+        a_links = resp.html.find("a", class_="calend_item")
+
+        assert resp.status_code == 200
+        assert "2023" in calend_menu_year.text
+        assert "May" in a_links.text

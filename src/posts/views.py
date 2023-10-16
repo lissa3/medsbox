@@ -121,7 +121,6 @@ class PostDatumFilter(ListView):
     def dispatch(self, *args, **kwargs):
         self._year = kwargs.pop("year", None)
         self._month = kwargs.pop("month", None)
-        print("year ans month ", self._year, self._month)
 
         return super().dispatch(*args, **kwargs)
 

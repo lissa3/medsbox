@@ -5,7 +5,7 @@
       {% for post in posts%}
           {% include "posts/parts/single_post.html" %}
       {% endfor %}
-      {% pags_tag tag=tag slug=slug page_obj=page_obj request=request year=year month=month %}
+      {% pags_htmx tag=tag slug=slug page_obj=page_obj request=request year=year month=month %}
       {% else %}
       <div class= "not-found p-2 fs-3 fs-sm-1 ms-2 me-2" >
         {% trans "Sorry. Nothing found for your search" %}
