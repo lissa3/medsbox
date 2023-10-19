@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static sidebars i18n tree_comms calend %}
+{% block content %}
+  <div class="row">
+  <aside class="col-md-3 col-sm-12">
+    {% show_categs %}
+
+  </aside>
+  <div class="col-md-6 col-sm-12" id="post_list">
+    <div>Current status: <strong>{{post.get_status_display}}</strong></div>
+    <!-- if soft deleted:  -->
+    {% if post.is_deleted %}
+    <form action="{% url 'devs:change_state' action='remove_soft_del' %}" method="POST" >
+      {% csrf_token %}
+      <input type="hidden" value={{post.uuid}} name="uuid" />
+      <input type="hidden" value={{post.status}} name="current_state" />
+        <button  type="submit" class="btn btn-primary">
+          Remove soft deleted status
+        </button>
+      </form>
+
+    {% else %}
+    <!-- if not soft deleted: choice to change status -->
+      <div class="d-flex justify-content-between mt-3 mb-3">
+        <!-- status == 0 (drafts) -->
+        {% if post.status == 0 %}
+        <form action="{% url 'devs:change_state' action='status' %}" method="POST" id="toReview" >
+          {% csrf_token %}
+          <input type="hidden" value={{post.uuid}} name="uuid" />
+          <input type="hidden" value={{post.status}} name="current_state" />
+            <button  type="submit" class="btn btn-primary">
+                Uo to review
+            </button>
+          </form>
+        <!-- status == 1 (reviews) -->
+        {% else %}
+        <form action="{% url 'devs:change_state' action='status' %}" method="POST" id="toPublic">
+          {% csrf_token %}
+          <input type="hidden" value={{post.uuid}} name="uuid" />
+          <input type="hidden" value={{post.status}} name="current_state" />
+            <button  type="submit" class="btn btn-success">
+                Uo to public
+            </button>
+          </form>
+
+
+        {% endif %}
+        <form  method="POST" action="{% url 'devs:soft_delete_post' post.uuid %}"  id="softDelForm">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">
+                To soft deleted
+            </button>
+        </form>
+      </div>
+   {% endif %}
+
+    <h3>{{post.title}}</h3>
+    <p>{{post.created_at|date:"F d, Y"}}</p>
+    <p>{{post.updated_at|date:"F d, Y"}}</p>
+
+    <div>{%trans "category" %}<strong> {{post.categ}}</strong>:
+
+    </div>
+    <div class="content">
+        {{post.content|safe}}
+    </div>
+    <hr>
+
+  </div>
+  <div class="col-md-3 col-sm-12">
+    {% calend_posts %}
+    {% show_tags %}
+  </div>
+  </div>
+
+{% endblock%}
+
+{% block js %}
+<script src="{% static 'js/categs.js' %}"></script>
+{% endblock %}

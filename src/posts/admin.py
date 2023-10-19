@@ -53,13 +53,13 @@ class PostAdmin(TranslationAdmin):
     save_on_top = True
     list_filter = ["status", "created_at", "is_deleted"]
     list_per_page = 15
-    actions = ("make_posts_published", "set_to_draft")
+    actions = ("make_posts_published", "set_to_draft", "set_to_review")
     empty_value_display = " --- # ---"
     formfield_overrides = {
         models.TextField: {"widget": CKEditor5Widget(config_name="extends")},
     }
 
-    @admin.action(description="Mark as published")
+    @admin.action(description="to_public")
     def make_posts_published(self, request, queryset):
         """make possbile to mark posts as published in admin bar checkbox"""
         updated = queryset.update(status=2, published_at=timezone.now())
@@ -75,10 +75,26 @@ class PostAdmin(TranslationAdmin):
             messages.SUCCESS,
         )
 
+    @admin.action(description="to_review")
+    def set_to_review(self, request, queryset):
+        """make possbile to mark posts as published in admin bar checkbox"""
+        updated = queryset.update(status=1, published_at=timezone.now())
+
+        self.message_user(
+            request,
+            ngettext(
+                "%d post successfully marked as published.",
+                "%d posts were successfully marked as published.",
+                updated,
+            )
+            % updated,
+            messages.SUCCESS,
+        )
+
     @admin.action(description="to_draft")
     def set_to_draft(self, request, queryset):
         """make possbile to undo published status"""
-        updated = queryset.update(status=1, published_at=None)
+        updated = queryset.update(status=0, published_at=None)
 
         self.message_user(
             request,

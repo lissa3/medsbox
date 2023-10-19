@@ -3,6 +3,7 @@
 <div class="single_post">
     <h3>{{post.title}}</h3>
     <p>{{post.published_at|date:"F d, Y"}}</p>
+
     <strong>{% trans "category" %}: {{post.categ.name}}</strong>
     <div class="content">
         {{post.content|safe}}

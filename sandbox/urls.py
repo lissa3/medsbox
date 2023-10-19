@@ -23,6 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("contacts/", include("src.contacts.urls")),
     path("notifications/", include("src.notifications.urls")),
+    path("in-development/", include("src.devs.urls")),
 ]
 
 htmx_urlpatterns = [
