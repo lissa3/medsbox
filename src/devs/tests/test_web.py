@@ -1,4 +1,4 @@
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django_webtest import WebTest
 
 from src.accounts.tests.factories import AdminSupUserFactory

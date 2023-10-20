@@ -10,6 +10,7 @@ from modeltranslation.admin import TranslationAdmin
 from treebeard.admin import TreeAdmin
 from treebeard.forms import movenodeform_factory
 
+from src.accounts.admin import User
 from src.contacts.models import NewsLetter
 from src.core.utils.admin_help import admin_link
 from src.posts.models.categ_model import Category
@@ -28,12 +29,10 @@ class CategoryAdmin(TreeAdmin, TranslationAdmin):
 class PostAdmin(TranslationAdmin):
     """
     ordering based on model('-created_at')
-
     """
 
     date_hierarchy = "created_at"
     search_fields = ("title", "categ__name")
-
     list_display = [
         "id",
         # "author",
@@ -113,9 +112,11 @@ class PostAdmin(TranslationAdmin):
         user is_staff can crud only their own objetcs
         """
         initial_qs = super().get_queryset(request).prefetch_related("tags")
+        dev_group = User.objects.filter(groups__name="devs")
         if request.user.is_superuser:
             return initial_qs
-        return initial_qs.filter(author=request.user)
+        elif request.user.is_staff and request.user in dev_group:
+            return initial_qs.filter(author=request.user)
 
     def show_img(self, obj):
         """if top_img show small thumbnail in admin table"""
@@ -150,6 +151,7 @@ class PostAdmin(TranslationAdmin):
     # using link to access related categ object
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """add current admin kwargs to foreign key fields"""
+
         if db_field.name == "author":
             kwargs["queryset"] = get_user_model().objects.filter(
                 username=request.user.username
@@ -177,3 +179,6 @@ class PostAdmin(TranslationAdmin):
         choices = super().get_action_choices(request)
         choices.pop(0)
         return choices
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser

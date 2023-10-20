@@ -27,7 +27,7 @@ class UserAdmin(BaseUserAdmin):
     )
     list_display_links = ["username", "email"]
     readonly_fields = ["last_login", "date_joined"]
-    list_filter = ("is_active", "is_superuser")
+    list_filter = ("is_active", "is_superuser", "is_staff")
     add_fieldsets = (
         (
             ("Add Your User"),
@@ -48,6 +48,8 @@ class UserAdmin(BaseUserAdmin):
                     "banned",
                     "deactivated_on",
                     "blackListEmail",
+                    "groups",
+                    "is_staff",
                 ),
             },
         ),
