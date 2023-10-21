@@ -1,5 +1,5 @@
 from django.core.exceptions import BadRequest, PermissionDenied
-from django.shortcuts import Http404, get_object_or_404
+from django.shortcuts import get_object_or_404
 
 from src.posts.models.post_model import Post
 
