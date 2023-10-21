@@ -13,6 +13,7 @@ from treebeard.forms import movenodeform_factory
 from src.accounts.admin import User
 from src.contacts.models import NewsLetter
 from src.core.utils.admin_help import admin_link
+from src.posts.filters import SoftDelFilter
 from src.posts.models.categ_model import Category
 from src.posts.models.post_model import Post
 
@@ -47,10 +48,10 @@ class PostAdmin(TranslationAdmin):
     list_select_related = ("categ", "author")
     list_editable = ["is_deleted"]  # , "status"]
     list_display_links = ["title"]
-    list_filter = ["status", "created_at"]
     radio_fields = {"status": admin.HORIZONTAL}
     save_on_top = True
-    list_filter = ["status", "created_at", "is_deleted"]
+    list_filter = ["status", "created_at", SoftDelFilter]
+    # list_filter = ["status", "created_at", "is_deleted"]
     list_per_page = 15
     actions = ("make_posts_published", "set_to_draft", "set_to_review")
     empty_value_display = " --- # ---"

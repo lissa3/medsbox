@@ -1,0 +1,20 @@
+from django.contrib.admin import SimpleListFilter
+
+from src.posts.models.post_model import Post
+
+
+class SoftDelFilter(SimpleListFilter):
+    title = "Soft deleted"
+    parameter_name = "is_deleted"
+
+    def lookups(self, request, model_admin):
+        return [
+            ("deleted", "Soft deleted"),
+            ("active", "Still active"),
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value() == "deleted":
+            return queryset.filter(is_deleted=True)
+        elif self.value() == "active":
+            return queryset.filter(is_deleted=False)
