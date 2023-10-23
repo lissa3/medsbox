@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 
-from .views import (
+from src.posts.views.post_views import (
     PostCategSearch,
     PostComment,
     PostDatumFilter,
@@ -8,6 +8,7 @@ from .views import (
     PostTagSearch,
     SearchPost,
 )
+from src.posts.views.user_action_views import track_like
 
 app_name = "posts"
 
@@ -30,3 +31,8 @@ urlpatterns = [
         name="filter_calend",
     ),
 ]
+
+htmx_urlpatterns = [
+    path("interaction/", track_like, name="track_likes"),
+]
+urlpatterns += htmx_urlpatterns

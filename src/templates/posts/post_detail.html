@@ -17,7 +17,38 @@
     <div class="content">
         {{post.content|safe}}
     </div>
+
     <hr>
+    <div class="d-flex justify-content-between">
+      <div class="d-flex">
+        <div class="me-5">
+          {% if user.is_authenticated %}
+          <button hx-post="{% url 'posts:track_likes' %}"  hx-target="#hart"
+            hx-vals='{
+              "post_uuid":"{{post.uuid}}",
+              "user_id":"{{user.id}}"
+            }' class="btn btn-danger" id="toLike" >Like it!
+          </button>
+        {% endif %}
+        </div>
+        <div class="d-flex align-self-center">
+          <div>
+             <svg data-v-44722779="" viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="heart fill" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-heart-fill b-icon bi"><g data-v-44722779=""><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path></g></svg>
+          </div>
+          <div id="hart" class="ms-2">{{post.count_likes}}</div>
+        </div>
+      </div>
+
+    <!-- <div>
+      Like flag in session: {request.session.like_flag}}
+
+    </div>       -->
+    {% if user.is_authenticated %}
+    <div class="me-5">
+      <button class="btn btn-outline" id="toBookMark">Add to bokmarks</button>
+    </div>
+    {% endif %}
+   </div>
 
   </div>
   <div class="col-md-3 col-sm-12">

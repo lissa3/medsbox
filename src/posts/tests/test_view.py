@@ -233,3 +233,29 @@ class PostDetailCommentsTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(count_comments, 2)
+
+
+class UserLikedTestCase(TestCase):
+    def setUp(self) -> None:
+        self.post = PostFactory(status=Post.CurrentStatus.PUB.value)
+        self.user = UserFactory(username="tissa")
+
+    @override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
+    def test_can_like(self):
+        """auth use can like post"""
+        self.client.force_login(self.user)
+        headers = {"HTTP_HX-Request": "true"}
+
+        path = reverse("posts:track_likes")
+        post_start_like = self.post.count_likes
+        data = {"post_uuid": self.post.uuid, "user_id": self.user.id}
+
+        resp = self.client.post(path, data=data, **headers)
+
+        self.post.refresh_from_db()
+        post_new_like = self.post.count_likes
+
+        total_likes = resp.context["total_likes"]
+
+        self.assertNotEqual(post_start_like, post_new_like)
+        self.assertEqual(total_likes, 1)

@@ -1,13 +1,10 @@
 from django.contrib.auth.models import Group, Permission
-from django.contrib.contenttypes.models import ContentType
-from django.http.response import HttpResponseBadRequest
-from django.test import TestCase, override_settings
+from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
 
 from src.accounts.admin import User
 from src.accounts.tests.factories import AdminSupUserFactory, StaffUserFactory
-from src.posts.models.post_model import Post
 from src.posts.tests.factories import PostFactory
 
 
@@ -69,38 +66,39 @@ class TestAdminDevelopers(WebTest):
     def test_staff_user_can_edit_own_post(self):
         """auth staff user can edit own posts in admin"""
         url = reverse(
-            "admin:posts_post_change", kwargs={"object_id": self.staff_author.id}
+            "admin:posts_post_change", kwargs={"object_id": self.post_staff.id}
         )
 
         resp = self.app.get(url)
 
         form = resp.forms["post_form"]
-        form["title_en"] = "goblin"
+        form["title_en"] = "abaracadabra"
 
         resp2 = form.submit().follow()
 
         self.post_staff.refresh_from_db()
 
+        assert resp.status_code == 200
         assert resp2.status_code == 200
-        assert self.post_staff.title_en == "goblin"
-        assert self.post_staff.content_en == "infections"
+        assert self.post_staff.title_en == "abaracadabra"
 
     def test_staff_user_can_not_crud_sup_user_post(self):
         """auth staff user can't edit of super user"""
-        url = reverse("admin:posts_post_change", kwargs={"object_id": self.sup_user})
+        url = reverse(
+            "admin:posts_post_change", kwargs={"object_id": self.post_sup_user.id}
+        )
 
         resp = self.app.get(url).follow()
         warning = resp.html.find("li", class_="warning")
         text = warning.text
 
         assert resp.status_code == 200
-        assert "polly" in text
+        assert "deleted" in text
 
     def test_staff_user_can_not_delete_own_post(self):
         """auth staff user (and post author) has no perms to delete own post"""
         url = reverse(
             "admin:posts_post_delete", kwargs={"object_id": self.staff_author.id}
         )
-        print("url to delete is ", url)
         resp = self.app.get(url, status=403)
         assert resp.status_code == 403

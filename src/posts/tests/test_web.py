@@ -11,7 +11,7 @@ from freezegun import freeze_time
 from taggit.models import Tag
 from webtest import TestApp
 
-from src.accounts.tests.factories import AdminSupUserFactory
+from src.accounts.tests.factories import AdminSupUserFactory, UserFactory
 from src.contacts.models import NewsLetter
 from src.contacts.tests.factories import NewsLetterFactory
 from src.core.utils.admin_help import admin_change_url
@@ -167,3 +167,46 @@ class CalendMenuTestCase(WebTest):
         assert resp.status_code == 200
         assert "2023" in calend_menu_year.text
         assert "May" in a_links.text
+
+
+@override_settings(LANGUAGE_CODE="ru", LANGUAGES=(("ru", "Russian"),))
+class UserInteraction(WebTest):
+    def setUp(self):
+        super().setUp()
+
+        self.post = PostFactory(status=Post.CurrentStatus.PUB.value)
+
+    def test_auth_user_page_buttons(self):
+        """
+        if user auth detail post page contains two buttons:
+        `like` and `add to bookmarks`
+        """
+        user = UserFactory(username="sunny")
+        self.app.set_user(user)
+        url = reverse("posts:post_detail", kwargs={"slug": self.post.slug})
+
+        resp = self.app.get(url)
+
+        to_like_but = resp.html.find("button", id="toLike")
+        to_bookmark_but = resp.html.find("button", id="toBookMark")
+
+        assert resp.status_code == 200
+        assert to_like_but is not None
+        assert to_bookmark_but is not None
+
+    def test_not_auth_user_page_buttons(self):
+        """
+        post detail for un-auth user has NO buttons:
+        `like` and `add to bookmarks`
+        """
+
+        url = reverse("posts:post_detail", kwargs={"slug": self.post.slug})
+
+        resp = self.app.get(url)
+
+        to_like_but = resp.html.find("button", id="toLike")
+        to_bookmark_but = resp.html.find("button", id="toBookMark")
+
+        assert resp.status_code == 200
+        assert to_like_but is None
+        assert to_bookmark_but is None

@@ -62,6 +62,7 @@ class Post(TimeStamp):
         null=True,
         on_delete=models.SET_NULL,
     )
+    count_likes = models.IntegerField(default=None, null=True, blank=True)
     tags = TaggableManager(
         blank=True, verbose_name="Tags", help_text="Tags should be separated by comma"
     )

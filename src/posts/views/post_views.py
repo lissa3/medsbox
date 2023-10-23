@@ -10,10 +10,9 @@ from src.comments.forms import CommentForm
 from src.comments.models import Comment
 from src.core.utils.views_help import make_query, search_qs
 from src.posts.forms import SearchForm
+from src.posts.mixins import CategoryCrumbMixin, PostListMenuMixin
 from src.posts.models.categ_model import Category
 from src.posts.models.post_model import Post
-
-from .mixins import CategoryCrumbMixin, PostListMenuMixin
 
 
 class PostList(PostListMenuMixin, ListView):
