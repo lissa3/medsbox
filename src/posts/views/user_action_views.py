@@ -12,7 +12,7 @@ User = get_user_model()
 @login_required
 def track_like(request):
     """
-    htmx based
+    htmx based; create or toggle user likes
     """
 
     if request.htmx and request.method == "POST":
@@ -23,6 +23,7 @@ def track_like(request):
         ctx = {}
         try:
             rel_obj = Relation.objects.get(user=user, post=post)
+            # toggle; don't want to use shorthand
             if rel_obj.like:
                 rel_obj.like = False
             else:

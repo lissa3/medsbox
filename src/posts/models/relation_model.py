@@ -14,9 +14,6 @@ class Relation(models.Model):
     like = models.BooleanField(blank=True, default=False)
     in_bookmark = models.BooleanField(blank=True, default=False)
 
-    def __str__(self):
-        return f"User: {self.user} active in user-post-relations {self.like}"
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -34,3 +31,6 @@ class Relation(models.Model):
         if self.old_like != new_like or start_creating:
             # user-post-rel obj is just created
             calc_count_likes(self.post)
+
+    def __str__(self):
+        return f"User: {self.user} active in user-post-relations {self.like}"

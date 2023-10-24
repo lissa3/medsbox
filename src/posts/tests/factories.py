@@ -8,9 +8,10 @@ from factory.django import DjangoModelFactory
 from faker import Faker
 from taggit.models import Tag
 
-from src.accounts.tests.factories import StaffUserFactory
+from src.accounts.tests.factories import StaffUserFactory, UserFactory
 from src.posts.models.categ_model import Category
 from src.posts.models.post_model import Post
+from src.posts.models.relation_model import Relation
 
 fake = Faker()
 
@@ -65,3 +66,11 @@ class TagFactory(factory.django.DjangoModelFactory):
     def _create(cls, model_class, *args, **kwargs):
         """create a  tag"""
         return Tag.objects.get_or_create({"name": elem} for elem in ["apple", "pier"])
+
+
+class RelationFactory(factory.django.DjangoModelFactory):
+    user = factory.SubFactory(UserFactory)
+    post = factory.SubFactory(PostFactory)
+
+    class Meta:
+        model = Relation
