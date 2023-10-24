@@ -1,4 +1,3 @@
 <div>
-    {{total_likes}}
-
+    <span {% if active %} class="circle_num_green" {% else %}class="circle_num"{% endif %}>{{total_likes}}</span>
 </div>
