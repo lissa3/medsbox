@@ -48,6 +48,13 @@
                   {% trans 'Subscribe to news' %}
               </a>
             </li>
+            {% else %}
+            <li><hr class="dropdown-divider"></li>
+              <li class="nav-item">
+              <a class="dropdown-item" href="{% url 'contacts:end_news' user.profile.uuid %}" >
+                  {% trans 'Usubscribe to news' %}
+              </a>
+            </li>
             {% endif %}
             </ul>
           </li>

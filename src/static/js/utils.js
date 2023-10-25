@@ -86,11 +86,6 @@ function fileToDataUri(file) {
   });
 }
 
-// const colorSVG = (colorCls)=>{
-//   let circle = document.getElementById("avaColor")
-//   circle.classList.add(colorCls);
-// }
-
 
 
 

@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM
 from django.http import JsonResponse
@@ -20,6 +21,7 @@ class ProfileView(LRM, CheckJSMixin, View):
         return render(request, "profiles/profile_detail.html", ctx)
 
     def post(self, request, **kwargs):
+        # js reload page: trigger dj msg
         uuid = kwargs.get("uuid")
         profile = get_object_or_404(Profile, uuid=uuid)
         form = ProfileForm(request.POST, request.FILES, profile)
@@ -30,6 +32,7 @@ class ProfileView(LRM, CheckJSMixin, View):
             else:
                 profile.avatar = None
             profile.save()
+            messages.success(request, "Avatar changed successfully")
             return JsonResponse({"status_code": 200, "resp": "OK"})
         else:
             return JsonResponse({"status_code": 404, "err": form.errors})
