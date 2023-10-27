@@ -62,10 +62,12 @@ class Post(TimeStamp):
         null=True,
         on_delete=models.SET_NULL,
     )
-    count_likes = models.IntegerField(default=None, null=True, blank=True)
     tags = TaggableManager(
         blank=True, verbose_name="Tags", help_text="Tags should be separated by comma"
     )
+    fans = models.ManyToManyField(User, related_name="post_fans", through="Relation")
+    count_likes = models.IntegerField(default=None, null=True, blank=True)
+    count_bmarks = models.IntegerField(default=None, null=True, blank=True)
     vector_ru = SearchVectorField(null=True, blank=True)
     vector_en = SearchVectorField(null=True, blank=True)
 

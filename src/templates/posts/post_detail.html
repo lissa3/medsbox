@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static sidebars i18n tree_comms calend %}
 {% block content %}
+
   <div class="row">
   <aside class="col-md-3 col-sm-12">
     {% show_categs %}
@@ -17,22 +18,15 @@
     <div class="content">
         {{post.content|safe}}
     </div>
-
     <hr>
     <div class="d-flex justify-content-between">
-      <div class="d-flex">
-
+      <div class="d-flex align-self-center">
         <div class="d-flex align-self-center">
-          <div>
-            <svg data-v-44722779="" viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="heart fill" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-heart-fill b-icon bi"><g data-v-44722779=""><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path></g></svg>
-          </div>
           {% if post.count_likes %}
-
           <div id="hart" class="ms-2"><span class="circle_num">{{post.count_likes}}</span></div>
           {% else %}
           <div id="hart" class="ms-2"></div>
           {% endif%}
-
         </div>
         <div class="me-5 ms-5">
           {% if user.is_authenticated %}
@@ -40,15 +34,22 @@
             hx-vals='{
               "post_uuid":"{{post.uuid}}",
               "user_id":"{{user.id}}"
-            }' class="btn btn-success" id="toLike" >Like
+            }' class="btn btn-danger" id="toLike" >
+            <svg data-v-44722779="" viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="heart fill" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-heart-fill b-icon bi"><g data-v-44722779=""><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path></g></svg>
           </button>
         {% endif %}
         </div>
       </div>
-
     {% if user.is_authenticated %}
-    <div class="me-5">
-      <button class="btn btn-outline" id="toBookMark">Add to bokmarks</button>
+    <div class="me-5 d-flex">
+      <form action="{% url 'posts:change_bookmark' action='add' %}" method="POST" id="bookmark">
+        {% csrf_token %}
+        <input type="hidden" name="post_uuid" value="{{post.uuid}}">
+        <input type="hidden" name = "user_id"  value="{{user.id}}">
+        <button class="btn btn-success" type="submit" id="toBookMark">
+          <svg viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="bookmark heart fill" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-bookmark-heart-fill b-icon bi"><g><path d="M2 15.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v13.5zM8 4.41c1.387-1.425 4.854 1.07 0 4.277C3.146 5.48 6.613 2.986 8 4.412z"></path></g></svg><span class="px-2">Add to bookmarks</span></button>
+        </form>
+
     </div>
     {% endif %}
    </div>
@@ -59,6 +60,7 @@
     {% show_tags %}
   </div>
   </div>
+  <hr>
  <div class="container mt-4">
   {% if user.is_authenticated and not user.banned and post.allow_comments %}
     <div class="row">
@@ -135,4 +137,5 @@
 
 {% block js %}
 <script src="{% static 'js/categs.js' %}"></script>
+<script src="{% static 'js/bookmark.js' %}"></script>
 {% endblock %}

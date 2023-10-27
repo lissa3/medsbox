@@ -88,7 +88,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "src.contacts.context_processors.check_subscription",
+                "src.contacts.context_processors.check_data_menu",
                 "src.notifications.context_processors.check_nofications",
             ],
         },

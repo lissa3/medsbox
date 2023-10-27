@@ -53,7 +53,7 @@ let helpUtil =  (url,name)=>{
 
   let arr = url.split(",")
   let mime = arr[0].match(/:(.*?);/)[1]
-  console.log("initial mime is ",mime,"check below ...")
+  // console.log("initial mime is ",mime,"check below ...")
   let dataStr = arr.at(-1)
   // let dataStr = arr[1]
   let bstr = atob(dataStr);
@@ -63,7 +63,7 @@ let helpUtil =  (url,name)=>{
       u8arr[lenData]= bstr.charCodeAt(lenData);
   }
   const file = new File([u8arr],name,{type:mime})
-  console.log("final file ext is ",mime)
+  // console.log("final file ext is ",mime)
   // console.log("w,h do not exist")
   return file;
 }
@@ -85,6 +85,7 @@ function fileToDataUri(file) {
     reader.readAsDataURL(file);
   });
 }
+
 
 
 

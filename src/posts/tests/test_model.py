@@ -1,9 +1,12 @@
 from django.db.models import Count
 from django.test import TestCase, override_settings
+from django.urls import reverse
 
+from src.accounts.tests.factories import UserFactory
 from src.posts.models.categ_model import Category
 from src.posts.models.post_model import Post
-from src.posts.tests.factories import CategoryFactory, PostFactory
+from src.posts.models.relation_model import Relation
+from src.posts.tests.factories import CategoryFactory, PostFactory, RelationFactory
 
 
 class CategoryPathTestCase(TestCase):
@@ -97,3 +100,23 @@ class PostTagsTestCase(TestCase):
 
         self.assertEqual(similar_posts.count(), 8)
         self.assertEqual(post_4_annot.same_tags, 2)
+
+
+class UserInteractionTestCase(TestCase):
+    def setUp(self) -> None:
+        self.post = PostFactory(status=Post.CurrentStatus.PUB.value)
+        self.user1 = UserFactory(username="zoo")
+        self.user2 = UserFactory(username="lake")
+        self.user3 = UserFactory(username="sky")
+        RelationFactory(user=self.user1, post=self.post, in_bookmark=True, like=True)
+        RelationFactory(user=self.user2, post=self.post, like=True, in_bookmark=True)
+        RelationFactory(user=self.user3, post=self.post, like=True)
+
+    def test_post_count_attrs(self):
+        """check creation and update post calculated fields"""
+        # self.post.refresh_from_db()
+        post_likes = self.post.count_likes
+        post_bmarks = self.post.count_bmarks
+
+        self.assertEqual(post_likes, 3)
+        self.assertEqual(post_bmarks, 2)

@@ -5,8 +5,9 @@ from src.accounts.tests.factories import StaffUserFactory, UserFactory
 from src.comments.tests.factories import CommentFactory
 from src.posts.models.categ_model import Category
 from src.posts.models.post_model import Post
+from src.posts.models.relation_model import Relation
 
-from .factories import PostFactory
+from .factories import PostFactory, RelationFactory
 
 
 class PostListTestCase(TestCase):
@@ -259,3 +260,39 @@ class UserLikedTestCase(TestCase):
 
         self.assertNotEqual(post_start_like, post_new_like)
         self.assertEqual(total_likes, 1)
+
+
+@override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
+class UserAddBookmarkTestCase(TestCase):
+    def setUp(self) -> None:
+        self.post = PostFactory(status=Post.CurrentStatus.PUB.value)
+        self.user = UserFactory(username="zoo")
+
+    def test_can_bookmark(self):
+        """auth use can add post to bookmark"""
+        self.client.force_login(self.user)
+        path = reverse("posts:change_bookmark", kwargs={"action": "add"})
+        data = {"post_uuid": self.post.uuid, "user_id": self.user.id}
+
+        self.client.post(path, data=data)
+
+        finish = Relation.objects.count()
+
+        self.assertEqual(finish, 1)
+
+    def test_delete_bookmark(self):
+        """auth user delete from bookmark"""
+        self.client.force_login(self.user)
+        obj = RelationFactory(user=self.user, post=self.post, in_bookmark=True)
+        start = Relation.objects.count()
+        path = reverse("posts:change_bookmark", kwargs={"action": "delete"})
+        data = {"post_uuid": self.post.uuid, "user_id": self.user.id}
+
+        self.client.post(path, data=data)
+
+        obj.refresh_from_db()
+
+        finish = Relation.objects.count()
+
+        self.assertEqual(start, finish)
+        self.assertFalse(obj.in_bookmark)

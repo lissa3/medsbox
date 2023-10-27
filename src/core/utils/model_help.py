@@ -9,3 +9,11 @@ def calc_count_likes(obj):
     )
     obj.count_likes = agr_likes.get("total_likes", None)
     obj.save()
+
+
+def calc_count_marks(obj):
+    agr_bmarks = Relation.objects.filter(post=obj).aggregate(
+        total_bmarks=(Count(Case(When(in_bookmark=True, then=1))))
+    )
+    obj.count_bmarks = agr_bmarks.get("total_bmarks", None)
+    obj.save()

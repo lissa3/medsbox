@@ -8,7 +8,7 @@ from src.posts.views.post_views import (
     PostTagSearch,
     SearchPost,
 )
-from src.posts.views.user_action_views import track_like
+from src.posts.views.user_action_views import TrackBookmark, TrackLike
 
 app_name = "posts"
 
@@ -30,9 +30,14 @@ urlpatterns = [
         PostDatumFilter.as_view(),
         name="filter_calend",
     ),
+    path(
+        "change-bookmark/<action>/",
+        TrackBookmark.as_view(),
+        name="change_bookmark",
+    ),
 ]
 
 htmx_urlpatterns = [
-    path("interaction/", track_like, name="track_likes"),
+    path("set-like/", TrackLike.as_view(), name="track_likes"),
 ]
 urlpatterns += htmx_urlpatterns
