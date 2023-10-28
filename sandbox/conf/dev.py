@@ -13,12 +13,10 @@ DATABASES = {
         "PORT": "5432",
     }
 }
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": "memory.sqlite3",
-#     }
-# }
+
 # use in-memory-db
 # let op: email confirmation will be NOT in console
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
+
+
+USE_CAPCHA = False

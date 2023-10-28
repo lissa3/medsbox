@@ -1,9 +1,9 @@
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 from django import forms
+from django.conf import settings
 from django.core import validators
 from django.utils.translation import gettext_lazy as _
-
-# from captcha.fields import ReCaptchaField
-# from captcha.widgets import ReCaptchaV2Checkbox
 
 
 class ContactForm(forms.Form):
@@ -24,12 +24,12 @@ class ContactForm(forms.Form):
         widget=forms.Textarea(attrs={"autocomplete": "email", "rows": 15}),
     )
     honeypot = forms.CharField(required=False, widget=forms.HiddenInput)
-    # if settings.USE_CAPCHA:
-    #     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
-    #     # captcha = ReCaptchaField(
-    #     #     public_key=settings.RECAPTCHA_PUBLIC_KEY,
-    #     #     private_key=settings.RECAPTCHA_PRIVATE_KEY,
-    #     # )
+
+    if settings.USE_CAPCHA:
+        captcha = ReCaptchaField(
+            widget=ReCaptchaV2Checkbox(),
+            error_messages={"required": _("You must pass the recapcha test")},
+        )
 
     def clean_message(self):
         message = self.cleaned_data.get("message", "no input")
@@ -42,7 +42,7 @@ class ContactForm(forms.Form):
 
     def clean_honeypot(self):
         """Check that nothing's been entered into the honeypot."""
-        value = self.cleaned_data["honeypot"]
+        value = self.cleaned_data.get("honeypot")
         if value:
             raise forms.ValidationError(_("It should not be here"))
         return value

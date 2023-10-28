@@ -16,3 +16,4 @@ django-ckeditor-5
 unidecode
 psycopg2==2.9.5
 django-rosetta==0.9.9
+django-recaptcha==3.0.0

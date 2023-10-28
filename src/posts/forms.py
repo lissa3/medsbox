@@ -32,7 +32,6 @@ class SearchForm(forms.Form):
         """Check that nothing's been entered into the honeypot."""
         value = self.cleaned_data["honeypot"]
         if value:
-            # print("raising a Validation Error")
             raise forms.ValidationError(_("It should not be here"))
 
         return value

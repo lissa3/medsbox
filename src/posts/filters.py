@@ -1,7 +1,5 @@
 from django.contrib.admin import SimpleListFilter
 
-from src.posts.models.post_model import Post
-
 
 class SoftDelFilter(SimpleListFilter):
     title = "Soft deleted"

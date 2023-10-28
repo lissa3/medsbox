@@ -47,6 +47,7 @@ THIRD_PARTY = [
     # "modeltranslation", # see above
     "django_ckeditor_5",
     "rosetta",
+    "captcha",
 ]
 
 
@@ -382,3 +383,8 @@ CKEDITOR_5_CONFIGS = {
         }
     },
 }
+
+USE_CAPCHA = True
+RECAPTCHA_PUBLIC_KEY = env("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = env("RECAPTCHA_PRIVATE_KEY")
+SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error"]
