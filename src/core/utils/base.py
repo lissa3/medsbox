@@ -30,7 +30,7 @@ def upload_img(instance, filepath):
     if klass == "profile":
         user_folder = f"profile_{instance.user.id}"
         return os.path.join("avatar", user_folder, new_file_name)
-    elif klass == "image":
+    elif klass == "post":
         folder = f"post_{date_trace}"
         return os.path.join("post", folder, new_file_name)
     elif klass == "category":
