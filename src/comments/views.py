@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponse, HttpResponseForbidden, QueryDict
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
@@ -45,7 +44,6 @@ class GetReplyFormView(LRM, CheckRequestMixin, View):
     def get(self, request, post_uuid, comm_id):
         """htmx + modal; get req to get form for reply"""
         form = CommentForm(initial={"comm_parent_id": comm_id})
-
         ctx = {}
         ctx["form"] = form
         ctx["post_uuid"] = post_uuid

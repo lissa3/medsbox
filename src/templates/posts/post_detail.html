@@ -15,33 +15,40 @@
     <div><strong>{%trans "category" %}</strong>:
       {% include "components/post_categs.html" with categ_dict=cats_path %}
     </div>
+    {% if post.top_img %}
+    <img src="{{post.top_img.url}}" alt="post_img">
+    {% endif %}
     <div class="content">
         {{post.content|safe}}
     </div>
     <hr>
     <div class="d-flex justify-content-between">
       <div class="d-flex align-self-center">
-        <div class="d-flex align-self-center">
-          {% if post.count_likes %}
-          <div id="hart" class="ms-2"><span class="circle_num">{{post.count_likes}}</span></div>
-          {% else %}
-          <div id="hart" class="ms-2"></div>
-          {% endif%}
-        </div>
         <div class="me-5 ms-5">
           {% if user.is_authenticated %}
-          <button hx-post="{% url 'posts:track_likes' %}"  hx-target="#hart"
+          <button hx-post="{% url 'posts:track_likes' %}"  hx-target="#likeSpan"
             hx-vals='{
               "post_uuid":"{{post.uuid}}",
               "user_id":"{{user.id}}"
-            }' class="btn btn-danger" id="toLike" >
-            <svg data-v-44722779="" viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="heart fill" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-heart-fill b-icon bi"><g data-v-44722779=""><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path></g></svg>
+            }' id="toLike" class="btn btn-danger">
+            <span id="likeSpan">
+              {% if liked %}
+                Remove like
+              {% else %}
+                Click to like
+              {% endif %}
+              {% if post.count_likes %}
+              <span class="circle_num">
+              {{post.count_likes}}
+            </span>
+            {% endif %}
+            </span>
           </button>
         {% endif %}
         </div>
       </div>
-    {% if user.is_authenticated %}
-    <div class="me-5 d-flex">
+    {% if user.is_authenticated and display_bmark_button%}
+    <div class="me-5 d-flex" id="bmarkDiv">
       <form action="{% url 'posts:change_bookmark' action='add' %}" method="POST" id="bookmark">
         {% csrf_token %}
         <input type="hidden" name="post_uuid" value="{{post.uuid}}">
@@ -53,7 +60,82 @@
     </div>
     {% endif %}
    </div>
+   <hr>
+   <!-- coments section -->
+   <div class="container mt-4">
+    <div id="jsBox"></div>
+    {% if user.is_authenticated and not user.banned and post.allow_comments %}
+      <div class="row">
+        <div class="col-md-12 text-center">
 
+          <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            {% trans "Show form" %}
+          </button>
+        </div>
+      </div>
+      <div class="row collapse" id="collapseExample" >
+        <div class="col-md-12">
+
+          <form action="{% url 'posts:post_detail' post.slug %}" id="top_form" method="POST" class="form-main"
+          >
+            {% csrf_token %}
+            {% for field in form.visible_fields %}
+              <p>{{ field.errors }}</p>
+                {{ field }}
+              <p class="text-center"><strong>{{ field.help_text }}</strong></p>
+            {% endfor %}
+            {% for error in field.errors %}
+            <div class="errorlist">{{ error }}</div>
+            {% endfor %}
+
+            <button class="btn btn-primary" type="submit">Comment</button>
+          </form>
+
+        </div>
+      </div>
+      {% endif %}
+
+      {% if comments %}
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-md-12 col-sm-6 number">{% trans 'Comments' %} : {{comms_total}}</div>
+        <div class="col-sm-3"></div>
+
+      </div>
+
+      <div class="row comms">
+        <div class="col-sm-3"></div>
+          <div class="col-sm-6 col-md-12 ">
+            {% if thread_uuid %}
+            <div class="mb-2"><button class="btn btn-secondary"
+            hx-get="{% url 'comments:all_comms' post.uuid %}"
+            hx-target="#mycomms"
+              >{% trans 'Refresh all comments' %}</button>
+            </div>
+            <div id="comms_list"
+              hx-trigger="load, updateCommList from:body"
+              hx-get="{% url 'comments:select_comms' post_uuid=post.uuid thread_uuid=thread_uuid %}"
+              hx-target="#mycomms">
+              <div id="mycomms"class="comms_bg"></div>
+            </div>
+            {% else %}
+            <div id="comms_list"
+            hx-trigger="load, updateCommList from:body"
+            hx-get="{% url 'comments:all_comms' post.uuid %}"
+            hx-target="#mycomms">
+            <div id="mycomms"class="comms_bg"></div>
+          </div>
+
+            {% endif %}
+          </div>
+        <div class="col-sm-3"></div>
+      </div>
+      {% else %}
+      <div class="row">
+        <div class="col col-md-12 text-center mt-1">{% trans 'No comments yet. Please, be first to comment' %}</div>
+      </div>
+      {% endif %}
+  </div>
   </div>
   <div class="col-md-3 col-sm-12">
     {% calend_posts %}
@@ -61,78 +143,7 @@
   </div>
   </div>
   <hr>
- <div class="container mt-4">
-  {% if user.is_authenticated and not user.banned and post.allow_comments %}
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-          {% trans "Show form" %}
-        </button>
-      </div>
-    </div>
-    <div class="row collapse" id="collapseExample" >
-      <div class="col-md-12">
 
-        <form action="{% url 'posts:post_detail' post.slug %}" id="top_form" method="POST" class="form-main"
-        >
-          {% csrf_token %}
-          {% for field in form.visible_fields %}
-            <p>{{ field.errors }}</p>
-              {{ field }}
-            <p class="text-center"><strong>{{ field.help_text }}</strong></p>
-          {% endfor %}
-          {% for error in field.errors %}
-          <div class="errorlist">{{ error }}</div>
-          {% endfor %}
-
-          <button class="btn btn-primary" type="submit">Comment</button>
-        </form>
-
-      </div>
-    </div>
-    {% endif %}
-
-    {% if comments %}
-    <div class="row">
-      <div class="col-sm-3"></div>
-      <div class="col-md-12 col-sm-6 number">{% trans 'Comments' %} : {{comms_total}}</div>
-      <div class="col-sm-3"></div>
-
-    </div>
-
-    <div class="row comms">
-      <div class="col-sm-3"></div>
-        <div class="col-sm-6 col-md-12 ">
-          {% if thread_uuid %}
-          <div class="mb-2"><button class="btn btn-secondary"
-          hx-get="{% url 'comments:all_comms' post.uuid %}"
-          hx-target="#mycomms"
-            >{% trans 'Refresh all comments' %}</button>
-          </div>
-          <div id="comms_list"
-            hx-trigger="load, updateCommList from:body"
-            hx-get="{% url 'comments:select_comms' post_uuid=post.uuid thread_uuid=thread_uuid %}"
-            hx-target="#mycomms">
-            <div id="mycomms"class="comms_bg"></div>
-          </div>
-          {% else %}
-          <div id="comms_list"
-          hx-trigger="load, updateCommList from:body"
-          hx-get="{% url 'comments:all_comms' post.uuid %}"
-          hx-target="#mycomms">
-          <div id="mycomms"class="comms_bg"></div>
-        </div>
-
-          {% endif %}
-        </div>
-      <div class="col-sm-3"></div>
-    </div>
-    {% else %}
-    <div class="row">
-      <div class="col col-md-12 text-center mt-1">{% trans 'No comments yet. Please, be first to comment' %}</div>
-    </div>
-    {% endif %}
-</div>
 {% endblock%}
 
 {% block js %}

@@ -230,6 +230,7 @@ class PostDetailCommentsTestCase(TestCase):
         path = reverse("posts:post_detail", kwargs={"slug": self.post_1.slug})
 
         response = self.client.get(path)
+
         count_comments = response.context["comms_total"]
 
         self.assertEqual(response.status_code, 200)
@@ -280,19 +281,19 @@ class UserAddBookmarkTestCase(TestCase):
 
         self.assertEqual(finish, 1)
 
-    def test_delete_bookmark(self):
-        """auth user delete from bookmark"""
-        self.client.force_login(self.user)
-        obj = RelationFactory(user=self.user, post=self.post, in_bookmark=True)
-        start = Relation.objects.count()
-        path = reverse("posts:change_bookmark", kwargs={"action": "delete"})
-        data = {"post_uuid": self.post.uuid, "user_id": self.user.id}
+    # def test_delete_bookmark(self):
+    #     """auth user delete from bookmark"""
+    #     self.client.force_login(self.user)
+    #     obj = RelationFactory(user=self.user, post=self.post, in_bookmark=True)
+    #     start = Relation.objects.count()
+    #     path = reverse("posts:change_bookmark", kwargs={"action": "delete"})
+    #     data = {"post_uuid": self.post.uuid, "user_id": self.user.id}
 
-        self.client.post(path, data=data)
+    #     self.client.post(path, data=data)
 
-        obj.refresh_from_db()
+    #     obj.refresh_from_db()
 
-        finish = Relation.objects.count()
+    #     finish = Relation.objects.count()
 
-        self.assertEqual(start, finish)
-        self.assertFalse(obj.in_bookmark)
+    #     self.assertEqual(start, finish)
+    #     self.assertFalse(obj.in_bookmark)

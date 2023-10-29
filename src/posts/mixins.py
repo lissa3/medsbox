@@ -1,4 +1,3 @@
-from django.core.exceptions import BadRequest
 from django.urls import reverse
 from django.utils.functional import cached_property
 

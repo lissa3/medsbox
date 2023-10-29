@@ -1,4 +1,4 @@
-from django.http import HttpResponseForbidden
+from django.contrib.auth.mixins import LoginRequiredMixin as LRM
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.translation import get_language
@@ -13,6 +13,7 @@ from src.posts.forms import SearchForm
 from src.posts.mixins import CategoryCrumbMixin, PostListMenuMixin
 from src.posts.models.categ_model import Category
 from src.posts.models.post_model import Post
+from src.posts.models.relation_model import Relation
 
 
 class PostList(PostListMenuMixin, ListView):
@@ -32,7 +33,8 @@ class PostList(PostListMenuMixin, ListView):
 class PostDetail(CategoryCrumbMixin, DetailView):
     """
     Detail view to display post object with comments;
-    they can be either  all related comments or selected(via notifications)
+    they can be either  all related comments or selected(via notifications);
+    availability check for comments tools via tempate
     """
 
     model = Post
@@ -41,8 +43,24 @@ class PostDetail(CategoryCrumbMixin, DetailView):
     _thread_uuid = None
 
     def get_context_data(self, **kwargs):
-        comms = Comment.objects.filter(post=self.get_object()).exists()
         ctx = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            # populate ctx with initial bools: user's likes and bmark for UI
+
+            _post = self.get_object()
+            _user = self.request.user
+            rel = Relation.objects.filter(post=_post, user=_user)
+            if rel:
+                rel_obj = rel.last()
+                if rel_obj.like:
+                    ctx["liked"] = True
+                if rel_obj.in_bookmark:
+                    ctx["display_bmark_button"] = False
+            else:
+                ctx.update({"display_bmark_button": True, "liked": False})
+
+        comms = Comment.objects.filter(post=self.get_object()).exists()
         ctx["cats_path"] = self.get_post_categs_path()
         ctx["comments"] = comms
         if self._thread_uuid:
@@ -58,23 +76,25 @@ class PostDetail(CategoryCrumbMixin, DetailView):
         return super().dispatch(*args, **kwargs)
 
 
-class PostCommFormView(SingleObjectMixin, FormView):
+class PostCommFormView(LRM, SingleObjectMixin, FormView):
     model = Post
     form_class = CommentForm
     template_name = "posts/post_detail.html"
 
     def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated and not request.user.banned:
-            return HttpResponseForbidden()
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
+            print("form is valid")
+            print(form.__dict__)
             comm = form.save(commit=False)
             comm.user = request.user
             comm.post = self.object
             Comment.add_root(instance=comm)
+            print("comment added ")
             return self.form_valid(form)
         else:
+            print("form invalid")
             return self.form_invalid(form)
 
     def get_success_url(self):

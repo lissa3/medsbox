@@ -45,6 +45,10 @@ footer{
 .red{
   color: red;
 }
+
+.redish{
+  color: rgb(234, 164, 164);
+}
 .flash-msg{
   background-color: #78a18ebd;
   font-size: 1rem;

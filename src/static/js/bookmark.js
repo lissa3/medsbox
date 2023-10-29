@@ -1,8 +1,9 @@
 
  // func to add/remove bookmarks
   const jsBox = document.getElementById("jsBox");
+  const bmarkDiv = document.getElementById("bmarkDiv");
   const formBook = document.querySelector("#bookmark");
-
+  if(bmarkDiv){
   const fd = new FormData();
   fd.append("csrfmiddlewaretoken",getCookie("csrftoken"))
   formBook.addEventListener("submit",(e)=>{
@@ -19,9 +20,14 @@
         .then((data)=>{
           if(data.status_code ===200){
             let msg = data.msg;
-              jsBox.classList.add("green","slide");
-              jsBox.textContent=  msg;
-
+            console.log("msg from the server ",msg)
+            jsBox.classList.add("green","slide");
+            jsBox.textContent=  msg;
+            if(data.del_button){
+              console.log("removing bmark button from the DOM");
+              bmarkDiv.remove();
+              console.log("div removed");
+            }
           }
           else if(data.status_code ===404){
             //  add error flash msg
@@ -34,3 +40,4 @@
           console.log(err["message"]);
         })
   })
+}

@@ -11,13 +11,16 @@ class Relation(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_rel")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="post_rel")
-    like = models.BooleanField(blank=True, default=False)
+    like = models.BooleanField(blank=True, null=True)
     in_bookmark = models.BooleanField(blank=True, default=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.old_bmarks = self.in_bookmark
         self.old_like = self.like
+
+    class Meta:
+        unique_together = ["user", "post"]
 
     def save(self, *args, **kwargs):
         from src.core.utils.model_help import calc_count_likes, calc_count_marks
