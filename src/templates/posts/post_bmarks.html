@@ -7,9 +7,14 @@
       {% for post in posts%}
         {% include "posts/parts/post_card.html" %}
       {% endfor %}
-    </div>
+   </div>
       {% include "posts/parts/pagination.html" %}
-    {% endif %}
+   {% else %}
+   <div class="col-md-12 col-sm-12 text-center ">
+    <h5>No posts in bookmarks</h5>
+   </div>
+
+   {% endif %}
 </div>
 
 {% endblock%}

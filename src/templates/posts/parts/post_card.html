@@ -15,4 +15,11 @@
   <div class="card-body">
     <a href="{% url 'devs:dev_detail_post' post.uuid %}"><button class="btn btn-primary">More details</button></a>
   </div>
+  <div><button class="btn btn-danger" id="data-{{post.uuid}}"
+    hx-post="{% url 'posts:change_bookmark' action='delete'%}"
+    hx-vals='{
+      "post_uuid":"{{post.uuid}}",
+      "user_id":"{{user.id}}"
+    }'
+    >Remove from bookmarks</button></div>
 </div>

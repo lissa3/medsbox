@@ -36,6 +36,7 @@ urlpatterns = [
         TrackBookmark.as_view(),
         name="change_bookmark",
     ),
+    # delete bmark => htmx
     path(
         "bmark-collection/", PostBookMarkCollection.as_view(), name="bmark_collection"
     ),
