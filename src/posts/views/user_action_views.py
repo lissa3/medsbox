@@ -57,7 +57,6 @@ class TrackBookmark(LRM, View):
         via js
         """
         action = kwargs.get("action")
-        print("action ", action)
         msg = None
         try:
             post_uuid = request.POST.get("post_uuid", None)
@@ -74,7 +73,6 @@ class TrackBookmark(LRM, View):
                     {"status_code": 200, "msg": msg, "del_button": True}
                 )
             elif self.request.htmx and action == "delete":
-                print("htmx detected")
                 rel = get_object_or_404(Relation, user=user, post=post)
                 rel.in_bookmark = False
                 rel.save()
@@ -89,7 +87,6 @@ class TrackBookmark(LRM, View):
                 )
 
         except Post.DoesNotExist:
-            print("post no found")
             if self.request.htmx:
                 return HttpResponse(status=404)
 

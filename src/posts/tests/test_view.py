@@ -302,7 +302,7 @@ class UserAddBookmarkTestCase(TestCase):
         count_posts = resp.context["posts"]
 
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(count_posts, 2)
+        self.assertEqual(count_posts.count(), 2)
 
     def test_delete_bookmark(self):
         """auth user delete from bookmark"""
