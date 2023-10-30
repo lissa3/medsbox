@@ -16,7 +16,7 @@ from src.contacts.models import NewsLetter
 from src.contacts.tests.factories import NewsLetterFactory
 from src.core.utils.admin_help import admin_change_url
 from src.posts.models.post_model import Post
-from src.posts.tests.factories import CategoryFactory, PostFactory
+from src.posts.tests.factories import CategoryFactory, PostFactory, RelationFactory
 
 User = get_user_model()
 TestApp.__test__ = False
@@ -170,7 +170,7 @@ class CalendMenuTestCase(WebTest):
 
 
 @override_settings(LANGUAGE_CODE="ru", LANGUAGES=(("ru", "Russian"),))
-class UserInteraction(WebTest):
+class UserInteractionWebTest(WebTest):
     def setUp(self):
         super().setUp()
 
@@ -209,4 +209,22 @@ class UserInteraction(WebTest):
 
         assert resp.status_code == 200
         assert to_like_but is None
+        assert to_bookmark_but is None
+
+    def test_auth_user_bmark_exist(self):
+        """
+        post detail for auth user has NO button `bookmark`
+        if post is already in their bmarks
+        """
+        user = UserFactory(username="sunny")
+        self.app.set_user(user)
+        RelationFactory(post=self.post, user=user, in_bookmark=True)
+
+        url = reverse("posts:post_detail", kwargs={"slug": self.post.slug})
+
+        resp = self.app.get(url)
+
+        to_bookmark_but = resp.html.find("button", id="toBookMark")
+
+        assert resp.status_code == 200
         assert to_bookmark_but is None

@@ -40,10 +40,12 @@ class PostAdmin(TranslationAdmin):
         "title",
         "status",
         "is_deleted",
-        # "show_img",
+        "show_img",
         "published_at",
         "display_tags",
         "categ_link",
+        "count_likes",
+        "count_bmarks",
     ]
     list_select_related = ("categ", "author")
     list_editable = ["is_deleted"]  # , "status"]
@@ -122,7 +124,7 @@ class PostAdmin(TranslationAdmin):
     def show_img(self, obj):
         """if top_img show small thumbnail in admin table"""
         if obj.top_img:
-            return format_html("<img src={} width='60' />", obj.top_img_url)
+            return format_html("<img src={} width='60' />", obj.top_img.url)
 
     def display_tags(self, obj):
         """if tags make a flat list of them"""

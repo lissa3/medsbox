@@ -1,0 +1,18 @@
+{% load static i18n %}
+<!-- short represention -->
+<div class="card m-2" style="width: 28rem;">
+  {% if post.top_img %}
+  <img src="{{post.top_img.url}}" class="card-img-top" alt="top-img">
+  {% endif %}
+  <ul class="list-group list-group-flush">
+
+      <!-- <li class="list-group-item">created {post.created_at|date:"F d, Y"}}</li> -->
+      <li class="list-group-item"><h3>{{post.title}}</h3></li>
+      <li class="list-group-item">Published updated {{post.updated_at|date:"F d, Y"}}</li>
+      <li class="list-group-item">status = {{post.get_status_display}}</li>
+      <li class="list-group-item"><strong>{% trans "category" %}: {{post.categ.name}}</strong></li>
+    </ul>
+  <div class="card-body">
+    <a href="{% url 'devs:dev_detail_post' post.uuid %}"><button class="btn btn-primary">More details</button></a>
+  </div>
+</div>

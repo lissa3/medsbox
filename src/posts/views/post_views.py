@@ -258,3 +258,16 @@ class SearchPost(PostListMenuMixin, ListView):
         elif self.inp_errors:
             context["invalid_input"] = _("Query is invalid")
         return context
+
+
+class PostBookMarkCollection(LRM, ListView):
+    template_name = "posts/post_bmarks.html"
+    context_object_name = "posts"
+    paginate_by = 12
+
+    def get_queryset(self):
+        user = self.request.user
+        users_with_rels = user.user_rel.filter(in_bookmark=True).values_list(
+            "post_id", flat=True
+        )
+        return Post.objects.get_public().filter(id__in=users_with_rels)

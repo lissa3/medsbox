@@ -43,7 +43,7 @@
               {% if has_bookmarks %}
               <li >
                 <li><hr class="dropdown-divider"></li>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{% url 'posts:bmark_collection' %}">
                     {% trans 'Bookmarks' %}
                 </a>
               </li>

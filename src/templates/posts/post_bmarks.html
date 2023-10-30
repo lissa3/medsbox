@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12 col-sm-12 d-flex flex-wrap" id="post_list">
+    {% if posts %}
+      {% for post in posts%}
+        {% include "posts/parts/post_card.html" %}
+      {% endfor %}
+    </div>
+      {% include "posts/parts/pagination.html" %}
+    {% endif %}
+</div>
+
+{% endblock%}

@@ -20,7 +20,9 @@ class Relation(models.Model):
         self.old_like = self.like
 
     class Meta:
-        unique_together = ["user", "post"]
+        constraints = [
+            models.UniqueConstraint(fields=["user", "post"], name="unique_rels")
+        ]
 
     def save(self, *args, **kwargs):
         from src.core.utils.model_help import calc_count_likes, calc_count_marks
@@ -39,4 +41,4 @@ class Relation(models.Model):
             calc_count_marks(self.post)
 
     def __str__(self):
-        return f"User: {self.user} active in user-post-relations {self.like}"
+        return f"{self.user} rels: like {self.like} bmark:{self.in_bookmark} post {self.post}"

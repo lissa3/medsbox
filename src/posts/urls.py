@@ -1,6 +1,7 @@
 from django.urls import path, re_path
 
 from src.posts.views.post_views import (
+    PostBookMarkCollection,
     PostCategSearch,
     PostComment,
     PostDatumFilter,
@@ -34,6 +35,9 @@ urlpatterns = [
         "change-bookmark/<action>/",
         TrackBookmark.as_view(),
         name="change_bookmark",
+    ),
+    path(
+        "bmark-collection/", PostBookMarkCollection.as_view(), name="bmark_collection"
     ),
 ]
 

@@ -266,7 +266,9 @@ class UserLikedTestCase(TestCase):
 @override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
 class UserAddBookmarkTestCase(TestCase):
     def setUp(self) -> None:
-        self.post = PostFactory(status=Post.CurrentStatus.PUB.value)
+        author = StaffUserFactory(username="great_author")
+        self.post = PostFactory(status=Post.CurrentStatus.PUB.value, author=author)
+        self.post2 = PostFactory(status=Post.CurrentStatus.PUB.value, author=author)
         self.user = UserFactory(username="zoo")
 
     def test_can_bookmark(self):
@@ -280,6 +282,27 @@ class UserAddBookmarkTestCase(TestCase):
         finish = Relation.objects.count()
 
         self.assertEqual(finish, 1)
+
+    def test_posts_in_bookmarks(self):
+        """
+        display list of posts in bookmarks selected by auth users
+        """
+        user = UserFactory(username="sunny")
+        user_x = UserFactory(username="one")
+
+        self.client.force_login(user)
+        RelationFactory(post=self.post, user=user, in_bookmark=True)
+        RelationFactory(post=self.post, user=user_x, in_bookmark=True)
+        RelationFactory(post=self.post2, user=user, in_bookmark=True)
+
+        url = reverse("posts:bmark_collection")
+
+        resp = self.client.get(url)
+
+        count_posts = resp.context["posts"]
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(count_posts, 2)
 
     # def test_delete_bookmark(self):
     #     """auth user delete from bookmark"""
