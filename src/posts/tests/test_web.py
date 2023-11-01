@@ -147,28 +147,6 @@ class CategMenuTestCase(WebTest):
         self.assertTrue(lang, "ru")
 
 
-@override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
-@freeze_time("2023-01-12")
-class CalendMenuTestCase(WebTest):
-    @patch("django.utils.timezone.now")
-    def test_public_posts_order(self, mock_timezone):
-        """show public posts per month in year: aside UI menu;
-        posts created in past but later get published"""
-        dt = datetime(2023, 5, 21, tzinfo=tz.utc)
-        mock_timezone.return_value = dt
-        PostFactory.create_batch(6, status=Post.CurrentStatus.PUB.value)
-        path = reverse("posts:post_list")
-
-        resp = self.app.get(path)
-
-        calend_menu_year = resp.html.find("h5", class_="header_right")
-        a_links = resp.html.find("a", class_="calend_item")
-
-        assert resp.status_code == 200
-        assert "2023" in calend_menu_year.text
-        assert "May" in a_links.text
-
-
 @override_settings(LANGUAGE_CODE="ru", LANGUAGES=(("ru", "Russian"),))
 class UserInteractionWebTest(WebTest):
     def setUp(self):

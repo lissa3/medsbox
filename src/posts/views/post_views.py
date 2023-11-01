@@ -85,13 +85,10 @@ class PostCommFormView(LRM, SingleObjectMixin, FormView):
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
-            print("form is valid")
-            print(form.__dict__)
             comm = form.save(commit=False)
             comm.user = request.user
             comm.post = self.object
             Comment.add_root(instance=comm)
-            print("comment added ")
             return self.form_valid(form)
         else:
             print("form invalid")
@@ -131,16 +128,10 @@ class PostDatumFilter(ListView):
         else:
             return "posts/post_list.html"
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx["year"] = self._year
-        ctx["month"] = self._month
-        return ctx
-
     def dispatch(self, *args, **kwargs):
         self._year = kwargs.pop("year", None)
-        self._month = kwargs.pop("month", None)
-
+        str_month = kwargs.pop("month", None)
+        self._month = str_month.split("-")[1]
         return super().dispatch(*args, **kwargs)
 
 

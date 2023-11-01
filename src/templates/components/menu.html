@@ -16,9 +16,10 @@
         <!-- <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li> -->
-        <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'posts:post_list'%}">{% trans 'Posts'%}</a>
           </li>
+
 
           <li class="nav-item">
             <a class="nav-link" href="{% url 'contacts:feedback' %}">{% trans 'Contact' %}
@@ -41,11 +42,12 @@
               <li><a class="dropdown-item" id="subLink" href="{% url 'profiles:profile_detail' uuid=user.profile.uuid %}">{% trans "Profile" %}</a>
               </li>
               {% if has_bookmarks %}
+              <li><hr class="dropdown-divider"></li>
               <li >
-                <li><hr class="dropdown-divider"></li>
                 <a class="dropdown-item" href="{% url 'posts:bmark_collection' %}">
-                    {% trans 'Bookmarks' %}
-                </a>
+                  {% trans 'Bookmarks' %} <svg viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="bookmark heart fill" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-bookmark-heart-fill b-icon bi"><g><path d="M2 15.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v13.5zM8 4.41c1.387-1.425 4.854 1.07 0 4.277C3.146 5.48 6.613 2.986 8 4.412z"></path></g></svg>
+              </a>
+
               </li>
               {% endif %}
 

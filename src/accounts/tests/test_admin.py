@@ -4,8 +4,6 @@ from django_webtest import WebTest
 
 from src.accounts.admin import User
 from src.accounts.tests.factories import AdminSupUserFactory, UserFactory
-from src.posts.models.categ_model import Category
-from src.posts.tests.factories import CategoryFactory
 
 
 @override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))

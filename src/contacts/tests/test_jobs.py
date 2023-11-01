@@ -1,9 +1,7 @@
-import pytest
 import time_machine
 from django.conf import settings
 from django.urls import reverse
 
-from src.accounts.models import User
 from src.contacts.exceptions import *  # noqa
 from src.contacts.jobs.send_news import Job as SendMailJob
 from src.contacts.models import NewsLetter

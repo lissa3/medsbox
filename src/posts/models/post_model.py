@@ -88,7 +88,7 @@ class Post(TimeStamp):
     def save(self, *args, **kwargs):
         """auto create datetime if public status changes"""
         if self.status == 2:
-            self.published_at = timezone.now()
+            self.published_at = timezone.now()  # .date() no time part
         else:
             self.published_at = None
         super().save(*args, **kwargs)

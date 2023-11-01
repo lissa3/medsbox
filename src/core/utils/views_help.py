@@ -44,5 +44,4 @@ def limit_like(request, attempts=None):
     """
     num_likes = request.session.get("_count", 0) + 1
     request.session["_count"] = num_likes
-    print("too many attempts? ", num_likes > attempts)
     return num_likes > attempts

@@ -1,5 +1,6 @@
 from django.template import Context, Template
-from django.test import TestCase
+from django.test import TestCase, override_settings
+from freezegun import freeze_time
 from taggit.models import Tag
 
 from src.posts.models.categ_model import Category
@@ -24,8 +25,9 @@ class CategsTempTagsTest(TestCase):
         self.assertIn(self.categ_kid_2.name, rendered)
 
 
-class TagsInTempest(TestCase):
-    """test custom inclusion tag for rendering tags;
+class TagsInTempTest(TestCase):
+    """
+    test custom inclusion tag for rendering tags;
     tags only if they are linked to public posts
     """
 
@@ -47,3 +49,23 @@ class TagsInTempest(TestCase):
         self.assertIn(self.tag1.name, rendered)
         self.assertIn(self.tag2.name, rendered)
         self.assertNotIn(self.tag3.name, rendered)
+
+
+@override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
+class ArchiveTempTest(TestCase):
+    TEMPLATE = Template("{% load calend %} {% show_archive %}")
+
+    @freeze_time("2022-01-12")
+    def setUp(self):
+        self.post_1 = PostFactory(status=Post.CurrentStatus.PUB.value)
+        self.post_2 = PostFactory(status=Post.CurrentStatus.PUB.value)
+
+    @freeze_time("2023-05-23")
+    def test_archive_show(self):
+        PostFactory(status=Post.CurrentStatus.PUB.value)
+        rendered = self.TEMPLATE.render(Context({}))
+
+        self.assertIn(str(2022), rendered)
+        self.assertIn(str(2023), rendered)
+        self.assertIn("January", rendered)
+        self.assertIn("May", rendered)
