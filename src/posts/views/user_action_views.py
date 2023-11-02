@@ -73,6 +73,7 @@ class TrackBookmark(LRM, View):
                     {"status_code": 200, "msg": msg, "del_button": True}
                 )
             elif self.request.htmx and action == "delete":
+                # htmx-request for delete
                 rel = get_object_or_404(Relation, user=user, post=post)
                 rel.in_bookmark = False
                 rel.save()

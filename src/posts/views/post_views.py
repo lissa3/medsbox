@@ -47,17 +47,19 @@ class PostDetail(CategoryCrumbMixin, DetailView):
 
         if self.request.user.is_authenticated:
             # populate ctx with initial bools: user's likes and bmark for UI
-
             _post = self.get_object()
             _user = self.request.user
-            rel = Relation.objects.filter(post=_post, user=_user)
-            if rel:
-                rel_obj = rel.last()
+            try:
+                rel_obj = Relation.objects.get(post=_post, user=_user)
+                # bools for UI: current state for likes
                 if rel_obj.like:
                     ctx["liked"] = True
                 if rel_obj.in_bookmark:
                     ctx["display_bmark_button"] = False
-            else:
+                else:
+                    ctx["display_bmark_button"] = True
+
+            except Relation.DoesNotExist:
                 ctx.update({"display_bmark_button": True, "liked": False})
 
         comms = Comment.objects.filter(post=self.get_object()).exists()

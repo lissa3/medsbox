@@ -311,7 +311,7 @@ class UserAddBookmarkTestCase(TestCase):
         start = Relation.objects.count()
         path = reverse("posts:change_bookmark", kwargs={"action": "delete"})
         data = {"post_uuid": self.post.uuid, "user_id": self.user.id}
-        headers = {"HTTP_HX-Request": "true", "HTTP_REFERER": "foo"}
+        headers = {"HTTP_HX_Request": "true", "HTTP_REFERER": "foo"}
 
         self.client.post(path, data=data, **headers)
 

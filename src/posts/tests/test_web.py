@@ -3,7 +3,7 @@ from datetime import timezone as tz
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
-from django.test import override_settings
+from django.test import Client, override_settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_webtest import WebTest
@@ -153,6 +153,7 @@ class UserInteractionWebTest(WebTest):
         super().setUp()
 
         self.post = PostFactory(status=Post.CurrentStatus.PUB.value)
+        self.post2 = PostFactory(status=Post.CurrentStatus.PUB.value)
 
     def test_auth_user_page_buttons(self):
         """
@@ -206,3 +207,29 @@ class UserInteractionWebTest(WebTest):
 
         assert resp.status_code == 200
         assert to_bookmark_but is None
+
+    def test_bmark_exist_after_removing_from_other_post(self):
+        """
+        post detail user has button `bookmark`
+        after bmarks has been removed by another post
+        """
+        client = Client()
+        user = UserFactory(username="sunny")
+        client.force_login(user)
+
+        RelationFactory(post=self.post, user=user, in_bookmark=True)
+        headers = {"HTTP_HX_Request": "true", "HTTP_REFERER": "foo"}
+        data = {"post_uuid": self.post.uuid, "user_id": user.id}
+        url = reverse("posts:change_bookmark", kwargs={"action": "delete"})
+
+        resp = client.post(url, data=data, **headers)
+
+        url_other_post = reverse("posts:post_detail", kwargs={"slug": self.post2.slug})
+        self.app.set_user(user)
+        resp_other_post = self.app.get(url_other_post)
+
+        to_bookmark_but = resp_other_post.html.find("button", id="toBookMark")
+
+        assert resp.status_code == 200
+        assert resp_other_post.status_code == 200
+        assert to_bookmark_but is not None

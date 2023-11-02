@@ -47,7 +47,7 @@
         {% endif %}
         </div>
       </div>
-    {% if user.is_authenticated and display_bmark_button%}
+    {% if user.is_authenticated and display_bmark_button %}
     <div class="me-5 d-flex" id="bmarkDiv">
       <form action="{% url 'posts:change_bookmark' action='add' %}" method="POST" id="bookmark">
         {% csrf_token %}
