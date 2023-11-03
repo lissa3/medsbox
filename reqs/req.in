@@ -17,3 +17,5 @@ unidecode
 psycopg2==2.9.5
 django-rosetta==0.9.9
 django-recaptcha==3.0.0
+django-storages==1.14.2
+boto3==1.28.77

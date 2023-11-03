@@ -16,7 +16,7 @@ DATABASES = {
 
 # use in-memory-db
 # let op: email confirmation will be NOT in console
-EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
-
+# EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 USE_CAPCHA = False
