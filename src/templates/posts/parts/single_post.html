@@ -7,6 +7,7 @@
     <strong>{% trans "category" %}: {{post.categ.name}}</strong>
     <div class="content">
         {{post.content|safe}}
+        <!-- |truncatewords:10 }} -->
     </div>
     <div class="details">
       <a href="{% url 'posts:post_detail' post.slug %}">More details</a>

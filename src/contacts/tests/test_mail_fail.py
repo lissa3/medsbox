@@ -2,10 +2,10 @@ from smtplib import SMTPException
 from unittest import mock
 
 from django.core import mail
+from django.core.management import call_command
 from django.test import TestCase
 
 from src.accounts.models import User
-from src.contacts.jobs.send_news import Job as SendMailJob
 from src.profiles.tests.factories.profile_factory import ProfileFactory
 
 from ..exceptions import *  # noqa
@@ -19,9 +19,7 @@ class MailFailureTests(TestCase):
         letter = NewsLetterFactory(letter_status=1)  # noqa
 
         mock_fail.side_effect = SMTPException
-
-        send_mail_job = SendMailJob()
-        send_mail_job.execute()
+        call_command("send_news_letter")
 
         self.assertEqual(len(mail.outbox), 0)
         self.assertTrue(mock_fail.called)
@@ -41,9 +39,10 @@ class TestSendEmailJob(TestCase):
         user.is_active = False
         user.save()
         letter = NewsLetterFactory(letter_status=1)  # noqa
-        send_mail_job = SendMailJob()
+
         with self.assertRaises(NewsFansNotFoundException) as e:
-            send_mail_job.execute()
+            call_command("send_news_letter")
+
         self.assertEqual(str(e.exception), "No profiles not send news")
         self.assertEqual(len(mail.outbox), 0)
 
@@ -54,9 +53,9 @@ class TestSendEmailJob(TestCase):
         """
         profile = ProfileFactory()  # noqa
         letter = NewsLetterFactory(letter_status=1)  # noqa
-        send_mail_job = SendMailJob()
+
         with self.assertRaises(NewsFansNotFoundException) as e:
-            send_mail_job.execute()
+            call_command("send_news_letter")
 
         self.assertEqual(str(e.exception), "No profiles not send news")
         self.assertEqual(len(mail.outbox), 0)
@@ -66,9 +65,9 @@ class TestSendEmailJob(TestCase):
         if no letter -> no SendMail
         """
         profile = ProfileFactory(want_news=True)  # noqa
-        send_mail_job = SendMailJob()
+
         with self.assertRaises(LetterNotFoundException) as e:
-            send_mail_job.execute()
+            call_command("send_news_letter")
 
         self.assertEqual(str(e.exception), "No letter to send")
-        assert len(mail.outbox) == 0
+        self.assertEqual(len(mail.outbox), 0)

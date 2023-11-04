@@ -133,7 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
 LANGUAGES = (("ru", _("Russian")), ("en", _("English")), ("uk", _("Ukrainian")))
 
 USE_I18N = True
@@ -167,8 +167,7 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = True
-EMAIL_BACKEND = env("EMAIL_BACKEND")
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" # dev.py
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 
 # img upload limits
@@ -392,14 +391,14 @@ SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error"]
 
 # AWS
 
-AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+# AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+# AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+# AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
 
-AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = None
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ACL = None
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-AWS_QUERYSTRING_AUTH = False  # key will be not present in url
-AWS_S3_MAX_MEMORY_SIZE = 2200000
-AWS_S3_REGION_NAME = "eu-central-1"
+# AWS_QUERYSTRING_AUTH = False  # key will be not present in url
+# AWS_S3_MAX_MEMORY_SIZE = 2200000
+# AWS_S3_REGION_NAME = "eu-central-1"

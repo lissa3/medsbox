@@ -5,27 +5,23 @@
 <body>
   <div>
     <h3>Greetings from MedSandbox</h3>
-    <p>Here is some fresh content on our site</p>
     {% if letter %}
-      <p>Letter title: {{letter.title}}</p>
-      <p>Letter text: {{ letter.text|linebreaksbr }}</p>
-      <p>Here is a link to read a new article:
-        {% if posts %}
+      <p>{{letter.title}}</p>
+      <p>{{ letter.text|linebreaksbr }}</p>
+      <p>Please follow the link to read more
+      {% if posts %}
           {% for post in posts %}
-            <a href="#">Post title: {{post.title_ru}}</a>
-    {% comment %}
-    <a href="{{domain}}{% url 'posts:post_detail' letter.post.slug %}">Some post</a></p>
-    {% endcomment %}
+          <a href="{{domain}}{% url 'posts:post_detail' post.slug %}">{{post.title}}</a></p>
           {% endfor%}
           {% else %}
-          <p>No posts</p>
+          <p>No links to posts</p>
          {% endif %}
       {% endif %}
       <p>Best regards,</p>
       <p>Admin</p>
       <hr>
     <a href="{{domain}}{% url 'contacts:end_news' uuid=uuid %}">
-      Unsubscribe
+      Unsubscribe from news letters
     </a>
     </div>
   </body>
