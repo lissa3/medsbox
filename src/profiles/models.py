@@ -1,7 +1,7 @@
 import uuid
 
-from boto3.session import Session
-from django.conf import settings
+# from boto3.session import Session
+# from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.shortcuts import reverse
@@ -39,26 +39,10 @@ class Profile(TimeStamp):
     def __str__(self) -> str:
         return self.user.username
 
-    # def delete(self):
-    #     """if profile obj deleted; remove avatar file"""
-    #     self.avatar.delete()
-    #     super().delete()
-    # def delete(self, *args, **kwargs):
-    #     session = Session (settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
-    #     s3_resource = session.resource('s3')
-    #     s3_bucket = s3_resource.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
-
-    #     file_path = f"avatar/{self.id}" + str(self.avatar)
-    #     print("path is ",file_path)
-    #     response = s3_bucket.delete_objects(
-    #         Delete={
-    #             'Objects': [
-    #                 {
-    #                     'Key': file_path
-    #                 }
-    #             ]
-    #         })
-    #     super().delete(*args, **kwargs)
+    def delete(self):
+        """if profile obj deleted; remove avatar file"""
+        self.avatar.delete()
+        super().delete()
 
 
 class ProfileChart(Profile):
