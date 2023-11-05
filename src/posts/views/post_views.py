@@ -22,7 +22,7 @@ class PostList(PostListMenuMixin, ListView):
 
     template_name = "posts/post_list.html"
     context_object_name = "posts"
-    paginate_by = 4
+    paginate_by = 6
 
     def get_queryset(self):
         return (
@@ -93,7 +93,6 @@ class PostCommFormView(LRM, SingleObjectMixin, FormView):
             Comment.add_root(instance=comm)
             return self.form_valid(form)
         else:
-            print("form invalid")
             return self.form_invalid(form)
 
     def get_success_url(self):

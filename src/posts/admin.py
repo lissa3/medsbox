@@ -36,7 +36,7 @@ class PostAdmin(TranslationAdmin):
     search_fields = ("title", "categ__name")
     list_display = [
         "id",
-        # "author",
+        "send_status",
         "title",
         "status",
         "is_deleted",
@@ -48,11 +48,10 @@ class PostAdmin(TranslationAdmin):
         "count_bmarks",
     ]
     list_select_related = ("categ", "author")
-    list_editable = ["is_deleted"]  # , "status"]
     list_display_links = ["title"]
     radio_fields = {"status": admin.HORIZONTAL}
     save_on_top = True
-    list_filter = ["status", "created_at", SoftDelFilter]
+    list_filter = ["status", "created_at", SoftDelFilter, "send_status"]
     # list_filter = ["status", "created_at", "is_deleted"]
     list_per_page = 15
     actions = ("make_posts_published", "set_to_draft", "set_to_review")

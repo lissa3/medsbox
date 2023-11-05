@@ -20,13 +20,10 @@
         .then((data)=>{
           if(data.status_code ===200){
             let msg = data.msg;
-            console.log("msg from the server ",msg)
             jsBox.classList.add("green","slide");
             jsBox.textContent=  msg;
             if(data.del_button){
-              console.log("removing bmark button from the DOM");
               bmarkDiv.remove();
-              console.log("div removed");
             }
           }
           else if(data.status_code ===404){
