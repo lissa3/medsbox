@@ -3,14 +3,12 @@
 <div class="single_post">
     <h3>{{post.title}}</h3>
     <p>{{post.published_at|date:"F d, Y"}}</p>
-
     <strong>{% trans "category" %}: {{post.categ.name}}</strong>
     <div class="content">
-        {{post.content|safe}}
-        <!-- |truncatewords:10 }} -->
+        {{post.content|truncatewords_html:6|safe}}
     </div>
     <div class="details">
-      <a href="{% url 'posts:post_detail' post.slug %}">More details</a>
+      <a href="{% url 'posts:post_detail' post.slug %}">{% trans 'Read more' %}</a>
     </div>
     <hr>
 </div>

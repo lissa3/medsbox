@@ -10,34 +10,33 @@
   </div>
 
 </div>
-<div class="row">
-  <aside class="col-md-3 col-sm-12">
+<div class="wrap">
+  <aside class="grid-categs">
     <!-- <nav role="navigation" aria-label="Sidebar Navigation">
       <div class="list-group"> -->
         {% show_categs %}
         <!-- </div>
     </nav>     -->
   </aside>
-  <div class="col-md-6 col-sm-12" id="post_list">
+  <div class="grid-content" id="post_list">
     {% if posts %}
       {% for post in posts%}
         {% include "posts/parts/single_post.html" %}
       {% endfor %}
-
-      {# {% include "posts/parts/posts_collection.html" %} #}
       {% include "posts/parts/pagination.html" %}
-
-
     {% else %}
-    <div id="not-found">
+    <div id="not-found" class="not-found p-2">
         {% trans "Sorry. Nothing found for your search" %}
     </div>
     {% include "posts/parts/search_errors.html" %}
     {% endif %}
   </div>
-  <div class="col-md-3 col-sm-12 d-flex flex-column">
+  <div class="grid-archive ">
     {% show_archive %}
+  </div>
+  <div class="grid-tags">
     {% show_tags %}
+
   </div>
 
 </div>

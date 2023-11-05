@@ -115,7 +115,7 @@ class MarkNotificationsAsReadTestCase(TestCase):
         url = reverse(
             "notifications:mark_top_read",
         )
-        print("I am here")
+
         with self.assertRaises(HtmxFailureError) as e:
             resp = self.client.post(url)  # noqa
 

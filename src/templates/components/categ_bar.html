@@ -6,10 +6,10 @@
     {% recursetree categs %}
         <li class="node-name categ_item" data-li>
           {% if node.is_leaf %}
-          <a hx-get="{% url 'posts:cat_search' node.slug %}" hx-target="#post_list" class="node-link" >{{node.name}}({{node.num}})</a>
+          <a hx-get="{% url 'posts:cat_search' node.slug %}" hx-target="#post_list" class="node-link" >{{node.name}} {{node.num}}</a>
           {% else %}
           <!-- 2 siblings: a tag and ul children -->
-            <a hx-get="{% url 'posts:cat_search' node.slug %}" hx-target="#post_list" class="node-link to-toggle" data-dropdown-link>{{node.name}} &#x25B8;({{node.num}})</a>
+            <a hx-get="{% url 'posts:cat_search' node.slug %}" hx-target="#post_list" class="node-link to-toggle" data-dropdown-link>{{node.name}} &#x25B8; {{node.num}}</a>
             <ul class="children">
               {{ children }}
             </ul>
@@ -18,6 +18,7 @@
         {% endrecursetree %}
     </ul>
 </div>
+
 
 
 

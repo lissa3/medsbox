@@ -1,7 +1,6 @@
 {% load i18n pags %}
 <!-- condition only for tag-,catges search  -->
   {% if posts %}
-      <h3>{% trans 'Found' %}  {{posts.count}} {% trans 'matches' %} </h3>
       {% for post in posts%}
           {% include "posts/parts/single_post.html" %}
       {% endfor %}

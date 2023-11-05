@@ -6,7 +6,6 @@ const checkInp = (checkbox,inp)=>{
     2.toggle class 'disabled' on submit button
      */
     if(checkbox){
-        console.log("checkbox in DOM; line 9")
         // checkbox(remove avatar) present in DOM:
         // checked vs unchecked
         checkbox.addEventListener("change",(e)=>{
@@ -37,7 +36,6 @@ const checkInp = (checkbox,inp)=>{
         // or "attach img" but not both
         if(checkbox!=null){
           // remove existed avatar (clear image input if user attached img occasionally);
-          console.log("checkbox NOT null; line 40")
           checkbox.addEventListener("change",(e)=>{
           if(checkbox.checked){
             inp.value = null
@@ -55,7 +53,6 @@ const checkInp = (checkbox,inp)=>{
           }
         })
         }else{
-       console.log("initial default state;line 58")
        // checkbox NOT in DOM (avatar == default static image)
         inp.addEventListener("change",()=>{
         // toggle class 'disabled' on submit button

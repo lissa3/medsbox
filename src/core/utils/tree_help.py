@@ -37,8 +37,6 @@ def get_cached_trees(queryset) -> list:
     for obj in queryset:
         obj._cached_children = []
         if obj.depth == queryset[0].depth:
-            # print("line 45 obj depth == qs[0]")
-            # print("adding to top node")
             add_top_node(obj, top_nodes, path)
         else:
             while not is_child_of(obj, parent := path[-1]):
