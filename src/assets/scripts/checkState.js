@@ -1,6 +1,81 @@
+import { formatFileSize,checkExt,fileToDataUri } from "./utils";
+import { sendAvaUpdate } from "./sendAvaForm";
+const checkInp = (checkbox,inp)=>{
+    /*
+    func for upload image:
+    1.should help to send only one state to the server:
+    either remove avatar or update the old one;
+    2.toggle class 'disabled' on submit button
+     */
+    if(checkbox){
+        // checkbox(remove avatar) present in DOM:
+        // checked vs unchecked
+        checkbox.addEventListener("change",(e)=>{
+        if(checkbox.checked){
+            // checkbox checked = avatar should be removed
+          inp.value = null //
+          butSubmit.classList.remove("disabled")
+         }
+         else{
+          butSubmit.classList.add("disabled")
+        }
+
+       });
+       inp.addEventListener("change",()=>{
+        if(inp.value){
+          checkbox.checked = false;
+          butSubmit.classList.remove("disabled")
+
+        }else{
+          butSubmit.classList.add("disabled");
+        }
+      })
+
+    }
+    else{
+        // checkbox present in DOM but not
+        // state can contain either "remove img"
+        // or "attach img" but not both
+        if(checkbox!=null){
+          // remove existed avatar (clear image input if user attached img occasionally);
+          checkbox.addEventListener("change",(e)=>{
+          if(checkbox.checked){
+            inp.value = null
+            butSubmit.classList.remove("disabled")
+          }else{
+            butSubmit.classList.add("disabled")
+          }
+          });
+        inp.addEventListener("change",()=>{
+          if(inp.value){
+            checkbox.checked = false;
+            butSubmit.classList.remove("disabled");
+          }else{
+            butSubmit.classList.add("disabled");
+          }
+        })
+        }else{
+       // checkbox NOT in DOM (avatar == default static image)
+        inp.addEventListener("change",()=>{
+        // toggle class 'disabled' on submit button
+          if(inp.value){
+            butSubmit.classList.remove("disabled")
+          }else{
+            butSubmit.classList.add("disabled")
+
+          }
+        })
+
+      }
+    }
+}
+// canvas flow
 let canvas,ctx,avatar,newImgUrl,serverErrMsg;
   const WIDTH = 600;
   const form = document.getElementById("upForm");
+  if(form){
+
+
   const url = form.getAttribute("action");
   const checkbox = document.querySelector("#avatar-clear_id");
   const inp = document.querySelector("#imgInp");
@@ -14,7 +89,11 @@ let canvas,ctx,avatar,newImgUrl,serverErrMsg;
   function init(){
     canvas = document.createElement("canvas");
     ctx = canvas.getContext('2d');
-    form.addEventListener("submit",upload);
+    if(form){
+      const url = form.getAttribute("action");
+      form.addEventListener("submit",upload);
+
+    }
   }
   async function upload(e){
     e.preventDefault()
@@ -39,18 +118,14 @@ let canvas,ctx,avatar,newImgUrl,serverErrMsg;
       }
       const res = await fileToDataUri(file) // base64 encoded
       if(res){
-      // console.log("res is",res)
         let img = new Image();
         img.src = res // base64 encoded
-      // console.log("img created",img.src)
         img.onload = function(e){
-
-          let initialWidth = img.width;
           let initialHeight = img.height;
+          let initialWidth = img.width;
           if(initialSize <300000)  {
-      // file(less 300KB) without resizing
-      // console.log("size is small",img)
-      //console.log("file is rel small; upload as it is");
+          // file(less 300KB) without resizing
+
             sendAvaUpdate(url,avatar=file)
           }
           else if(initialWidth <WIDTH)  {
@@ -71,14 +146,15 @@ let canvas,ctx,avatar,newImgUrl,serverErrMsg;
         }
       }else{
       // error during reader file load
-        console.log("line 128 ")
         jsErr.textContent = "Something went wrong; uplaod file failed"
         }
       }
       else{
       //file detached; remove existing avatar
-      console.log("file detached; removing exisitnig avatar")
+      // console.log("file detached; removing exisitnig avatar")
       sendAvaUpdate(url,avatar=false);
     }
-
+  }
 }
+
+

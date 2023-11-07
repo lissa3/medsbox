@@ -1,0 +1,15 @@
+.bell{
+    background-color:#e5e9ed6e ;
+    border-radius: 8px;
+    display: flex;
+ }
+
+ .notif_container{
+     min-width: 600px;
+     border-radius: 10px;
+     background-color:#d9ddde;
+     padding: 1em;
+ }
+ #notis.dropdown-menu{
+     background-color:#e5f0ec;
+ }
