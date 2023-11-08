@@ -2,9 +2,9 @@ from smtplib import SMTPException
 
 from django.conf import settings
 from django.core import mail
+from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django_extensions.management.jobs import WeeklyJob
 
 from src.contacts.exceptions import *  # noqa
 from src.contacts.models import NewsLetter
@@ -12,18 +12,18 @@ from src.posts.models.post_model import Post
 from src.profiles.models import Profile
 
 
-class Job(WeeklyJob):
+class Command(BaseCommand):
     """
     users: active status and profile wanted_niews
-    will get email with news weekly;
+    will get email with news weekly?;
     News letter may not contain links to posts
     TODO: better way to arrange unsubscribe
 
     """
 
-    help = "Send news letter"  # noqa
+    help = "Send a newsletter to subscribed users"  # noqa
 
-    def execute(self):
+    def handle(self, *args, **options):
         _date = timezone.localdate()
         str_date = _date.strftime("%d/%m/%Y")
         stamp = f"Newsletter {_date:%A}, {_date:%b}. {_date:%d} {str_date}"
@@ -31,9 +31,10 @@ class Job(WeeklyJob):
         profiles = Profile.objects.send_news().select_related("user")
         letter = NewsLetter.objects.filter(letter_status=1).last()
         ctx = {"letter": letter, "domain": domain}
+
         if profiles and letter:
             try:
-                posts = Post.objects.filter(send_status=1, letter=letter)
+                posts = Post.objects.get_public().filter(send_status=1, letter=letter)
                 ctx.update({"posts": posts})
                 for profile in profiles:
                     ctx.update({"uuid": profile.uuid})
@@ -53,6 +54,7 @@ class Job(WeeklyJob):
                     for post in posts:
                         post.send_status = 2
                         post.save()
+                self.stdout.write(self.style.SUCCESS("Successfully sent newletter"))
 
             except SMTPException as e:
                 print("smth went wrong ", e)

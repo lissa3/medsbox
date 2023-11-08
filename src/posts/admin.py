@@ -52,7 +52,7 @@ class PostAdmin(TranslationAdmin):
     list_display_links = ["title"]
     radio_fields = {"status": admin.HORIZONTAL}
     save_on_top = True
-    list_filter = ["status", "created_at", SoftDelFilter]
+    list_filter = ["status", "created_at", SoftDelFilter, "send_status"]
     # list_filter = ["status", "created_at", "is_deleted"]
     list_per_page = 15
     actions = ("make_posts_published", "set_to_draft", "set_to_review")
