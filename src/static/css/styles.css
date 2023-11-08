@@ -16,7 +16,7 @@ body padding-top: 165px;
 html,body{
   margin:0;
   padding: 0;
-  background-color:#f1dfc5;
+  background-color:#f0e1cd;
   font-family:"Poppins",sans-serif;
   height: 100%;
 }
@@ -54,6 +54,8 @@ scroll to top button
 }
 .wraps {
   min-height: 100%;
+  /* max-width:100%; */
+  overflow: hidden;
   display:flex;
   flex-direction: column;
 }
@@ -67,7 +69,7 @@ footer{
 .red{
   color: red;
 }
-
+/* for likes .redish */
 .redish{
   color: rgb(234, 164, 164);
 }
@@ -77,24 +79,14 @@ footer{
   padding:0.5rem;
   border-radius: 5px;
 }
-.note{
-  background-color: #7db099;
-  color:white;
-  padding:5px 10px;
-  border-radius: 5px;
 
-}
-.or{
-  background-color: #f0551d;
-}
+/* .green in flash msg */
 .green{
   background-color:#1987547d;
   padding:10px;
   border-radius: 10px;
 }
-.blue{
-  background-color: #296684;
-}
+/* for admin? */
 .wide{
   width: 100%;
 }
@@ -105,16 +97,63 @@ footer{
   margin:20px 0;
   border-radius: 5px;
 }
-
 /* override bootstrap 5 */
 .breadcrumb-item {
     color:#7e736f;
-    font-size: 1.5rem;
 }
+/* breadcrum a tag */
 .breadcrumb-item a{
-  color:#0f3649
+  color:#0f3649;
+  text-decoration: none;
 
 }
+/* test with grid layout */
+.wrap{
+  display:grid;
+  grid-gap:1.5rem;
+  grid-template-columns:1fr;
+  /* grid-template-rows: 300px 600px 300px 300px; */
+}
+.grid-tags{
+  grid-row:4/5;
+}
+.grid-categs{
+  grid-row:1/2;
+}
+.grid-content{
+  grid-row:3/4;
+  padding-left:1rem;
+}
+.grid-archive{
+  grid-row:2/3;
+ }
+
+@media (min-width:700px){
+.wrap{
+  display:grid;
+  grid-gap:1rem;
+  grid-template-columns: 18% 60% 22% ;
+  /* padding-block:2rem; */
+  width:100%;
+  /* margin-inline:  auto;  */
+ }
+.grid-categs{
+  grid-row:1/3;
+ }
+.grid-content{
+  grid-row:1/3;
+  padding-left:1rem;
+ }
+.grid-archive{
+  grid-row:1/2;
+ }
+.grid-tags{
+  grid-row:2/3;
+ }
+}
+/* end test with grid layout */
+
+
  /* override bootstrap 5 */
  .btn-secondary {
     background-color: rgb(165, 46, 6);
@@ -156,7 +195,7 @@ footer{
     background-color:#302725;
     border-color:#302725;
     color:white;
-    /* color:rgb(212, 205, 177);     */
+
 }
 .btn-warning {
     background-color:#c34b14cf;
@@ -455,58 +494,6 @@ a.reply:visited {
   --color-9: "#ee817d",
   --color-10: "#36654f",
 }
-
-.color-8{
- fill:coral;
-}
-.color-2{
- fill: darkmagenta;
-}
-.color-3{
- fill: firebrick;
-}
-.color-4{
- fill: sienna;
-}
-.color-5{
- fill: silver;
-}
-.color-6{
- fill: forestgreen;
-}
-.color-7{
- fill: teal;
-
-}
-.color-1{
- fill: rgb(220, 81, 56);
-}
-.color-9{
- fill: goldenrod;
-}
-.color-10{
- fill: orangered;
-}
-.avat {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.letter{
-  fill:white;
-
-}
-
-/* search result highlight */
-/* todo ... */
-.search-result{
-  color: #f0551d;
-  font-weight: 900;
-}
-
 
 /* *******************
 Pagination

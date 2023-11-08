@@ -57,7 +57,6 @@ class ShowDevPostList(SURM, ListView):
     def get_context_data(self, **kwargs):
         """author can see in admin their permitted objects"""
         ctx = super().get_context_data(**kwargs)
-        print("header is ", self.header)
 
         ctx["header"] = self.header
         # if self.request.user.has_perm("posts.add_post"):
@@ -112,7 +111,6 @@ class ChangeState(SURM, View):
     def post(self, request, **kwargs):
         uuid = request.POST.get("uuid", None)
         current_state = request.POST.get("current_state")
-        print("current status", current_state)
         post = get_object_or_404(
             Post, uuid=uuid, status=current_state, author=self.request.user
         )

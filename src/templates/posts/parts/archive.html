@@ -1,6 +1,6 @@
 {% load i18n %}
-<div class=" text-center mb-2 pt-2 pb-2">
-  <h3>{%trans 'History' %}</h3>
+<div class="mb-2  pb-2">
+  <h4>{%trans 'History' %}</h4>
   {% for year,month_info in archives %}
   <div class="dropdown">
       <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -10,8 +10,6 @@
         {% for items in month_info %}
           <li><a class="dropdown-item" hx-get="{% url 'posts:filter_calend' year=year month=items.0 %}" hx-target="#post_list" class="calend_item">{{items.0|date:"F"}}-<span class="circle_num">{{items.1}}</span></a></li>
         {% endfor %}
-
-
       </ul>
     </div>
   {% endfor %}

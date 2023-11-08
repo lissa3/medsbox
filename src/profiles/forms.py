@@ -53,7 +53,6 @@ class CustomUploadImageField(ImageField):
                     params={"size": filesizeformat(min_upload_size)},
                 )
             if up_file.size > max_upload_size:
-                # print("too big ...")
                 raise ValidationError(
                     err_msg["max_size"],
                     params={"size": filesizeformat(max_upload_size)},

@@ -5,8 +5,6 @@
   <img src="{{post.top_img.url}}" class="card-img-top" alt="top-img">
   {% endif %}
   <ul class="list-group list-group-flush">
-
-      <!-- <li class="list-group-item">created {post.created_at|date:"F d, Y"}}</li> -->
       <li class="list-group-item"><h3>{{post.title}}</h3></li>
       <li class="list-group-item">Published updated {{post.updated_at|date:"F d, Y"}}</li>
       <li class="list-group-item">status = {{post.get_status_display}}</li>

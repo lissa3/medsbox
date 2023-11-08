@@ -97,7 +97,6 @@ class TopCommentsPostDetailWebTestCase(WebTest):
         div_comms = resp_submit.html.find("div", class_="comms")
 
         msg_txt = _("This field is required.")
-        print(resp_submit.context["form"].errors)
 
         self.assertEqual(self.resp.status_code, 200)
         self.assertEqual(resp_submit.status_code, 200)

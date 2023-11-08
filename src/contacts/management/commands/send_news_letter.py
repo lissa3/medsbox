@@ -65,3 +65,5 @@ class Command(BaseCommand):
                 raise NewsFansNotFoundException("No profiles not send news")
             elif not letter:
                 raise LetterNotFoundException("No letter to send")
+
+        self.stdout.write(self.style.SUCCESS("Successfully sent newletter"))

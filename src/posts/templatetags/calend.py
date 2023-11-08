@@ -12,12 +12,10 @@ register = template.Library()
 def show_archive(**kwargs):
     """substitute template sidebar `calender` with dropdown archive"""
     arch = Post.objects.get_public().datetimes("published_at", "month", order="DESC")
-    # print("arch is", arch.count()) # amount months with posts
     archives = {}
     for item in arch:
         year = item.year
         month = item.month
-        print("month ", month)
         for i in range(1, 13):
             if i == month:
                 try:

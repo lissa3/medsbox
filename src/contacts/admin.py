@@ -10,6 +10,7 @@ class NewsLetterAdmin(admin.ModelAdmin):
     related posts status should be changd
     """
 
+    list_display_links = ["title"]
     date_hierarchy = "added_at"
     search_fields = ("title", "letter_status")
 

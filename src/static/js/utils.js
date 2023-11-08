@@ -63,8 +63,6 @@ let helpUtil =  (url,name)=>{
       u8arr[lenData]= bstr.charCodeAt(lenData);
   }
   const file = new File([u8arr],name,{type:mime})
-  // console.log("final file ext is ",mime)
-  // console.log("w,h do not exist")
   return file;
 }
 
@@ -106,6 +104,24 @@ function topFunction() {
   document.documentElement.scrollTop = 0;
 }
 
+// button to the topFunction//Get the button
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+    toTop.style.display = "block";
+  } else {
+    toTop.style.display = "none";
+  }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
 
 
 
