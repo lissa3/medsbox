@@ -482,18 +482,6 @@ a.reply:visited {
 }
 /* TODO: svg for avatar */
 
-:ava {
-  --color-1: "#e58a8a",
-  --color-2: "#7f2626",
-  --color-3: "#7fb39b",
-  --color-4: "#a68f2c",
-  --color-5: "#44697c",
-  --color-6: "#75447c",
-  --color-7: "#745111",
-  --color-8: "#d3c6a2",
-  --color-9: "#ee817d",
-  --color-10: "#36654f",
-}
 
 /* *******************
 Pagination

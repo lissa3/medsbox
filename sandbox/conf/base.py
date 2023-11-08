@@ -2,7 +2,7 @@
 django 4.2.1
 """
 
-import os
+
 from pathlib import Path
 
 import environ
@@ -106,13 +106,6 @@ WSGI_APPLICATION = "sandbox.wsgi.application"
 #         "PASSWORD": env("DB_PSW"),
 #         "HOST": "localhost",
 #         "PORT": "5432",
-#     }
-# }
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
 
