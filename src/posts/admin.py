@@ -15,6 +15,7 @@ from src.contacts.models import NewsLetter
 from src.core.utils.admin_help import admin_link
 from src.posts.filters import SoftDelFilter
 from src.posts.models.categ_model import Category
+from src.posts.models.media_model import Video
 from src.posts.models.post_model import Post
 
 
@@ -24,6 +25,16 @@ class CategoryAdmin(TreeAdmin, TranslationAdmin):
     list_display = ["name", "slug"]
     list_display_links = ["name"]
     ordering = ["path"]
+
+
+@admin.register(Video)
+class Video(admin.ModelAdmin):
+    list_display = ["id", "show_thumb"]
+
+    def show_thumb(self, obj):
+        """if top_img show small thumbnail in admin table"""
+        if obj.thumbnail:
+            return format_html("<img src={} width='60' />", obj.thumbnail.url)
 
 
 @admin.register(Post)

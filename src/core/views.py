@@ -1,9 +1,11 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
+from src.posts.models.media_model import Video
+
 
 def home(request: HttpRequest) -> HttpResponse:
-    ctx = {}
+    ctx = {"vidos": Video.objects.last()}
     return render(request, "core/home.html", ctx)
 
 

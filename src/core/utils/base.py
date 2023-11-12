@@ -36,6 +36,8 @@ def upload_img(instance, filepath):
         return os.path.join("post", folder, new_file_name)
     elif klass == "category":
         return os.path.join("category", new_file_name)
+    elif klass == "video":
+        return os.path.join("video", new_file_name)
 
 
 def show_comment_form(update_time):

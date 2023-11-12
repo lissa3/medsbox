@@ -19,7 +19,7 @@
       {% include "components/post_categs.html" with categ_dict=cats_path %}
     </div>
     {% if post.top_img %}
-    <img src="{{post.top_img.url}}" alt="post_img">
+    <img src="{{post.top_img.url}}" class="img-fluid" alt="post_img">
     {% endif %}
     <div class="content">
         {{post.content|safe}}
@@ -141,13 +141,14 @@
   </div>
   </div>
 
-  <div class="col-md-3 col-sm-12 d-flex flex-column">
+  <div class="col-md-3 col-sm-12 d-flex flex-column hidden-mobile">
     {% show_archive %}
     {% show_tags %}
   </div>
   </div>
   <hr>
 
+  <button onclick="topFunction()" id="toTop" title="Go to top" style="display: block;">{% trans "Go Top" %}</button>
 {% endblock%}
 
 {% block js %}

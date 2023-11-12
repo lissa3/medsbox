@@ -25,28 +25,7 @@ body{
   /* width added new 27 april 2023 */
   width: 100%;
 }
-/* #########################
-scroll to top button
-######################### */
-#toTop {
-  /* display: none; */ /*default */
-  position: fixed;
-  bottom: 20px;
-  right: 30px;
-  z-index: 99;
-  border: none;
-  outline: none;
-  background-color:rgb(165, 46, 6);
-  color: white;
-  cursor: pointer;
-  padding: 15px;
-  border-radius: 10px;
-  font-size: 18px;
-}
 
-#toTop:hover {
-  background-color: #555;
-}
 @media screen and (min-width: 600px){
   body{
     padding-top:150px;
@@ -110,7 +89,7 @@ footer{
 /* test with grid layout */
 .wrap{
   display:grid;
-  grid-gap:1.5rem;
+  grid-gap:0.5rem;
   grid-template-columns:1fr;
   /* grid-template-rows: 300px 600px 300px 300px; */
 }
@@ -123,6 +102,8 @@ footer{
 .grid-content{
   grid-row:3/4;
   padding-left:1rem;
+  margin-top: -25px;
+
 }
 .grid-archive{
   grid-row:2/3;
@@ -131,7 +112,7 @@ footer{
 @media (min-width:700px){
 .wrap{
   display:grid;
-  grid-gap:1rem;
+  grid-gap:1.5rem;
   grid-template-columns: 18% 60% 22% ;
   /* padding-block:2rem; */
   width:100%;
@@ -156,33 +137,35 @@ footer{
 
  /* override bootstrap 5 */
  .btn-secondary {
-    background-color: rgb(165, 46, 6);
+    background-color: #914127e6;
     border-color:rgb(165, 46, 6);
     color:cornsilk
 }
  .btn-secondary:hover {
     background-color: rgb(121, 44, 19);
     border-color:rgb(165, 46, 6);
-    color:cornsilk
+    color:cornsilk;
 }
 .btn-success {
-    background-color: #246d4c;
+    background-color:#466c5bed;
     border-color:#246d4c;
     color:cornsilk;
+    box-shadow: none;
 }
 .btn-success:hover {
-    background-color: #103725;
+    background-color: #416153ed;
     border-color:#246d4c;
     color:cornsilk;
+    box-shadow: none;
 }
 .btn-primary {
-    background-color: #296684;
+    background-color: #51666a;
     border-color:#296684;
     color:cornsilk;
 }
 .btn-primary:hover {
-    background-color: #0f3649;
-    border-color:#296684;
+    background-color: #444e53;
+    border-color:#1a3643;
     color:cornsilk;
 }
 
@@ -205,27 +188,30 @@ footer{
 }
 .btn-warning:hover {
     background-color:#ac3e0acf;
-    border-color:#c34b14cf;
+    border-color:#f2f0eecf;
     color:white;
     font-size: larger;
 }
 .btn-outline {
-    border-color:black;
-    background-color: #eceae3cc;
+    border-radius: 8px;
+    border:1px #ccc8c8ba solid;
+    background-color:#5d5a5a14;
 }
 .btn-outline:hover {
-    background-color:#bbb3b3;
+    background-color:#9f9898ba;
 }
 .btn-danger{
-  background-color:#cd1f1fe4;
+  background-color:#ac1919e4;
   border-color:#be0808cf;
   border-radius: 8px;
   color:white;
   font-size: smaller;
+  box-shadow: none;
 }
 .btn-danger:hover{
-  background-color:#f41313;
-  border-color:#f20a0acf;
+  background-color:#ba3333;
+  border-color: transparent;
+  /* border-color:#f20a0acf; */
   border-radius: 8px;
   color:white;
 
@@ -301,7 +287,7 @@ footer{
 
 a.general{
     color:#7e736f;
-    font-size: 1.5rem;
+    font-size: 1em;
 }
 a.red{
     color:#f0551d;

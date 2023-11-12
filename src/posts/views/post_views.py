@@ -33,8 +33,7 @@ class PostList(PostListMenuMixin, ListView):
 class PostDetail(CategoryCrumbMixin, DetailView):
     """
     Detail view to display post object with comments;
-    they can be either  all related comments or selected(via notifications);
-    availability check for comments tools via tempate
+    ability to check comments tools via template
     """
 
     model = Post
@@ -44,7 +43,7 @@ class PostDetail(CategoryCrumbMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-
+        # print("full path is",self.request.get_full_path())
         if self.request.user.is_authenticated:
             # populate ctx with initial bools: user's likes and bmark for UI
             _post = self.get_object()
@@ -74,6 +73,7 @@ class PostDetail(CategoryCrumbMixin, DetailView):
         return ctx
 
     def dispatch(self, *args, **kwargs):
+        #  all related comments or selected thread (via notifications);
         self._thread_uuid = kwargs.pop("thread_uuid", None)
         return super().dispatch(*args, **kwargs)
 
@@ -195,6 +195,7 @@ class PostCategSearch(PostListMenuMixin, ListView):
             return "posts/post_list.html"
 
     def get_context_data(self, **kwargs):
+        # add attr `_slug` for pagination based on htmx
         ctx = super().get_context_data(**kwargs)
         ctx["count_total"] = self.get_queryset().count()
         ctx["slug"] = self._slug

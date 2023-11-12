@@ -100,7 +100,8 @@
         width: 600px;
     }  */
 }
-@media only screen and (max-width: 580px) {
+/* @media only screen and (max-width: 580px) { */
+@media only screen and (max-width: 770px) {
     .search-box{
         width: 100%;
         justify-content:center;

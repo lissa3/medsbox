@@ -48,6 +48,7 @@ THIRD_PARTY = [
     "django_ckeditor_5",
     "rosetta",
     "captcha",
+    "embed_video",
 ]
 
 

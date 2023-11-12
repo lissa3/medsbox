@@ -1,14 +1,25 @@
 {% load static i18n %}
 <!-- short represention -->
 <div class="single_post">
-    <h3>{{post.title}}</h3>
-    <p>{{post.published_at|date:"F d, Y"}}</p>
-    <strong>{% trans "category" %}: {{post.categ.name}}</strong>
-    <div class="content">
-        {{post.content|truncatewords_html:6|safe}}
+    <div class="single_post__title">{{post.title}}</div>
+    {% if post.top_img %}
+    <div class="single_post__image d-flex">
+      <img src="{{post.top_img.url}}" class="img-fluid" alt="post_img">
     </div>
-    <div class="details">
-      <a href="{% url 'posts:post_detail' post.slug %}">{% trans 'Read more' %}</a>
+    {% endif %}
+    <div>
+      <p class="single_post__date">{{post.published_at|date:"F d, Y"}}</p>
+      <p class="single_post__categ">
+        <strong>{% trans "category" %}</strong>: {{post.categ.name}}
+
+      </p>
     </div>
-    <hr>
+    <div class="single_post_content">
+          {{post.content|truncatewords_html:6|safe}}
+      </div>
+      <div class="single_post__link d-flex">
+        <a href="{% url 'posts:post_detail' post.slug %}">
+          {% trans 'Read more' %}
+        </a>
+    </div>
 </div>

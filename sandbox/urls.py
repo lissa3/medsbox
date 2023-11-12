@@ -6,7 +6,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 
-from src.core.utils.views_help import clear
+from src.core.utils.views_help import clear, terms
 from src.core.views import home
 
 # handler404 = "src.core.utils.views_help.handler404"
@@ -24,6 +24,7 @@ urlpatterns = [
     path("contacts/", include("src.contacts.urls")),
     path("notifications/", include("src.notifications.urls")),
     path("in-development/", include("src.devs.urls")),
+    path("terms", terms, name="terms"),
 ]
 
 htmx_urlpatterns = [
