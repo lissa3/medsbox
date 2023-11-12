@@ -52,4 +52,5 @@ class CustomSignupForm(SignupForm):
             )
         )
     )
+
     field_order = ("username", "email", "password1", "password2", "agree_to_terms")

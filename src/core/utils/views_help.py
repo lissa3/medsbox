@@ -1,5 +1,6 @@
 from django.contrib.postgres.search import SearchQuery
 from django.http import HttpResponse
+from django.shortcuts import render
 
 from src.posts.models.post_model import Post
 
@@ -7,6 +8,14 @@ from src.posts.models.post_model import Post
 def clear(request):
     """(htmx) help func to clean elem on htmx requests"""
     return HttpResponse("")
+
+
+def terms(request):
+    """show terms and conditions by sign-up"""
+    return render(
+        request,
+        "core/terms_conditions.html",
+    )
 
 
 def make_query(current_lang, user_inp):

@@ -28,10 +28,12 @@
   {% for field in form.visible_fields %}
     {% if field.name == "agree_to_terms" %}
     <div class="d-flex mt-3">
+      {{field}}
       <label for="{{ field.id_for_label }}" class="control-label mx-2">
         {{ field.label }}
-        </label>
-        {{field}}
+      </label>
+
+
     </div>
         {% else %}
         <label for="{{ field.id_for_label }}" class="control-label">
@@ -63,6 +65,7 @@
     <button type="submit" class="btn btn-success">{% trans "Sign Up" %} &raquo;</button>
   </div>
 </form>
+<div id="term"></div>
 </div>
 
 {% endblock %}
