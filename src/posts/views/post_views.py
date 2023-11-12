@@ -41,6 +41,11 @@ class PostDetail(CategoryCrumbMixin, DetailView):
     template_name = "posts/post_detail.html"
     _thread_uuid = None
 
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            Post.objects.get_public(), slug=self.kwargs.get("slug")
+        )
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         # print("full path is",self.request.get_full_path())

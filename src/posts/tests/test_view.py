@@ -213,10 +213,12 @@ class PostSearchLangTestCase(TestCase):
         self.assertEqual(len(posts), 0)
 
 
-class PostDetailCommentsTestCase(TestCase):
+@override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
+class PostDetailAndCommentsTestCase(TestCase):
     def setUp(self) -> None:
         self.post_1 = PostFactory(status=Post.CurrentStatus.PUB.value)
         self.post_2 = PostFactory(status=Post.CurrentStatus.PUB.value)
+        self.post_3 = PostFactory(status=Post.CurrentStatus.DRAFT.value)
         self.user = UserFactory(username="tissa")
         self.comment_1 = CommentFactory(body="foo", post=self.post_1, user=self.user)
         self.comment_2 = CommentFactory(
@@ -224,7 +226,23 @@ class PostDetailCommentsTestCase(TestCase):
         )
         self.comment_3 = CommentFactory(body="no fun", post=self.post_2, user=self.user)
 
-    @override_settings(LANGUAGE_CODE="en", LANGUAGES=(("en", "English"),))
+    def test_fail_to_get_draft_posts(self):
+        """no detail view for not public post"""
+        path = reverse("posts:post_detail", kwargs={"slug": self.post_3.slug})
+
+        resp = self.client.get(path)
+
+        self.assertEqual(resp.status_code, 404)
+
+    def test_success_get_public_post(self):
+        """detail view for public post"""
+        path = reverse("posts:post_detail", kwargs={"slug": self.post_1.slug})
+
+        resp = self.client.get(path)
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(resp.context_data["post"])
+
     def test_count_posts_comments(self):
         """comments for a given post;"""
         path = reverse("posts:post_detail", kwargs={"slug": self.post_1.slug})
