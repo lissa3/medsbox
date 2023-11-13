@@ -1,0 +1,7 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import "./sidebars.css";
+@import "./categs.css";
+@import "./styles.css";
+@import "./search.css";
+@import "./editor.css";
+@import "./comments.css";

@@ -145,8 +145,6 @@ scroll to top button
     padding:0.5rem;
     font-size: 1.5rem;
 }
-
-
 }
 @media (max-width: 767px) {
   .hidden-mobile {

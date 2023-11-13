@@ -49,7 +49,6 @@
 .single_post__image img{
   width: 90%;
 }
-
 /* large screens */
 @media screen and (min-width: 600px){
   .single_post__link a{
@@ -68,7 +67,30 @@
     font-size: 16px;
 
   }
+}
+.bell{
+  background-color:#e5e9ed6e ;
+  border-radius: 8px;
+  display: flex;
+}
+.notif_container{
+   min-width: 600px;
+   border-radius: 10px;
+   background-color:#d9ddde;
+   padding: 1em;
+}
+#notis.dropdown-menu{
+   background-color:#e5f0ec;
+}
+#header, .module caption {
+  background: #593c33;
+}
+div.breadcrumbs {
+  background:#765037;
+}
 
+module h2, .module caption, .inline-group h2 {
+  background: #765037;
 }
 
 

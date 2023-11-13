@@ -25,7 +25,6 @@
     opacity: 1;
     transition: all .5s ease-in-out;
   }
-
   /* recurs children */
 .children {
     display: none;
@@ -36,7 +35,6 @@
     /* display whole ul with children */
     display: block;
 }
-
 .to-toggle:hover{
    background-color: #a52e06;
    color:white;

@@ -77,7 +77,6 @@
     outline: none;
     border:none;
 }
-
 /* idea:combine a link with button - button for search*/
 .custom-invisible {
     background: transparent;
@@ -122,7 +121,6 @@
 .tag_item{
     cursor: pointer;
 }
-
 /* end tags search  */
 /* start categ search  */
 .categ_item{
@@ -132,7 +130,6 @@
     background-color: #b1c3b28a;
     border-radius: 10px;
 }
-
 /* end categs search  */
 
 /* msg above search form */
