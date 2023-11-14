@@ -23,3 +23,6 @@ docs
 reqs/req.txt
 reqs/req.in
 *bron
+*node_modules
+*logs
+*.log

@@ -1,8 +1,12 @@
+import logging
+
 from django.contrib.postgres.search import SearchQuery
 from django.http import HttpResponse
 from django.shortcuts import render
 
 from src.posts.models.post_model import Post
+
+logger = logging.getLogger("user_issues")
 
 
 def clear(request):
@@ -45,6 +49,27 @@ def search_qs(current_lang, query):
         posts = Post.objects.get_public().filter(vector_ru=query)
 
     return posts
+
+
+def get_ip(req):
+    """
+    if x_forward present return it;
+    otherwise remote_addr or empty string
+    """
+    try:
+        forward = req.META.get("HTTP_X_FORWARDED_FOR")
+        if forward:
+            return (
+                req.META.get("HTTP_X_FORWARDED_FOR", req.META.get("REMOTE_ADDR", ""))
+                .split(",")[0]
+                .strip()
+            )
+        else:
+            return req.META.get("REMOTE_ADDR")
+
+    except Exception as e:
+        logger.warning(f"Failed to find IP in request: {e}")
+        return ""
 
 
 def limit_like(request, attempts=None):

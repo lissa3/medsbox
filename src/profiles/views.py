@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM
@@ -10,6 +12,8 @@ from src.profiles.mixins import CheckJSMixin
 
 from .forms import ProfileForm
 from .models import Profile
+
+logger = logging.getLogger("upload")
 
 
 class ProfileView(LRM, CheckJSMixin, View):
@@ -35,6 +39,7 @@ class ProfileView(LRM, CheckJSMixin, View):
             messages.success(request, "Avatar changed successfully")
             return JsonResponse({"status_code": 200, "resp": "OK"})
         else:
+            logger.warning(f"Profile {profile.id} failed to upload ava")
             return JsonResponse({"status_code": 404, "err": form.errors})
 
 

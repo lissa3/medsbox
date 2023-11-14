@@ -5,23 +5,21 @@
   <div class="col col-md-8 mb-2 ">
     <div class="d-flex justify-content-center">
       {% include "components/crumbs.html" %}
-
     </div>
   </div>
-
 </div>
 <div class="wrap">
   <aside class="grid-categs">
         {% show_categs %}
   </aside>
-  <div class="grid-content" id="post_list">
+  <div class="grid-content mt-2" id="post_list">
     {% if posts %}
       {% for post in posts%}
         {% include "posts/parts/single_post.html" %}
       {% endfor %}
       {% include "posts/parts/pagination.html" %}
     {% else %}
-    <div id="not-found" class="not-found p-2">
+    <div id="not-found" class="not-found p-2 mt-2">
         {% trans "Sorry. Nothing found for your search" %}
     </div>
     {% include "posts/parts/search_errors.html" %}
@@ -32,7 +30,6 @@
   </div>
   <div class="grid-tags">
     {% show_tags %}
-
   </div>
 </div>
 <button onclick="topFunction()" id="toTop" title="Go to top" style="display: block;">{% trans "Go Top" %}</button>

@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM
 from django.core.mail import send_mail
@@ -9,10 +11,13 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 from django.views.generic.edit import FormView
 
+from src.core.utils.views_help import get_ip
 from src.profiles.models import Profile
 
 from .exceptions import HtmxFailureError
 from .forms import ContactForm
+
+logger = logging.getLogger("user_issues")
 
 
 class Subscribe(LRM, View):
@@ -39,11 +44,13 @@ class Subscribe(LRM, View):
             profile = get_object_or_404(Profile, id=_id)
             profile.want_news = True
             profile.save()
+            logger.info(f"{profile.id} succeeded to subscribe for news letter")
             messages.success(request, _("You have subscribed to the news letter"))
             return HttpResponse(
                 headers={"HX-Redirect": "/"},
             )
         elif htmx_req is None:
+            logger.error(f"{request.user.id} failed htmx to subscribe for news letter")
             raise HtmxFailureError(_("Subscription failed"))
 
 
@@ -70,6 +77,7 @@ class UnSubscribe(View):
             if htmx_req and profile.want_news:
                 profile.want_news = False
                 profile.save()
+                logger.info(f"{profile.id} succeeded to UNsubscribe for news letter")
                 messages.success(request, _("You have unsubscribed to the news letter"))
                 return HttpResponse(
                     headers={
@@ -77,6 +85,7 @@ class UnSubscribe(View):
                     },
                 )
             elif htmx_req is None:
+                logger.error(f"{profile.id} failed htmx to Unsubscribe for news letter")
                 raise HtmxFailureError(_("Something went wrong.Can't unsubscribe."))
         except HtmxFailureError:
             raise
@@ -124,6 +133,8 @@ class ContactView(FormView):
 
         # self.send_mail_to_admin() ?
         send_mail(subject, contact_message, from_email, to_email, fail_silently=True)
+        remote_address = get_ip(self.request)
+        logger.info(f"contact letter sent OK from ip: {remote_address}")
 
         messages.add_message(
             self.request,

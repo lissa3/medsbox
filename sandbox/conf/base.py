@@ -1,8 +1,6 @@
 """
 django 4.2.1
 """
-
-
 from pathlib import Path
 
 import environ
@@ -11,15 +9,11 @@ from django.utils.translation import gettext_lazy as _
 BASE_DIR = Path(__file__).resolve().parent.parent.parent  # let op: +parent
 env = environ.Env(ALLOWED_HOSTS=(list, []), DEBUG=(bool, False))
 
-
 environ.Env.read_env(BASE_DIR / ".env")
-
-
 DEBUG = True
 SECRET_KEY = env("SECRET_KEY")
 SITE_ID = 1
 AUTH_USER_MODEL = "accounts.User"
-
 ALLOWED_HOSTS: list[str] = env("ALLOWED_HOSTS")
 DJANGO_APPS = [
     "modeltranslation",
@@ -50,7 +44,6 @@ THIRD_PARTY = [
     "captcha",
     "embed_video",
 ]
-
 
 LOCAL_APPS = [
     "src.accounts.apps.AccountsConfig",
@@ -161,15 +154,15 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = True
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # dev.py
-
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 # img upload limits
 
 MIN_UPLOAD_SIZE = 120  # in bytes
 MAX_UPLOAD_SIZE = 1024 * 1024 * 2  # 2 MB
 UPLOAD_FILE_TYPES = "image/jpeg,image/png,image/jpg"
-FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 2  # for MemFileUploadHandler info
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 2
+# for MemFileUploadHandler info
 
 
 # allauth
@@ -183,7 +176,6 @@ ACCOUNT_FORMS = {
     "signup": "src.accounts.forms.CustomSignupForm",
 }
 ACCOUNT_ADAPTER = "src.accounts.adapters.InactiveUserEmailAdapter"
-
 
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True

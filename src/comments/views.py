@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM
 from django.http import HttpResponse, HttpResponseForbidden, QueryDict
@@ -9,6 +11,8 @@ from src.comments.forms import CommentForm
 from src.comments.mixins import CheckRequestMixin
 from src.comments.models import Comment
 from src.posts.models.post_model import Post
+
+logger = logging.getLogger("user_issues")
 
 
 def display_all_comments(request, post_uuid):
@@ -57,6 +61,7 @@ class ProccessReplyView(LRM, CheckRequestMixin, View):
         no notifications in cases:
         - parent(replied) comm is deleted;
         - users comment their own comment
+        - banned users filter via template
         """
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -84,6 +89,7 @@ def handle_edit_comment(request, post_uuid, comm_id):
     incl method PUT (htmx)
     """
     if request.user.banned:
+        logger.warning(f"banned user {request.user.id} attempted to edit comment")
         return HttpResponseForbidden()
 
     ctx = {"post_uuid": post_uuid, "comm_id": comm_id}

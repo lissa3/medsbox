@@ -103,7 +103,6 @@ footer{
   grid-row:3/4;
   padding-left:1rem;
   margin-top: -25px;
-
 }
 .grid-archive{
   grid-row:2/3;
@@ -119,18 +118,20 @@ footer{
   /* margin-inline:  auto;  */
  }
 .grid-categs{
-  grid-row:1/3;
+  grid-row:1/4;
  }
 .grid-content{
-  grid-row:1/3;
+  grid-row:1/4;
   padding-left:1rem;
  }
 .grid-archive{
   grid-row:1/2;
+
  }
 .grid-tags{
   grid-row:2/3;
  }
+
 }
 /* end test with grid layout */
 
