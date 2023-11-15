@@ -1,0 +1,24 @@
+.circle{
+    border-radius: 50%;
+    border: 1px solid black;
+    width:150px;
+    height:150px;
+}
+.top-left{
+ background-color:#e29073;
+}
+.top-right{
+    background-color: #c8b79e;
+}
+.bot-left{
+    background-color:#dbcbc6;
+}
+.bot-right{
+    background-color:#a0b4a1;
+}
+@media screen and (min-width:700px){
+    .circle{
+        height: 250px;
+        width: 250px;
+    }
+}

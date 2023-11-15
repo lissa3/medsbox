@@ -138,7 +138,7 @@ footer{
 
  /* override bootstrap 5 */
  .btn-secondary {
-    background-color: #914127e6;
+    background-color:#984529;
     border-color:rgb(165, 46, 6);
     color:cornsilk
 }
@@ -229,7 +229,7 @@ footer{
     font-size:2rem;
 }
 .logo{
-   font-family: "Archivo",sans-serif;
+   font-family: "Poppins",sans-serif;
    letter-spacing: -1.5px;
 }
 /* lang input and button */
@@ -268,7 +268,7 @@ footer{
     font-size:0.8rem;
   }
   .custom-font{
-    font-size:1.2rem;
+    font-size:1rem;
   }
 }
 @media only screen and (min-width: 760px) {
@@ -276,7 +276,7 @@ footer{
     font-size:1.5rem;
   }
   .custom-font{
-    font-size:1.5rem;
+    font-size:1.2rem;
   }
 
 }
