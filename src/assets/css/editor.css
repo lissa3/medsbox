@@ -1,20 +1,14 @@
-
 /* just for testing */
 .image{
-
     border:1px solid black;
-
-
   }
   .image-style-align-left{
     float:left;
     margin-right: 10px;
-
   }
   .image-style-align-right{
     float:right;
     margin-left: 10px;
-
   }
   /*for post text   */
   .single_post{
@@ -62,14 +56,9 @@
   }
   .single_post__content{
     line-height: 1.4rem;
-
   }
   .single_post__date,.single_post__categ{
     font-size: 16px;
-
   }
 
 }
-
-
-

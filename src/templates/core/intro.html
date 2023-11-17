@@ -2,8 +2,8 @@
 {% load static sidebars  i18n %}
 
 {% block head_title %} Intro | {{block.super}}{% endblock %}
-{% block styles%} <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock %}
+
+
 {% block content %}
 <div class="container">
   <div class="row">
@@ -15,7 +15,7 @@
        <div class="col border border-dark  top-left d-flex justify-content-sm-center
        justify-content-md-end
        ">
-         <div class="circle d-flex justify-content-center align-items-center">
+         <div class="circle-intro d-flex justify-content-center align-items-center">
            <div class="">
              {% trans 'Epidemiology' %}
            </div>
@@ -23,19 +23,19 @@
        </div>
        <div class="col border border-dark  top-right d-flex justify-content-sm-center
        justify-content-md-start">
-         <div class="circle d-flex justify-content-center align-items-center">
+         <div class="circle-intro d-flex justify-content-center align-items-center">
            {% trans 'TimeCourse' %}
          </div>
        </div>
        <div class="col border border-dark  bot-left d-flex justify-content-sm-center
        justify-content-md-end">
-         <div class="circle d-flex justify-content-center align-items-center">
+         <div class="circle-intro d-flex justify-content-center align-items-center">
            {% trans 'Clinical Presentation' %}
          </div>
        </div>
        <div class="col  border border-dark bot-right d-flex justify-content-sm-center
        justify-content-md-start">
-         <div class="circle d-flex justify-content-center align-items-center">
+         <div class="circle-intro d-flex justify-content-center align-items-center">
            {% trans 'Mechanisms' %}
          </div>
        </div>
@@ -95,12 +95,10 @@
       </div>
     </div>
     <!-- end timecourse -->
-
    </div>
   </div>
 </div>
 </div>
-
 {% endblock %}
 
 

@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 {% load static  i18n  embed_video_tags  %}
-<!-- { load static cats_tags  i18n %} -->
-{% block head_title %} Home | {{block.super}}{% endblock %}
 
+{% block head_title %} Home | {{block.super}}{% endblock %}
 {% block content %}
 <div class="container">
-  <h1 class="text-center mb-5">{% trans 'Welcome to clinical solving problems' %}</h1>
+  <figure class="text-end">
+    <blockquote class="blockquote">
+      <p>Life is too short to worry about stupid things.
+        Study, think,<br> create and grow. Teach yourself and teach others.</p>
+    </blockquote>
+    <figcaption class="blockquote-footer">
+      Prof. Feynman
+    </figcaption>
+  </figure>
+  <h1 class="mb-5">{% trans 'Welcome to clinical solving problems' %}</h1>
 
    <div class="row flex-md-row-reverse">
     <div class="col-md-6">
@@ -59,7 +67,7 @@
         Methods
       </h4>
       <div>
-        Illness scripts - the way how experts store information about specific diseases refined by clinical experience. Each time a pt presents with a sign or symptom it triggers or activates that patricular memory store in fast and efficient way than in a random file folder.
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore voluptatibus minima, nulla officia consequuntur libero et fugit repellat enim autem modi, debitis reiciendis tempora corporis quo nisi ex esse cumque.
       </div>
       <div class="d-flex">
         <div class="mt-lg-3">
@@ -102,6 +110,5 @@
 
 </div>
 {% endblock content %}
-{% block categs %}
-{% endblock categs %}
+
 

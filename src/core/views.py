@@ -12,3 +12,13 @@ def home(request: HttpRequest) -> HttpResponse:
 def intro(request: HttpRequest) -> HttpResponse:
     ctx = {}
     return render(request, "core/intro.html", ctx)
+
+
+def about(request: HttpRequest) -> HttpResponse:
+    ctx = {}
+    return render(request, "core/about.html", ctx)
+
+
+def thanks(request: HttpRequest) -> HttpResponse:
+    ctx = {}
+    return render(request, "core/acknowledgments.html", ctx)

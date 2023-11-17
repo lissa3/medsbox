@@ -31,7 +31,6 @@
     flex-direction: column;
     justify-content: center;
     width:100%;
-
 }
 .form-main > label{
     color:black;
@@ -60,7 +59,6 @@
     background-color:#e9f0ea;
     font-size:0.8em;
 }
-
 /* reply buttons on modile's bg darker and font smaller */
 @media all and (max-width:900px){
     .btn-primary {

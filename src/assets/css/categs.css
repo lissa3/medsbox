@@ -10,7 +10,6 @@
     text-decoration: none;
     color:inherit;
     padding:3px;
-
 }
 /* all content categs: root-cats */
 .root-cats{
@@ -25,8 +24,7 @@
     opacity: 1;
     transition: all .5s ease-in-out;
   }
-
-  /* recurs children */
+/* recurs children */
 .children {
     display: none;
     list-style: inherit;

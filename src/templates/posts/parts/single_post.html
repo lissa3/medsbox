@@ -14,12 +14,13 @@
 
       </p>
     </div>
-    <div class="single_post_content">
-          {{post.content|truncatewords_html:6|safe}}
-      </div>
+    <!-- <div class="single_post_content">
+          post.content|truncatewords_html:7|safe}}
+    </div> -->
       <div class="single_post__link d-flex">
         <a href="{% url 'posts:post_detail' post.slug %}">
           {% trans 'Read more' %}
         </a>
     </div>
 </div>
+<hr>

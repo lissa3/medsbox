@@ -1,0 +1,29 @@
+.circle{
+    width:270px;
+    height:270px;
+    border-radius:50%;
+  }
+  .circle-left{
+    background:#ea605529;
+    /* overflow:hidden; */
+    position:relative;
+  }
+  .circle-right{
+    background:#bacdcb63;
+    right:-80%;
+    position:absolute;
+}
+@media only screen and (max-width: 600px) {
+  .circle{
+      max-width: 150px;
+      max-height: 150px;
+  }
+}
+.image-style-align-left{
+  float:left;
+  margin-right: 10px;
+}
+.image-style-align-right{
+  float:right;
+  margin-left: 10px;
+}

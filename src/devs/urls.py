@@ -1,6 +1,13 @@
 from django.urls import path
 
-from .views import ChangeState, DevDetailPost, DevPage, ShowDevPostList, SoftDeletePost
+from .views import (
+    ChangeState,
+    DevDetailPost,
+    DevPage,
+    MakeNewPost,
+    ShowDevPostList,
+    SoftDeletePost,
+)
 
 app_name = "devs"
 
@@ -14,4 +21,5 @@ urlpatterns = [
     ),
     path("soft-delete/<str:uuid>/", SoftDeletePost.as_view(), name="soft_delete_post"),
     path("change-state/<action>/", ChangeState.as_view(), name="change_state"),
+    path("creation/", MakeNewPost.as_view(), name="creation"),
 ]

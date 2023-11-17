@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.db.models import F
 from django.http import Http404
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, DetailView, ListView, TemplateView, View
 
@@ -170,3 +170,8 @@ class SoftDeletePost(SURM, RTA, DeleteView):
         """obj draft vs review"""
         action = "soft_delete"
         return reverse_lazy("devs:selection", kwargs={"action": f"{action}"})
+
+
+class MakeNewPost(SURM, View):
+    def get(self, request):
+        return render(request, "devs/creation.html")

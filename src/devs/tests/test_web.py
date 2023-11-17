@@ -37,7 +37,7 @@ class MyTestCase(WebTest):
         menu_buttons = response.html.findAll("div", "menu_item")
 
         assert response.status_code == 200
-        assert len(menu_buttons) == 3
+        assert len(menu_buttons) == 4
 
     def test_dev_to_review(self):
         """check form submission: post status draft -> review"""
