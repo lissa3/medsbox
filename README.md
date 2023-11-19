@@ -1,6 +1,6 @@
 ### Med Sandbox
 
-## Site about different medical topcs
+## Site about different medical topics
 
 # Main features:
 
