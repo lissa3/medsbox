@@ -10,7 +10,7 @@
 
 3. Authentication (all-auth)
 
-4. Nested comments (django-tree-bread) with crud's on them
+4. Nested comments (django-tree-bread) with crud's on them (htmx)
 
 5. Notifications (currently without email notifications)
 
