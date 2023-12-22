@@ -7,3 +7,56 @@ div.breadcrumbs {
 module h2, .module caption, .inline-group h2 {
     background: #765037;
 }
+.bar-chart {
+    height: 160px;
+    padding-top: 70px;
+    display: flex;
+    justify-content: space-around;
+    overflow: hidden;
+
+}
+.bar-chart .bar {
+    background-color: #da4c14;
+    flex: 100%;
+    align-self: flex-end;
+    margin-right: 2px;
+    position: relative;
+}
+.bar-chart .bar:last-child {
+    margin: 0;
+}
+.bar-chart .bar:hover {
+    background-color: #ebb88f;
+}
+
+.bar-chart .bar .bar-tooltip {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    position: relative;
+    z-index: 999;
+}
+.bar-chart .bar .bar-tooltip {
+    position: absolute;
+    top: -60px;
+    left: 40%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-weight: bold;
+    opacity: 0;
+}
+.bar-chart .bar:first-child .bar-tooltip {
+    transform: initial;
+    text-align: initial;
+    left: 0;
+}
+.bar-chart .bar:last-child .bar-tooltip {
+    transform: initial;
+    text-align: right;
+    right: 0;
+    left: initial;
+}
+.bar-chart .bar:hover .bar-tooltip {
+    opacity: 1;
+}
