@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 
+from src.accounts.views import CustomSignUp
 from src.core.utils.views_help import clear, terms
 from src.core.views import home
 
@@ -33,6 +34,7 @@ htmx_urlpatterns = [
 
 urlpatterns += i18n_patterns(
     path("", home, name="home"),
+    path("accounts/signup/", CustomSignUp.as_view()),
     path("accounts/", include("allauth.urls")),
     path("core/", include("src.core.urls")),
     path("profile/", include("src.profiles.urls")),
