@@ -5,8 +5,8 @@ from src.posts.models.media_model import Video
 
 
 def home(request: HttpRequest) -> HttpResponse:
-    ctx = {"vidos": Video.objects.last()}
-    return render(request, "core/home.html", ctx)
+    # ctx = {"vidos": Video.objects.last()}
+    return render(request, "core/home.html")  # , ctx)
 
 
 def intro(request: HttpRequest) -> HttpResponse:
