@@ -17,7 +17,6 @@ from src.posts.models.relation_model import Relation
 
 
 class PostList(PostListMenuMixin, ListView):
-
     """display only public posts"""
 
     template_name = "posts/post_list.html"
