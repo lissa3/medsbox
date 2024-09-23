@@ -1,6 +1,7 @@
 """
 django 4.2.1
 """
+
 from pathlib import Path
 
 import environ
