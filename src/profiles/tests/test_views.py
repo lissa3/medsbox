@@ -157,10 +157,8 @@ class UploadImgTestCase(TestCase):
         """
 
         text_file = get_temporary_text_file()
-        err_msg = _(
-            "Upload a valid image. The file you uploaded was either not \
-            an image or a corrupted image."
-        )
+        err_msg = _("Upload a valid image. The file you uploaded was either not \
+            an image or a corrupted image.")
         request = HttpRequest()
         request.POST = {}
         request.FILES = {"avatar": text_file}
