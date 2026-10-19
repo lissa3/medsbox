@@ -45,12 +45,8 @@ class CustomSignupForm(SignupForm):
                 field.widget.attrs = {"class": "mt-2 mb-4"}
 
     agree_to_terms = forms.BooleanField(
-        label=format_html(
-            _(
-                "I agree to the <a class='general' \
-                href='/terms'>terms and conditions</a>"
-            )
-        )
+        label=format_html(_("I agree to the <a class='general' \
+                href='/terms'>terms and conditions</a>"))
     )
 
     field_order = ("username", "email", "password1", "password2", "agree_to_terms")
