@@ -14,9 +14,7 @@ class InactiveUserEmailAdapter(DefaultAccountAdapter):
 
     error_messages = DefaultAccountAdapter.error_messages
     update_email_err_msg = {
-        "email_taken": _(
-            "Can not create an account with this e-mail  \
-            address or use another one. Please contact the admin"
-        )
+        "email_taken": _("Can not create an account with this e-mail  \
+            address or use another one. Please contact the admin")
     }
     error_messages.update(update_email_err_msg)
